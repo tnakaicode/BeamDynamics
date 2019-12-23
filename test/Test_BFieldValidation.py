@@ -37,8 +37,8 @@ def PlotEllipticInt():
         Ek.append(K1)  # print Ek[-1]
         E1 = ellipe(1.0 * i / Ni)
         Ee.append(E1)  # print Ee[-1]
-    pl.plot(Ek)
-    pl.plot(Ee)
+    plt.plot(Ek)
+    plt.plot(Ee)
 
 # ------------------------------------------------------------------------------
 # Plot Toroidal field in 1D
@@ -63,13 +63,13 @@ def PlotTF1D(TF):
         Rvec = np.array([R[i], 0, 0])
         BIdeal[i] = norm(TF.local(Rvec))
 
-    pl.plot(R, B)
-    pl.plot(R, BIdeal, '-')
-    pl.ylim(0, 1.2 * max(B))
-    pl.title(r'Magnitude of B-field from TF Coils |B$_\phi(r)$|/|B$_\phi(R_o)$|')
-    pl.xlabel('Radial Position [m]')
-    pl.ylabel(r'Normalized B-Field Magnitude |B$_\phi$/B$_o$|')
-    pl.legend(('Discrete Coils', r'Ideal B$\sim$1/R'))
+    plt.plot(R, B)
+    plt.plot(R, BIdeal, '-')
+    plt.ylim(0, 1.2 * max(B))
+    plt.title(r'Magnitude of B-field from TF Coils |B$_\phi(r)$|/|B$_\phi(R_o)$|')
+    plt.xlabel('Radial Position [m]')
+    plt.ylabel(r'Normalized B-Field Magnitude |B$_\phi$/B$_o$|')
+    plt.legend(('Discrete Coils', r'Ideal B$\sim$1/R'))
 
 # ------------------------------------------------------------------------------
 # Plot Vertical Field in 1D at distance Z from the midplane
@@ -93,25 +93,25 @@ def PlotVF1D(VF):
             BNorm[i] = norm(Bvec) / VF.B0
             BVert[i] = Bvec[2] / VF.B0
 #		B = B/B[1]
-        pl.subplot(1, 2, 1)
-        pl.plot(R, BNorm, label='Z = %0.1f' % Z[j])
-        pl.subplot(1, 2, 2)
-        pl.plot(R, BVert, label='Z = %0.1f' % Z[j])
+        plt.subplot(1, 2, 1)
+        plt.plot(R, BNorm, label='Z = %0.1f' % Z[j])
+        plt.subplot(1, 2, 2)
+        plt.plot(R, BVert, label='Z = %0.1f' % Z[j])
 
-#	pl.plot(R,BIdeal,'-');
-    pl.subplot(1, 2, 1)
-    pl.ylim(0, 1.2 * max(BNorm))
-    pl.title(r'Magnitude of Vertical Field B$_z$($r$)')
-    pl.xlabel('Radial Position [m]')
-    pl.ylabel(r'Normalized B-Field Magnitude |B|/|B$_0$|')
-    pl.legend(loc=3)
+#	plt.plot(R,BIdeal,'-');
+    plt.subplot(1, 2, 1)
+    plt.ylim(0, 1.2 * max(BNorm))
+    plt.title(r'Magnitude of Vertical Field B$_z$($r$)')
+    plt.xlabel('Radial Position [m]')
+    plt.ylabel(r'Normalized B-Field Magnitude |B|/|B$_0$|')
+    plt.legend(loc=3)
 
-    pl.subplot(1, 2, 2)
-    pl.ylim(1.2 * min(BVert), 1.2 * max(BVert))
-    pl.title(r'Z-Component Vertical Field B$_z$($r$)')
-    pl.xlabel('Radial Position [m]')
-    pl.ylabel(r'Normalized Vertical Component of B-Field |B$_z$|/|B$_0$|')
-    pl.legend(loc=3)
+    plt.subplot(1, 2, 2)
+    plt.ylim(1.2 * min(BVert), 1.2 * max(BVert))
+    plt.title(r'Z-Component Vertical Field B$_z$($r$)')
+    plt.xlabel('Radial Position [m]')
+    plt.ylabel(r'Normalized Vertical Component of B-Field |B$_z$|/|B$_0$|')
+    plt.legend(loc=3)
 
 # ------------------------------------------------------------------------------
 # Magnitude Plot of Toroidal Field in 2D
@@ -128,16 +128,16 @@ def PlotTF2D(TF):
         for j in range(Nij):
             R = np.array([x[i], y[j]])
             B = TF.local(R)
-            Mag = pl.norm(B)
-            if (Mag < 2.5 and pl.norm(R) < 1.0) or (Mag < 0.75):
+            Mag = plt.norm(B)
+            if (Mag < 2.5 and plt.norm(R) < 1.0) or (Mag < 0.75):
                 BMagMatrix[i, j] = Mag
-    pl.figure()
-#	pl.pcolor(x,y,BMagMatrix); pl.colorbar
-    pl.contour(x, y, BMagMatrix, 100)
-    pl.title(r'Magnitude of B-field from TF Coils |B($r,\phi$)|/|B($R_o,\phi$)|')
-    pl.xlabel('x [m]')
-    pl.ylabel('y [m]')
-    pl.colorbar()
+    plt.figure()
+#	plt.pcolor(x,y,BMagMatrix); plt.colorbar
+    plt.contour(x, y, BMagMatrix, 100)
+    plt.title(r'Magnitude of B-field from TF Coils |B($r,\phi$)|/|B($R_o,\phi$)|')
+    plt.xlabel('x [m]')
+    plt.ylabel('y [m]')
+    plt.colorbar()
 
 # ------------------------------------------------------------------------------
 # Magnitude Plot of Vertical Field in 2D
@@ -148,22 +148,22 @@ def PlotVF2D():
     r = np.linspace(0.2, 2.2, Nij)
     z = np.linspace(-1.0, 1.0, Nij)
     BMagMatrix = np.zeros((Nij, Nij), float)
-    BZ0 = pl.norm(VF.local(np.array([0.1, 0, 0])))
+    BZ0 = plt.norm(VF.local(np.array([0.1, 0, 0])))
     for i in range(Nij):
         print(i)
         for j in range(Nij):
             R = np.array([r[i], 0, z[j]])
             B = VF.local(R)
-            Mag = pl.norm(B)
+            Mag = plt.norm(B)
             if True:  # (Mag < 100.0):
                 BMagMatrix[j, i] = Mag / BZ0  # log(Mag)
-    pl.figure(4)
-#	pl.pcolor(r,z,BMagMatrix);
-    pl.contour(r, z, BMagMatrix, 120)
-    pl.title(r'Magnitude of B-field from VF Coils: |B($r,z$)|/|B($0,0$)|')
-    pl.xlabel('r [m]')
-    pl.ylabel('z [m]')
-    pl.colorbar()
+    plt.figure(4)
+#	plt.pcolor(r,z,BMagMatrix);
+    plt.contour(r, z, BMagMatrix, 120)
+    plt.title(r'Magnitude of B-field from VF Coils: |B($r,z$)|/|B($0,0$)|')
+    plt.xlabel('r [m]')
+    plt.ylabel('z [m]')
+    plt.colorbar()
 
 
 # ------------------------------------------------------------------------------
@@ -190,15 +190,15 @@ def VectorVerticalField(VF):
             Br.append(B[0])
             Bz.append(B[2])
             Mag.append(np.sqrt(B[0]**2 + B[1]**2 + B[2]**2))
-#	pl.figure()
-    Q = pl.quiver(R, Z, Br, Bz, Mag, pivot='mid', scale=25,
+#	plt.figure()
+    Q = plt.quiver(R, Z, Br, Bz, Mag, pivot='mid', scale=25,
                   width=0.005, cmap=mpl.cm.autumn)
-    pl.title(r'Vertical Field Map (Poloidal View) |B$(r,z)$|/|B$(0,0)$|')
-    pl.xlabel('r [m]')
-    pl.ylabel('z [m]')
-    pl.colorbar()
-    pl.xlim(min(r), RInj[0])
-    pl.ylim(min(z), max(z))
+    plt.title(r'Vertical Field Map (Poloidal View) |B$(r,z)$|/|B$(0,0)$|')
+    plt.xlabel('r [m]')
+    plt.ylabel('z [m]')
+    plt.colorbar()
+    plt.xlim(min(r), RInj[0])
+    plt.ylim(min(z), max(z))
     return R, Z, Br, Bz, Mag
 
 # ------------------------------------------------------------------------------
@@ -228,20 +228,20 @@ def VectorToroidalField(TF):
             Bx.append(B[0])
             By.append(B[1])
             MAG = np.sqrt(B[0]**2 + B[1]**2 + B[2]**2)
-            if (MAG < 0.8 and pl.norm(R) < 1.0) or (MAG < 0.8):
+            if (MAG < 0.8 and plt.norm(R) < 1.0) or (MAG < 0.8):
                 Mag.append(MAG)
             else:
                 Mag.append(nan)
-    Q = pl.quiver(X, Y, Bx, By, np.array(Mag), pivot='mid', scale=10,
+    Q = plt.quiver(X, Y, Bx, By, np.array(Mag), pivot='mid', scale=10,
                   width=0.005, cmap=mpl.cm.winter)  # ,cmap=mpl.cm.winter
-#	pl.title(r'Toroidal B($r,\phi$)-field (uniform in $z$)')
-    pl.title(r'Toroidal Field Map (Top View) B($r,\phi$)/|B$(R_o,\phi)$|')
-    pl.xlabel('x [m]')
-    pl.ylabel('y [m]')
-    cb = pl.colorbar()
-#	pl.xlim(min(x),max(x));pl.ylim(min(y),max(y))
-    pl.xlim(min(x), RInj[0])
-    pl.ylim(min(y), max(y))
+#	plt.title(r'Toroidal B($r,\phi$)-field (uniform in $z$)')
+    plt.title(r'Toroidal Field Map (Top View) B($r,\phi$)/|B$(R_o,\phi)$|')
+    plt.xlabel('x [m]')
+    plt.ylabel('y [m]')
+    cb = plt.colorbar()
+#	plt.xlim(min(x),max(x));plt.ylim(min(y),max(y))
+    plt.xlim(min(x), RInj[0])
+    plt.ylim(min(y), max(y))
     return X, Y, Bx, By, Mag
 
 
@@ -261,35 +261,35 @@ zTop = [0.243 + (rTop[0] - rTop[1]) * np.tan(alpha), 0.243,
 
 
 if True:
-    pl.figure(1)
+    plt.figure(1)
     X, Y, Bx, By, Mag = VectorToroidalField(TF)
-    pl.plot(xTop, yTop, 'r', linewidth=2)
+    plt.plot(xTop, yTop, 'r', linewidth=2)
 
 if True:
-    pl.figure(2, figsize=(16, 6))
+    plt.figure(2, figsize=(16, 6))
 
-    pl.subplot(1, 2, 1)
+    plt.subplot(1, 2, 1)
     X, Y, Bx, By, Mag = VectorToroidalField(TF)
-    pl.subplot(1, 2, 1)
-    pl.plot(xTop, yTop, 'r', linewidth=2)
-    pl.xlabel('x [m]')
-    pl.ylabel('y [m]')
-    pl.title('Toroidal Field')
+    plt.subplot(1, 2, 1)
+    plt.plot(xTop, yTop, 'r', linewidth=2)
+    plt.xlabel('x [m]')
+    plt.ylabel('y [m]')
+    plt.title('Toroidal Field')
 
-    pl.subplot(1, 2, 2)
+    plt.subplot(1, 2, 2)
     R, Z, Br, Bz, Mag = VectorVerticalField(VF)
-    pl.subplot(1, 2, 2)
-    pl.plot(rTop, zTop, 'r', linewidth=2)
-    pl.xlabel('R [m]')
-    pl.ylabel('Z [m]')
-    pl.title('Vertical Field')
+    plt.subplot(1, 2, 2)
+    plt.plot(rTop, zTop, 'r', linewidth=2)
+    plt.xlabel('R [m]')
+    plt.ylabel('Z [m]')
+    plt.title('Vertical Field')
 
 if True:
-    pl.figure(3)
+    plt.figure(3)
     PlotTF1D(TF)
 
 if True:
-    pl.figure(4)
+    plt.figure(4)
     PlotVF1D(VF)
 
-pl.show()
+plt.show()

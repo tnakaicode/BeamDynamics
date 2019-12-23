@@ -6,18 +6,18 @@ import pylab as pl
 import timeit
 
 # Import poloidal boundary points
-Rb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0])
-Zb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
+Rb = np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0])
+Zb = np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
 
 # ------------------------------------------------------------------------------
 # Generate vessel boundary
 Vessel = Boundary(Rb, Zb)
 
 # ------------------------------------------------------------------------------
-pl.figure(1)
+plt.figure(1)
 Vessel.Border()
 
-pl.figure(2)
+plt.figure(2)
 Vessel.Plot2D(2)
 
 # ------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ Vessel.Plot3D(ax)
 # Test Case for in-out detection algorithm
 # ===============================================================================
 
-pl.figure(4)
+plt.figure(4)
 Xrand = np.array([0.0, 0.0])
 Ni = 10000
 Xrange = [0.2, 1.2]
@@ -67,12 +67,12 @@ for i in range(Ni):
 # ------------------------------------------------------------------------------
 # Plot Results
 
-pl.plot(OutX, OutZ, '.r')
-pl.plot(InX, InY, '.g')
-pl.legend(('Out', 'In'))
-pl.title(
+plt.plot(OutX, OutZ, '.r')
+plt.plot(InX, InY, '.g')
+plt.legend(('Out', 'In'))
+plt.title(
     'In-Out Boundary Detection: Time %0.4f ms/test (N$_{test}$ = %0.0f)' % (TIME, Ni))
 Vessel.Border()
 
 
-pl.show()
+plt.show()

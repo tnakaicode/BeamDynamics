@@ -8,7 +8,7 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import numpy as np
 import pylab as pl
 
@@ -34,17 +34,17 @@ if False:
         # -RL)/d0 ) #/T.s[-1]*d0 - RL)
         dr.append(np.sqrt(R[0]**2 + R[1]**2 + R[2]**2) * (d0 / T[-1].s[-1]) - RL)
         # T.Plot2D()
-    pl.figure(1)
-    pl.loglog(dS, dr, '.')
-    pl.xlabel(r'Step Size $\Delta$S [m]')
-    pl.ylabel(r'$\Delta R/S$')
-    pl.title(r'Error / Arc length')
+    plt.figure(1)
+    plt.loglog(dS, dr, '.')
+    plt.xlabel(r'Step Size $\Delta$S [m]')
+    plt.ylabel(r'$\Delta R/S$')
+    plt.title(r'Error / Arc length')
 
-    pl.figure(2)
-    pl.loglog(dS, dr / RL, '.')
-    pl.xlabel(r'Step Size $\Delta$S [m]')
-    pl.ylabel(r'${\Delta R}/{R S}$ [1/m]')
-    pl.title(r'Normalized Bending Radius Error per Arc Length')
+    plt.figure(2)
+    plt.loglog(dS, dr / RL, '.')
+    plt.xlabel(r'Step Size $\Delta$S [m]')
+    plt.ylabel(r'${\Delta R}/{R S}$ [1/m]')
+    plt.title(r'Normalized Bending Radius Error per Arc Length')
 
 # Test Varying Total Distance S
 if True:
@@ -78,43 +78,43 @@ if True:
             r.append(np.sqrt(x[-1]**2 + y[-1]**2 + z[-1]**2))
             rN.append((r[-1] - RL) / T.s[i])
 
-        pl.figure(1)
-        pl.plot(x, z)
-        pl.figure(2)
-        pl.plot(S, abs(1 - r / RL))
-        pl.xlabel('S Coordinate [m]')
-        pl.ylabel(r'Error $\epsilon $')
-        pl.title(r'$\epsilon = \Delta $r/Rc')
-#		pl.figure(3); pl.loglog(S,abs(1-r/RL));
-#		pl.xlabel('S Coordinate [m]'); pl.ylabel(r'$\epsilon $'); pl.title(r'$\epsilon = \Delta $r/Rc')
-        pl.figure(4)
-        pl.plot(S, np.array(rN))
-        pl.xlabel('S Coordinate [m]')
-        pl.ylabel(r'Normalized Error $\epsilon_N $')
-        pl.title(r'$\epsilon_N = \Delta$ r/S')
-        pl.figure(5)
-        pl.semilogx(S, np.array(rN))
-        pl.xlabel('S Coordinate [m]')
-        pl.ylabel(r'Normalized Error $\epsilon_N $')
-        pl.title(r'$\epsilon_N = \Delta$ r/S')
+        plt.figure(1)
+        plt.plot(x, z)
+        plt.figure(2)
+        plt.plot(S, abs(1 - r / RL))
+        plt.xlabel('S Coordinate [m]')
+        plt.ylabel(r'Error $\epsilon $')
+        plt.title(r'$\epsilon = \Delta $r/Rc')
+#		plt.figure(3); plt.loglog(S,abs(1-r/RL));
+#		plt.xlabel('S Coordinate [m]'); plt.ylabel(r'$\epsilon $'); plt.title(r'$\epsilon = \Delta $r/Rc')
+        plt.figure(4)
+        plt.plot(S, np.array(rN))
+        plt.xlabel('S Coordinate [m]')
+        plt.ylabel(r'Normalized Error $\epsilon_N $')
+        plt.title(r'$\epsilon_N = \Delta$ r/S')
+        plt.figure(5)
+        plt.semilogx(S, np.array(rN))
+        plt.xlabel('S Coordinate [m]')
+        plt.ylabel(r'Normalized Error $\epsilon_N $')
+        plt.title(r'$\epsilon_N = \Delta$ r/S')
 
-        pl.figure(6)
-        pl.subplot(2, 1, 1)
-        pl.plot(S, abs(1 - r / RL))
-        pl.xlabel('S Coordinate [m]')
-        pl.ylabel(r'Error $\epsilon_r$')
-        pl.title(r'Radius of Curvature Error $\epsilon_r = \Delta$r/Rc')
-        pl.xlim(0, 100)
-        pl.subplot(2, 1, 2)
-        pl.semilogx(S, np.array(rN))
-        pl.xlabel('S Coordinate [m]')
-        pl.ylabel(r'Error $\epsilon_N $')
-        pl.title(
+        plt.figure(6)
+        plt.subplot(2, 1, 1)
+        plt.plot(S, abs(1 - r / RL))
+        plt.xlabel('S Coordinate [m]')
+        plt.ylabel(r'Error $\epsilon_r$')
+        plt.title(r'Radius of Curvature Error $\epsilon_r = \Delta$r/Rc')
+        plt.xlim(0, 100)
+        plt.subplot(2, 1, 2)
+        plt.semilogx(S, np.array(rN))
+        plt.xlabel('S Coordinate [m]')
+        plt.ylabel(r'Error $\epsilon_N $')
+        plt.title(
             r'Transverse Error Normalized to Trajectory Length $\epsilon_N = \Delta$ r/S')
-        pl.xlim(0.1, 100)
-    pl.subplot(2, 1, 1)
-    pl.legend((r'B$_{TF}$ = 0.15 T', r'B$_{TF}$ = 0.10 T',
+        plt.xlim(0.1, 100)
+    plt.subplot(2, 1, 1)
+    plt.legend((r'B$_{TF}$ = 0.15 T', r'B$_{TF}$ = 0.10 T',
                r'B$_{TF}$ = 0.05 T'), loc=2)
 
 
-pl.show()
+plt.show()

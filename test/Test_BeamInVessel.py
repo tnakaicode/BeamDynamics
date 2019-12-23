@@ -9,7 +9,7 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import pylab as pl
 
 # ------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ S1 = np.matrix([
 
 # ------------------------------------------------------------------------------
 # Define Vessel Boundary(Rb,Zb)
-DATA = loadtxt('../data/CmodCoordinatesRZ.dat')
+DATA = np.loadtxt('../data/CmodCoordinatesRZ.dat')
 Rb = []
 Zb = []
 for i in range(len(DATA[:, 0])):
@@ -104,16 +104,16 @@ if True:
 # ------------------------------------------------------------------------------
 # Save Geometric Paremters
         if True:
-            savetxt(Path + 'Curvature_I_' + str(int(In[i])) + '.txt', T.k)
-            savetxt(Path + 'SCoord_I_' + str(int(In[i])) + '.txt', T.s)
-            savetxt(Path + 'GradB_I_' + str(int(In[i])) + '.txt', T.gradB)
-            savetxt(Path + 'GradBk_I_' + str(int(In[i])) + '.txt', T.gradBn)
-            savetxt(Path + 'GradBn_I_' + str(int(In[i])) + '.txt', T.gradBk)
-            savetxt(Path + 'TargetBasis_I_' +
+            np.savetxt(Path + 'Curvature_I_' + str(int(In[i])) + '.txt', T.k)
+            np.savetxt(Path + 'SCoord_I_' + str(int(In[i])) + '.txt', T.s)
+            np.savetxt(Path + 'GradB_I_' + str(int(In[i])) + '.txt', T.gradB)
+            np.savetxt(Path + 'GradBk_I_' + str(int(In[i])) + '.txt', T.gradBn)
+            np.savetxt(Path + 'GradBn_I_' + str(int(In[i])) + '.txt', T.gradBk)
+            np.savetxt(Path + 'TargetBasis_I_' +
                     str(int(In[i])) + '.txt', T.target.TargetBasis)
-            savetxt(Path + 'SigmaBasis_I_' +
+            np.savetxt(Path + 'SigmaBasis_I_' +
                     str(int(In[i])) + '.txt', T.target.SigmaBasis)
-            savetxt(Path + 'SigmaFinal_I_' +
+            np.savetxt(Path + 'SigmaFinal_I_' +
                     str(int(In[i])) + '.txt', AIMSBeam.target.Sigma)
             Angle.append([T.target.VAngle, T.target.HAngle])
             Coordinates.append([T.target.R, T.target.Z, T.target.Phi])
@@ -122,29 +122,29 @@ if True:
         if True:
             T.Plot3D(ax)
             T.target.Plot3D
-            pl.figure(10)
+            plt.figure(10)
             T.Plot2D()
-            pl.figure(11)
+            plt.figure(11)
             T.Plot2D('top')
-            pl.figure(10)
+            plt.figure(10)
             Vessel.Border()
-            pl.xlim(0.2, 1.4)
-            pl.ylim(-0.7, 0.5)
-            pl.xlabel('R [m]')
-            pl.ylabel('Z [m]')
-            pl.title('Poloidal Projection')
-            pl.figure(11)
+            plt.xlim(0.2, 1.4)
+            plt.ylim(-0.7, 0.5)
+            plt.xlabel('R [m]')
+            plt.ylabel('Z [m]')
+            plt.title('Poloidal Projection')
+            plt.figure(11)
             Vessel.Border('top')
-            pl.xlim(0, 1.2)
-            pl.ylim(-0.6, 0.6)
-            pl.xlabel('x [m]')
-            pl.ylabel('y [m]')
-            pl.title('Midplane Projection')
+            plt.xlim(0, 1.2)
+            plt.ylim(-0.6, 0.6)
+            plt.xlabel('x [m]')
+            plt.ylabel('y [m]')
+            plt.title('Midplane Projection')
 
 # ------------------------------------------------------------------------------
 # Save Target Parameters
     if True:
-        savetxt(Path + 'TargetAngle_Vert_Horiz.txt', Angle)
-        savetxt(Path + 'TargetCoordinates.txt', Coordinates)
+        np.savetxt(Path + 'TargetAngle_Vert_Horiz.txt', Angle)
+        np.savetxt(Path + 'TargetCoordinates.txt', Coordinates)
 
-pl.show()
+plt.show()

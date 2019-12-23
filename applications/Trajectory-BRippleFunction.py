@@ -1,4 +1,15 @@
 import numpy as np
+import sys
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+import os
+sys.path.append(os.path.join('../'))
+from lib.BeamDynamicsTools.Boundary import Boundary
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF, CalculateB0,CalculateI0
+from lib.BeamDynamicsTools.Trajectory import Trajectory
+from lib.BeamDynamicsTools.Beam import Beam
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 from matplotlib.pyplot import *
 
 I0 = np.linspace(-12.5e3, 12.5e3, 10000)

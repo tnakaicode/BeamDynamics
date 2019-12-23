@@ -159,28 +159,28 @@ Sigma4450, dS = ConvertT3D(S4450)
 Sigma4450NG, dS = ConvertT3D(S4450NG)
 SigmaBend90, dS = ConvertT3D(Bend90)
 
-savetxt(Path0 + 'SigmaInjection.dat', SigmaInj)
-savetxt(Path0 + 'SigmaInjectionLC.dat', SigmaInjLC)
+np.savetxt(Path0 + 'SigmaInjection.dat', SigmaInj)
+np.savetxt(Path0 + 'SigmaInjectionLC.dat', SigmaInjLC)
 
-savetxt(Path0 + 'Trace3DSigma_I_0.dat', Sigma0000)
-savetxt(Path0 + 'Trace3DSigma_I_0LC.dat', Sigma0000LC)
+np.savetxt(Path0 + 'Trace3DSigma_I_0.dat', Sigma0000)
+np.savetxt(Path0 + 'Trace3DSigma_I_0LC.dat', Sigma0000LC)
 
-savetxt(Path0 + 'Trace3DSigma_I_1600.dat', Sigma1600)
-savetxt(Path0 + 'Trace3DSigma_I_1600LC.dat', Sigma1600LC)
-savetxt(Path0 + 'Trace3DSigma_I_1600NG.dat', Sigma1600NG)
+np.savetxt(Path0 + 'Trace3DSigma_I_1600.dat', Sigma1600)
+np.savetxt(Path0 + 'Trace3DSigma_I_1600LC.dat', Sigma1600LC)
+np.savetxt(Path0 + 'Trace3DSigma_I_1600NG.dat', Sigma1600NG)
 
-savetxt(Path0 + 'Trace3DSigma_I_3120.dat', Sigma3120)
-savetxt(Path0 + 'Trace3DSigma_I_3120NG.dat', Sigma3120NG)
+np.savetxt(Path0 + 'Trace3DSigma_I_3120.dat', Sigma3120)
+np.savetxt(Path0 + 'Trace3DSigma_I_3120NG.dat', Sigma3120NG)
 
-savetxt(Path0 + 'Trace3DSigma_I_4450.dat', Sigma4450)
-savetxt(Path0 + 'Trace3DSigma_I_4450NG.dat', Sigma4450NG)
+np.savetxt(Path0 + 'Trace3DSigma_I_4450.dat', Sigma4450)
+np.savetxt(Path0 + 'Trace3DSigma_I_4450NG.dat', Sigma4450NG)
 
 
-savetxt(Path0 + 'Trace3DSigmaBend90.dat', SigmaBend90)
+np.savetxt(Path0 + 'Trace3DSigmaBend90.dat', SigmaBend90)
 
 
 if True:
-    figure(1, figsize=(8, 8))
+    plt.figure(1, figsize=(8, 8))
     E0 = ellipse(Sigma0000)
     E1 = ellipse(Sigma0000LC)
     M = E0.MismatchFactor(E1, Type=1)

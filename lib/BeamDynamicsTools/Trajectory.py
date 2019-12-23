@@ -1,6 +1,7 @@
 # Trajectory.py
 
 import numpy as np
+import matplotlib.pyplot as plt
 #import scipy as sp
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -57,7 +58,7 @@ class Trajectory:
         BFieldVF = Bv
 
         # Beam
-#		v0 = pl.np.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
+#		v0 = plt.np.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
         self.r = [np.array(r0)]
 #		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.gamma = 1.0 + T0 / M0
@@ -309,7 +310,7 @@ class Trajectory:
                 c4 = Vessel.InBoundary(self.r[-1])
                 c5 = self.s[-1] < Smax
                 if c3:
-                    if C4:
+                    if c4:
                         IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
                             self.r[-2], self.r[-1])
 
@@ -399,24 +400,24 @@ class Trajectory:
         y = []
         z = []
         R = []
-#		pl.figure(FIG)
+#		plt.figure(FIG)
         for i in range(len(self.r)):
             x.append(self.r[i][0])
             y.append(self.r[i][1])
             z.append(self.r[i][2])
             R.append(np.sqrt(x[-1]**2 + y[-1]**2))
         if Type == 'poloidal':
-            PLOT = pl.plot(R, z, color=self.LineColor,
+            PLOT = plt.plot(R, z, color=self.LineColor,
                            linestyle=self.LineStyle, linewidth=self.LineWidth)
         if Type == 'top':
-            PLOT = pl.plot(x, y, color=self.LineColor,
+            PLOT = plt.plot(x, y, color=self.LineColor,
                            linestyle=self.LineStyle, linewidth=self.LineWidth)
         return PLOT
 
 # ------------------------------------------------------------------------------
 # Initialize 3D Axes on figure
     def Figure3D(self, FIG=1):
-        fig = pl.figure(FIG)
+        fig = plt.figure(FIG)
         ax = Axes3D(fig)
         return ax
 
@@ -446,26 +447,26 @@ class Trajectory:
         By = []
         Bz = []
         Bmag = []
-        pl.figure(FIG)
+        plt.figure(FIG)
         for i in range(len(self.B)):
             Bx.append(self.B[i][0])
             By.append(self.B[i][1])
             Bz.append(self.B[i][2])
             Bmag.append(norm(self.B[i]))
-        pl.subplot(4, 1, 1)
-        pl.plot(self.s, Bx)
-        pl.ylabel(r'Bx [T]')
-        pl.title('B-Field Components Along Trajectory')
-        pl.subplot(4, 1, 2)
-        pl.plot(self.s, By)
-        pl.ylabel(r'By [T]')
-        pl.subplot(4, 1, 3)
-        pl.plot(self.s, Bz)
-        pl.ylabel(r'Bz [T]')
-        pl.subplot(4, 1, 4)
-        pl.plot(self.s, Bmag)
-        pl.ylabel(r'|B| [T]')
-        pl.xlabel('S-coordinate [m]')
+        plt.subplot(4, 1, 1)
+        plt.plot(self.s, Bx)
+        plt.ylabel(r'Bx [T]')
+        plt.title('B-Field Components Along Trajectory')
+        plt.subplot(4, 1, 2)
+        plt.plot(self.s, By)
+        plt.ylabel(r'By [T]')
+        plt.subplot(4, 1, 3)
+        plt.plot(self.s, Bz)
+        plt.ylabel(r'Bz [T]')
+        plt.subplot(4, 1, 4)
+        plt.plot(self.s, Bmag)
+        plt.ylabel(r'|B| [T]')
+        plt.xlabel('S-coordinate [m]')
 
 # ------------------------------------------------------------------------------
 # Plot velocity components along beam trajectory
@@ -474,32 +475,32 @@ class Trajectory:
         Vy = []
         Vz = []
         c0 = 2.998e8
-        pl.figure(FIG)
+        plt.figure(FIG)
         for i in range(len(self.v)):
             Vx.append(self.v[i][0] / c0)
             Vy.append(self.v[i][1] / c0)
             Vz.append(self.v[i][2] / c0)
-        pl.subplot(3, 1, 1)
-        pl.plot(self.s, Vx)
-        pl.ylabel(r'$\beta_x$')
-        pl.title(r'Velocity Components Along Trajectory $\beta=v_i/c$')
-        pl.subplot(3, 1, 2)
-        pl.plot(self.s, Vy)
-        pl.ylabel(r'$\beta_y$')
-        pl.subplot(3, 1, 3)
-        pl.plot(self.s, Vz)
-        pl.ylabel(r'$\beta_z$')
-        pl.xlabel('S-coordinate [m]')
+        plt.subplot(3, 1, 1)
+        plt.plot(self.s, Vx)
+        plt.ylabel(r'$\beta_x$')
+        plt.title(r'Velocity Components Along Trajectory $\beta=v_i/c$')
+        plt.subplot(3, 1, 2)
+        plt.plot(self.s, Vy)
+        plt.ylabel(r'$\beta_y$')
+        plt.subplot(3, 1, 3)
+        plt.plot(self.s, Vz)
+        plt.ylabel(r'$\beta_z$')
+        plt.xlabel('S-coordinate [m]')
 
 # ------------------------------------------------------------------------------
 # Save magnetic field and curvature parameters
     def SaveFieldParameters(self, TFCurrent, Path='Output/'):
         # Save field and geometric parameters along trajectory
-        savetxt(Path + 'Curvature_I_' + str(int(TFCurrent)) + '.txt', self.k)
-        savetxt(Path + 'SCoord_I_' + str(int(TFCurrent)) + '.txt', self.s)
-        savetxt(Path + 'GradB_I_' + str(int(TFCurrent)) + '.txt', self.gradB)
-        savetxt(Path + 'GradBk_I_' + str(int(TFCurrent)) + '.txt', self.gradBn)
-        savetxt(Path + 'GradBn_I_' + str(int(TFCurrent)) + '.txt', self.gradBk)
+        np.savetxt(Path + 'Curvature_I_' + str(int(TFCurrent)) + '.txt', self.k)
+        np.savetxt(Path + 'SCoord_I_' + str(int(TFCurrent)) + '.txt', self.s)
+        np.savetxt(Path + 'GradB_I_' + str(int(TFCurrent)) + '.txt', self.gradB)
+        np.savetxt(Path + 'GradBk_I_' + str(int(TFCurrent)) + '.txt', self.gradBn)
+        np.savetxt(Path + 'GradBn_I_' + str(int(TFCurrent)) + '.txt', self.gradBk)
 
 
 def Basis3(e1, e2, e3):

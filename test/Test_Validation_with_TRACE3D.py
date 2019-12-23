@@ -8,7 +8,7 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import numpy as np
 from matplotlib.pyplot import *
 
@@ -30,16 +30,16 @@ EllipseT3D = []
 SigmaXT3D = []
 SigmaYT3D = []
 
-SigmaLC = loadtxt(Path0 + 'Trace3DSigma_I_0LC.txt')
-SigmaInj = np.matrix(loadtxt(Path0 + 'SigmaInj.txt'))
+SigmaLC = np.loadtxt(Path0 + 'Trace3DSigma_I_0LC.txt')
+SigmaInj = np.matrix(np.loadtxt(Path0 + 'SigmaInj.txt'))
 ellipseInj = Ellipse(SigmaInj)
 
 for i in range(len(FileList)):
-    Sigma.append(np.matrix(loadtxt(Path0 + FileList[i])))
+    Sigma.append(np.matrix(np.loadtxt(Path0 + FileList[i])))
     ellipse.append(Ellipse(Sigma[-1]))
 
 for i in range(len(FileListT3D)):
-    SigmaT3D.append(np.matrix(loadtxt(Path0 + FileListT3D[i])))
+    SigmaT3D.append(np.matrix(np.loadtxt(Path0 + FileListT3D[i])))
     EllipseT3D.append(Ellipse(SigmaT3D[-1]))
 
 # ======== Calculate Mismatch =================================================
@@ -55,7 +55,7 @@ for i in [0, 1, 2, 3]:
 
 # ======== All in one plot ====================================================
 if False:
-    figure(figsize=(12, 4))
+    plt.figure(figsize=(12, 4))
     C1 = 1.0  # /np.sqrt(5.0)#0.9
     for i in [0, 1]:
         subplot(1, 3, 1, aspect='equal')
@@ -78,7 +78,7 @@ BList = ['0.0000 T', '0.0582 T', '0.1135 T', '0.1618 T']
 if True:
     #	for i in [0,1,2,3]:
     for i in [2]:
-        figure(figsize=(10, 10))
+        plt.figure(figsize=(10, 10))
 #		title(FileList[i])
         subplot(2, 2, 1, aspect='equal')
         ellipseInj.PlotXX1(Mod=':r')
@@ -114,21 +114,21 @@ if True:
         title('Transverse Projection')
 
         E = ellipse[i]
-        savetxt('Maxima.txt', [E.WidthX, E.WidthY, E.WidthZ, E.DivergenceX,
+        np.savetxt('Maxima.txt', [E.WidthX, E.WidthY, E.WidthZ, E.DivergenceX,
                                E.DivergenceY, E.DivergenceZ, M[i][0], M[i][1], M[i][2], M[i][3]])
         suptitle(Title + r' (B$_\phi$= ' + BList[i] + ')', size=16)
 
 # ======== 90 degree bend test ============================================
 
 if True:
-    Sigma90 = loadtxt(Path0 + 'SigmaBend90.txt')
-    Sigma90T3D = loadtxt(Path0 + 'Trace3DSigmaBend90.txt')
+    Sigma90 = np.loadtxt(Path0 + 'SigmaBend90.txt')
+    Sigma90T3D = np.loadtxt(Path0 + 'Trace3DSigmaBend90.txt')
 
     E90 = Ellipse(Sigma90)
     E90T3D = Ellipse(Sigma90T3D)
     M90 = E90.MismatchFactor(E90T3D)
 
-    figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 10))
     FormatT = dict(va='center', ha='center', color='r', size=16)
 
     subplot(2, 2, 1, aspect='equal')
@@ -169,7 +169,7 @@ if True:
 # ======== Space Charge Effects ============================================
 
 if False:
-    figure(figsize=(8, 8))
+    plt.figure(figsize=(8, 8))
     E0 = Ellipse(Sigma[0])
     E1 = Ellipse(SigmaLC)
     M = E0.MismatchFactor(E1, Type=1)
@@ -200,7 +200,7 @@ if False:
 # ======== Plot All Projections ============================================
 
 if True:
-    figure()
+    plt.figure()
     for i in [0, 1, 2, 3]:
         ellipse[i].PlotXY()
 

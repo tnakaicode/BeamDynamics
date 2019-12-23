@@ -1,6 +1,7 @@
 # Beam.py
 
 import numpy as np
+import matplotlib.pyplot as plt
 #import scipy as sp
 import pylab as pl
 from numpy.linalg import inv, norm

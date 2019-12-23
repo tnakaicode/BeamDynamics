@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib.pyplot import *
 
 
@@ -87,7 +88,7 @@ def AngularEff(theta):
 
 # Generate Plots ==============================================================
 if False:
-    figure()
+    plt.figure()
     #plot(deg,P4); plot(deg,P3); plot([0.0,deg[0]],[P0,P3[0]])
     plot(deg, P3, label=r'Corners: $P_3$')
     plot(deg, P4, label=r'Bulk: $P_4$')
@@ -95,7 +96,7 @@ if False:
     legend()
     xlim(0, 90)
 
-    figure()
+    plt.figure()
     #plot(deg,A4); plot(deg,A3); plot([0.0,deg[0]],[A0,A3[0]])
     plot(deg, A3 / A0, label=r'Corners: $A_3/A_0$')
     plot(deg, A4 / A0, label=r'Bulk: $A_4/A_0$')
@@ -104,7 +105,7 @@ if False:
     legend()
     xlim(0, 90)
 
-    figure()
+    plt.figure()
     #plot(deg,A4*P4); plot(deg,A3*P3); plot([0.0,deg[0]],[A0*P0,A3[0]*P3[0]])
     plot(deg, A3 * P3 / (A0 * P0), label=r'Corners: $A_3 P_3/A_0 P_0$')
     plot(deg, A4 * P4 / (A0 * P0), label=r'Bulk: $A_4 P_4/A_0 P_0$')

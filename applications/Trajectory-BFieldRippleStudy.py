@@ -1,14 +1,16 @@
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.special as sp
 import sys
 import os
+from numpy.linalg import norm, det
 sys.path.append(os.path.join('../'))
 from lib.BeamDynamicsTools.Boundary import Boundary
-from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF, CalculateB0, CalculateI0
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import pylab as pl
 import matplotlib as mpl
 
@@ -29,8 +31,8 @@ Energy = 0.9e6  # np.linspace(0.594e6,0.900e6,10)
 
 # ------------------------------------------------------------------------------
 # Import poloidal Boundary points
-Rb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0])
-Zb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
+Rb = np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0])
+Zb = np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
 
 # ------------------------------------------------------------------------------
 # Generate vessel Boundary
@@ -158,55 +160,55 @@ if True:
 
 # ------------------------------------------------------------------------------
 # Plot 2D projections of trajectories (Poloidal View)
-    pl.figure(figsize=(20, 8))
+    plt.figure(figsize=(20, 8))
     for i in range(len(TrajectoryList)):
-        pl.subplot(1, 2, 1)
+        plt.subplot(1, 2, 1)
         TrajectoryList[i].Plot2D('poloidal')
-    pl.subplot(1, 2, 1)
+    plt.subplot(1, 2, 1)
     Vessel.Border('poloidal')
-    pl.xlim(0.2, 1.4)
-    pl.ylim(-0.7, 0.5)
-    pl.xlabel('R [m]')
-    pl.ylabel('Z [m]')
-    pl.title(r'Poloidal Projection ($\alpha$ = %0.1f$^o$, $\beta$ = %0.1f$^o$)' % (
+    plt.xlim(0.2, 1.4)
+    plt.ylim(-0.7, 0.5)
+    plt.xlabel('R [m]')
+    plt.ylabel('Z [m]')
+    plt.title(r'Poloidal Projection ($\alpha$ = %0.1f$^o$, $\beta$ = %0.1f$^o$)' % (
         alpha0, beta0))
-# pl.legend(Leg,loc=4)
+# plt.legend(Leg,loc=4)
 
 # ------------------------------------------------------------------------------
 # Plot 2D projections of Trajectories (Top View)
     for i in range(len(TrajectoryList)):
-        pl.subplot(1, 2, 2)
+        plt.subplot(1, 2, 2)
         TrajectoryList[i].Plot2D('top')
-    pl.subplot(1, 2, 2)
+    plt.subplot(1, 2, 2)
     Vessel.Border('top')
-    pl.xlim(0, 1.2)
-    pl.ylim(-0.6, 0.6)
-    pl.xlabel('x [m]')
-    pl.ylabel('y [m]')
-    pl.title(r'Midplane Projection ($\alpha$ = %0.1f$^o$, $\beta$ = %0.1f$^o$)' % (
+    plt.xlim(0, 1.2)
+    plt.ylim(-0.6, 0.6)
+    plt.xlabel('x [m]')
+    plt.ylabel('y [m]')
+    plt.title(r'Midplane Projection ($\alpha$ = %0.1f$^o$, $\beta$ = %0.1f$^o$)' % (
         alpha0, beta0))
-    ax = pl.subplot(1, 2, 2)
+    ax = plt.subplot(1, 2, 2)
     ax.legend(Leg, bbox_to_anchor=(1.28, 1.0))
 
-#	pl.legend(('B = 0.05','B = 0.10','B = 0.15','B = 0.20','B = 0.25','B = 0.30')
+#	plt.legend(('B = 0.05','B = 0.10','B = 0.15','B = 0.20','B = 0.25','B = 0.30')
 
 # ------------------------------------------------------------------------------
 # Plot Error vs I0
-pl.figure()
-pl.plot(np.array(I0) * 1e-3, np.array(DeltaR) * 1e3)
-pl.xlabel('Current [kA]')
-pl.ylabel('peak-peak Error [mm]')
-pl.title('Beam centroid error due to TF current error')
+plt.figure()
+plt.plot(np.array(I0) * 1e-3, np.array(DeltaR) * 1e3)
+plt.xlabel('Current [kA]')
+plt.ylabel('peak-peak Error [mm]')
+plt.title('Beam centroid error due to TF current error')
 
 # ===============================================================================
 # Save Angular and Detection Quantities
 # ===============================================================================
 
 if False:
-    savetxt(OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
-    savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
+    np.savetxt(OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
+    np.savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
-    savetxt(OutputPath + 'geometry/DetectionParameters.dat',
+    np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
             (np.array(Parameters)), header=Header0)
 
 if False:
@@ -215,9 +217,9 @@ if False:
     FigPath = '../output/plots/'
     TrajectoryList[-1].Target.SaveTargetParameters(
         Path=FigPath + 'Test_alpha%2.2f_beta%2.2f_UpDown' % (alpha0, beta0))
-    pl.savefig(FigPath + FigName + '_UpDown.pdf')
-    pl.savefig(FigPath + FigName + '_UpDown.png')
+    plt.savefig(FigPath + FigName + '_UpDown.pdf')
+    plt.savefig(FigPath + FigName + '_UpDown.png')
     print('File saved: ' + FigName)
 
 
-pl.show()
+plt.show()

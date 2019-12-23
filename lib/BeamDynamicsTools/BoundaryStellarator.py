@@ -71,20 +71,20 @@ class BoundaryStellarator:
 # ------------------------------------------------------------------------------
 
     def Plot2D(self, FIG=1, NScale=0.1):
-        pl.figure(FIG)
+        plt.figure(FIG)
         Cvec = self.Cvec
         Mvec = self.Mvec
         Tvec = self.Tvec
         Nvec = self.Nvec
 
         for i in range(self.Nv):
-            pl.plot([Cvec[i][0], Cvec[i - 1][0]], [Cvec[i][1], Cvec[i - 1][1]])
-            pl.plot([Nvec[i][0] * NScale + Mvec[i][0], Mvec[i][0]],
+            plt.plot([Cvec[i][0], Cvec[i - 1][0]], [Cvec[i][1], Cvec[i - 1][1]])
+            plt.plot([Nvec[i][0] * NScale + Mvec[i][0], Mvec[i][0]],
                     [Nvec[i][1] * NScale + Mvec[i][1], Mvec[i][1]])
-            pl.plot(Mvec[i][0], Mvec[i][1], 'o')
+            plt.plot(Mvec[i][0], Mvec[i][1], 'o')
 
-        pl.xlim(0.3 - 1, 0.3 + 1)
-        pl.ylim(-1, 1)
+        plt.xlim(0.3 - 1, 0.3 + 1)
+        plt.ylim(-1, 1)
 
 # ------------------------------------------------------------------------------
 # Plots a 2D projection of the boundary onto poloidal plane or midplane
@@ -97,12 +97,12 @@ class BoundaryStellarator:
                 ZB.append(self.Zb[i])
             RB.append(self.Rb[0])
             ZB.append(self.Zb[0])
-            pl.plot(RB, ZB, 'k')
+            plt.plot(RB, ZB, 'k')
 
             if Type == 'top':
                 for i in range(len(self.Rb)):
                     x, y = Circle(self.Rb[i])
-                    pl.plot(x, y, 'k')
+                    plt.plot(x, y, 'k')
 
 
 # ------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ class BoundaryStellarator:
 # ------------------------------------------------------------------------------
 # create figure and initialize axes for 3D plot
     def Figure3D(self, FIG=1):
-        fig = pl.figure(FIG)
+        fig = plt.figure(FIG)
         ax = Axes3D(fig)
         return ax
 
@@ -209,8 +209,8 @@ class BoundaryStellarator:
                 yp.append(np.sin(Phi[i]) * self.Rb[j - 1])
                 zp.append(self.Zb[j - 1])
             ax.plot(xp[-Nc:-1], yp[-Nc:-1], zp[-Nc:-1], Color)
-        pl.xlim(-1, 1)
-        pl.ylim(-1, 1)
+        plt.xlim(-1, 1)
+        plt.ylim(-1, 1)
         return ax
         # return xp,yp,zp,xt,yt,zt
 
@@ -261,4 +261,4 @@ def PsiPeriodicity(N, Phi, Offset=0.0):
 # TestInVolume(Wall,1000)
 
 # Wall.Plot3D(Nt=16,FIG=2)
-pl.show()
+plt.show()

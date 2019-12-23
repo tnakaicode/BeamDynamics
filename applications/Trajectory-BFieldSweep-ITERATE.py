@@ -21,4 +21,4 @@ for j in range(len(Beta)):
         execfile(ApplicationTF)
         execfile(ApplicationVF)
 
-pl.show()
+plt.show()

@@ -1,4 +1,5 @@
 import pylab as pl
+import matplotlib.pyplot as plt
 from pylab import det
 import numpy as np
 import math
@@ -117,11 +118,11 @@ class Ellipse:
 #		return XPoints,YPoints
 #
 #	def PlotProjectionXY(self,Axz=0,Ayz=0,FIG=0,NPoints=1000,Mod='-',Title = ' ',Label=''):
-# f=pl.figure(FIG)
+# f=plt.figure(FIG)
 #		X,Y = self.GenerateXY(self.TwissXY,NPoints)
 #		X = X/np.cos(Axz)
 #		Y = Y/np.cos(Ayz)
-#		pl.plot(X,Y,Mod,label=Label); pl.xlabel('X [mm]');  pl.ylabel('Y [mm]');
+#		plt.plot(X,Y,Mod,label=Label); plt.xlabel('X [mm]');  plt.ylabel('Y [mm]');
 
 # ------------------------------------------------------------------------------
 # Plot transverse spatial projection
@@ -131,49 +132,49 @@ class Ellipse:
         if Rotate == True:
             Y, X = self.GenerateXY(self.TwissXY, NPoints)
             Y = (-1) * Y
-        PLOT = pl.plot(Scale * X, Scale * Y, Mod, label=Label)
-        pl.xlabel('X [mm]')
-        pl.ylabel('Y [mm]')
+        PLOT = plt.plot(Scale * X, Scale * Y, Mod, label=Label)
+        plt.xlabel('X [mm]')
+        plt.ylabel('Y [mm]')
         L = max([max(X), max(Y)]) * 1.2
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
-#		pl.xlim(-L,L); pl.ylim(-L,L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
+#		plt.xlim(-L,L); plt.ylim(-L,L)
         return PLOT
 
 # ------------------------------------------------------------------------------
 # Plot X,X' phase plane projection
     def PlotXX1(self, NPoints=1000, L=30.0, Mod='-', Label='', Title=' ', Scale=1.0):
         X, X1 = self.GenerateXY(self.TwissXX1, NPoints)
-        PLOT = pl.plot(Scale * X, Scale * X1, Mod, label=Label)
-        pl.xlabel('X [mm]')
-        pl.ylabel(r'X$^\prime$ [mrad]')
+        PLOT = plt.plot(Scale * X, Scale * X1, Mod, label=Label)
+        plt.xlabel('X [mm]')
+        plt.ylabel(r'X$^\prime$ [mrad]')
         L = max([max(X), max(X1)]) * 1.2
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
         return PLOT
 
 # ------------------------------------------------------------------------------
 # Plot Y,Y' phase plane projection
     def PlotYY1(self, NPoints=1000, L=30.0, Mod='-', Label='', Title=' ', Scale=1.0):
         Y, Y1 = self.GenerateXY(self.TwissYY1, NPoints)
-        PLOT = pl.plot(Scale * Y, Scale * Y1, Mod, label=Label)
-        pl.xlabel('Y [mm]')
-        pl.ylabel(r'Y$^\prime$ [mrad]')
+        PLOT = plt.plot(Scale * Y, Scale * Y1, Mod, label=Label)
+        plt.xlabel('Y [mm]')
+        plt.ylabel(r'Y$^\prime$ [mrad]')
         L = max([max(Y), max(Y1)]) * 1.2
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
         return PLOT
 
 # ------------------------------------------------------------------------------
 # Plot Z,Z' phase plane projection
     def PlotZZ1(self, NPoints=1000, L=30.0, Mod='-', Label='', Title=' ', Scale=1.0):
         Z, Z1 = self.GenerateXY(self.TwissZZ1, NPoints)
-        PLOT = pl.plot(Scale * Z, Scale * Z1, Mod, label=Label)
-        pl.xlabel(r'$\ell$ [mm]')
-        pl.ylabel(r'$\Delta$P/P [mrad]')
+        PLOT = plt.plot(Scale * Z, Scale * Z1, Mod, label=Label)
+        plt.xlabel(r'$\ell$ [mm]')
+        plt.ylabel(r'$\Delta$P/P [mrad]')
         L = max([max(Z), max(Z1)]) * 1.2
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
         return PLOT
 
 # ------------------------------------------------------------------------------
@@ -210,16 +211,16 @@ class Ellipse:
     def PlotProjectionXY(self, offsetX=0.0, offsetY=0.0, Mod='-', Label=''):
         Xp = self.ProjectionX + offsetX
         Yp = self.ProjectionY + offsetY
-        pl.plot(Xp, Yp, Mod, label=Label, color=self.LineColor)
-        pl.xlabel('X [mm]')
-        pl.ylabel('Y [mm]')
+        plt.plot(Xp, Yp, Mod, label=Label, color=self.LineColor)
+        plt.xlabel('X [mm]')
+        plt.ylabel('Y [mm]')
 
     def PlotProjectionPolPhi(self):  # NOT FINISHED
         Xp = self.ProjectionX
         Yp = self.ProjectionY
-        pl.plot(Xp, Yp, Mod, label=Label)
-        pl.xlabel('Poloidal Position [mm]')
-        pl.ylabel('Toroidal Angle [degrees]')
+        plt.plot(Xp, Yp, Mod, label=Label)
+        plt.xlabel('Poloidal Position [mm]')
+        plt.ylabel('Toroidal Angle [degrees]')
 
 
 # ------------------------------------------------------------------------------
@@ -227,62 +228,62 @@ class Ellipse:
 
     def PrintProjection(self, FileName='ProjectionXY'):
         Output = np.transpose(vstack((self.ProjectionX, self.ProjectionY)))
-        savetxt(FileName, Output)
+        np.savetxt(FileName, Output)
 
 # ------------------------------------------------------------------------------
 # Plot All projections
     def PlotALL(self, FIG=0, NPoints=1000, Mod='-', Title=' '):
 
-        f = pl.figure(FIG)
+        f = plt.figure(FIG)
         f.text(.5, .95, Title, horizontalalignment='center')
 
         X, Y = self.GenerateXY(self.TwissXX1, NPoints)
-        pl.subplot(2, 3, 1)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('X [mm]')
-        pl.ylabel(r'$\Delta$Px / P [mrad]')
+        plt.subplot(2, 3, 1)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('X [mm]')
+        plt.ylabel(r'$\Delta$Px / P [mrad]')
 
         X, Y = self.GenerateXY(self.TwissYY1, NPoints)
-        pl.subplot(2, 3, 2)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('Y [mm]')
-        pl.ylabel(r'$\Delta$Py / P [mrad]')
+        plt.subplot(2, 3, 2)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('Y [mm]')
+        plt.ylabel(r'$\Delta$Py / P [mrad]')
 
         X, Y = self.GenerateXY(self.TwissZZ1, NPoints)
-        pl.subplot(2, 3, 3)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('Z [mm]')
-        pl.ylabel(r'$\Delta$Pz / P [mrad]')
+        plt.subplot(2, 3, 3)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('Z [mm]')
+        plt.ylabel(r'$\Delta$Pz / P [mrad]')
 
-#		pl.figure(FIG+1)
+#		plt.figure(FIG+1)
         X, Y = self.GenerateXY(self.TwissXY, NPoints)
-        pl.subplot(2, 3, 4)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('X [mm]')
-        pl.ylabel('Y [mm]')
+        plt.subplot(2, 3, 4)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('X [mm]')
+        plt.ylabel('Y [mm]')
         L = 20
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
 
         X, Y = self.GenerateXY(self.TwissXZ, NPoints)
-        pl.subplot(2, 3, 5)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('X [mm]')
-        pl.ylabel('Z [mm]')
+        plt.subplot(2, 3, 5)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('X [mm]')
+        plt.ylabel('Z [mm]')
         L = 20
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
 
         X, Y = self.GenerateXY(self.TwissYZ, NPoints)
-        pl.subplot(2, 3, 6)
-        pl.plot(X, Y, Mod)
-        pl.xlabel('Y [mm]')
-        pl.ylabel('Z [mm]')
+        plt.subplot(2, 3, 6)
+        plt.plot(X, Y, Mod)
+        plt.xlabel('Y [mm]')
+        plt.ylabel('Z [mm]')
         L = 20
-        pl.xlim(-L, L)
-        pl.ylim(-L, L)
+        plt.xlim(-L, L)
+        plt.ylim(-L, L)
 
-        pl.subplots_adjust(hspace=0.35)
-        pl.subplots_adjust(wspace=0.35)
+        plt.subplots_adjust(hspace=0.35)
+        plt.subplots_adjust(wspace=0.35)
 
-#		pl.xlim([-2,2]); pl.ylim([-2,2])
+#		plt.xlim([-2,2]); plt.ylim([-2,2])

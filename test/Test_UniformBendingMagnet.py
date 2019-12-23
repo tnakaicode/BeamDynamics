@@ -9,7 +9,7 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import numpy as np
 import pylab as pl
 
@@ -24,7 +24,7 @@ Vessel.Plot2D(0)
 
 # R = m v / q B -> v = np.sqrt(2 E / m) -> np.sqrt( 2 m E) / q B
 
-#DATA = loadtxt('CmodCoordinatesRZ.txt')
+#DATA = np.loadtxt('CmodCoordinatesRZ.txt')
 #Rb=[]; Zb=[];
 # for i in range(len(DATA[:,0])):
 #	Rb.append(DATA[i,0])
@@ -49,9 +49,9 @@ if True:
     plot(Rb, Zb)
     T.Plot2D()
 #	T.PlotB()
-    pl.xlabel(r'X')
-    pl.ylabel(r'Y')
-    pl.title(r'?')
+    plt.xlabel(r'X')
+    plt.ylabel(r'Y')
+    plt.title(r'?')
     xlim(-L0, L1 * 1.1)
     ylim(-L1 * 1.1, L1 * 1.1)
     Y = []
@@ -60,7 +60,7 @@ if True:
         Yi = np.cross(T.v[i], T.B[i])
         Y.append(Yi[2])
 
-#	pl.figure(); pl.plot(Y)
+#	plt.figure(); plt.plot(Y)
 
 if False:
     S0 = np.matrix([
@@ -71,13 +71,13 @@ if False:
         [0.000000, 0.000000, 0.000000, 0.000000, 1.297156, 2.343722],
         [0.000000, 0.000000, 0.000000, 0.000000, 2.343722, 134.9344]], float)
 
-    S0 = np.matrix(loadtxt('data/SigmaFinal/SigmaInj.txt'))
+    S0 = np.matrix(np.loadtxt('data/SigmaFinal/SigmaInj.txt'))
 
     Beam = beam(T, S0, Target=False)
 
     Beam.Trace(Target=False)
 
-    pl.figure
+    plt.figure(
     STR = r'1m Radius 90$^o$ Bend in Uniform B$_x$- Field'
     Ei = Ellipse(Beam.Sigma[0])
     Ei.PlotALL()
@@ -88,6 +88,6 @@ if False:
     Ef = Ellipse(Beam.Sigma[-1])
     Ef.PlotALL(Title=STR)
 
-#	savetxt('data/SigmaFinal/SigmaBend90.txt',Beam.Sigma[-1])
+#	np.savetxt('data/SigmaFinal/SigmaBend90.txt',Beam.Sigma[-1])
 
-pl.show()
+plt.show()

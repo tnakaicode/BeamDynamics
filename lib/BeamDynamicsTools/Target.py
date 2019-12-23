@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 #import scipy as sp
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -132,7 +133,7 @@ class Target:
         else:
             dX = self.R * self.Phi
             dY = self.r * self.Z
-        pl.plot(self.ProjectionX + dX, self.ProjectionY + dY, color=self.LineColor,
+        plt.plot(self.ProjectionX + dX, self.ProjectionY + dY, color=self.LineColor,
                 linestyle=self.LineStyle, linewidth=self.LineWidth)
 
     def PlotProjection(self, Type='Centered'):
@@ -159,11 +160,11 @@ class Target:
             YLAB = r'Polidal Position $X_p$ [cm]'
             yscale = 100.0
 
-        pl.plot((escale * self.ProjectionX + dX) * xscale, (escale * self.ProjectionY + dY)
+        plt.plot((escale * self.ProjectionX + dX) * xscale, (escale * self.ProjectionY + dY)
                 * yscale, color=self.LineColor, linestyle=self.LineStyle, linewidth=self.LineWidth)
         xlabel(XLAB)
         ylabel(YLAB)
-        pl.axes().set_aspect('equal', 'datalim')
+        plt.axes().set_aspect('equal', 'datalim')
 
 # ------------------------------------------------------------------------------
 # Calculate distance to Target
@@ -175,8 +176,8 @@ class Target:
 # ------------------------------------------------------------------------------
 # Save Target basis and sigma basis
 #	def SaveTargetParameters(self,TFCurrent,Path='Output/'):
-#		savetxt(Path+'SigmaBasis_I_'+str(int(TFCurrent))+'.txt',self.SigmaBasis)
-#		savetxt(Path+'TargetBasis_I_'+str(int(TFCurrent))+'.txt',self.TargetBasis)
+#		np.savetxt(Path+'SigmaBasis_I_'+str(int(TFCurrent))+'.txt',self.SigmaBasis)
+#		np.savetxt(Path+'TargetBasis_I_'+str(int(TFCurrent))+'.txt',self.TargetBasis)
 
 # ------------------------------------------------------------------------------
 # 3D plotting function of beam
@@ -215,7 +216,7 @@ class Target:
         print(Parameters)
         FileName = 'TargetParameters(B=%0.3fT,I=%0.3fkA).dat' % (
             self.B0, self.I0 / 1000.0)
-        savetxt(Path + FileName, (Parameters), header=Header0)
+        np.savetxt(Path + FileName, (Parameters), header=Header0)
 
 
 def Basis3(e1, e2, e3):

@@ -6,8 +6,8 @@ import pylab as pl
 import timeit
 
 # Import poloidal boundary points
-Rb = np.array(loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0]))  # -0.66
-Zb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
+Rb = np.array(np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0]))  # -0.66
+Zb = np.loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
 
 # ------------------------------------------------------------------------------
 # Generate vessel boundary
@@ -20,8 +20,8 @@ Vessel.Plot3D(ax)
 
 
 #
-pl.figure(1)
+plt.figure(1)
 Vessel.Border()
 
-pl.figure(2)
+plt.figure(2)
 Vessel.Plot2D(2)

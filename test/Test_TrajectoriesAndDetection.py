@@ -9,11 +9,11 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from BeamDynamicsTools import *
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import pylab as pl
 
 # Input Sigma Matrix
-S1 = np.matrix(loadtxt('../data/SigmaInjection.dat'))
+S1 = np.matrix(np.loadtxt('../data/SigmaInjection.dat'))
 
 
 # S1 = np.matrix([
@@ -36,7 +36,7 @@ S1 = np.matrix(loadtxt('../data/SigmaInjection.dat'))
 #Rb = [ 0.2 , 0.25, 0.4 , 0.6 , 0.8 , 0.8 , 0.6 , 0.4 , 0.25, 0.2 ]
 #Zb = [-0.55,-0.6 ,-0.6 ,-0.5 ,-0.2 , 0.2 , 0.5 , 0.6 , 0.6 , 0.55]
 
-DATA = loadtxt('../data/CmodCoordinatesRZ.dat')
+DATA = np.loadtxt('../data/CmodCoordinatesRZ.dat')
 Rb = []
 Zb = []
 for i in range(len(DATA[:, 0])):
@@ -96,27 +96,27 @@ if False:
     Ef = Ellipse(AIMSBeam.Sigma[-1])
     Ef.PlotALL()
 
-    pl.figure()
-    pl.plot(AIMSBeam.s)
-    pl.title('s')
-    pl.figure()
-    pl.plot(AIMSBeam.dS)
-    pl.title('dS')
+    plt.figure()
+    plt.plot(AIMSBeam.s)
+    plt.title('s')
+    plt.figure()
+    plt.plot(AIMSBeam.dS)
+    plt.title('dS')
 
     dBeta = []
     for i in range(len(AIMSBeam.beta)):
         dBeta.append((AIMSBeam.beta[i] - AIMSBeam.beta[0]) / AIMSBeam.beta[0])
-    pl.figure()
-    pl.semilogy(dBeta)
-    pl.title(r'$\delta \beta/\beta$')
+    plt.figure()
+    plt.semilogy(dBeta)
+    plt.title(r'$\delta \beta/\beta$')
 
-#	pl.figure(); AIMSBeam.target.Projection()
-    pl.figure(10)
+#	plt.figure(); AIMSBeam.target.Projection()
+    plt.figure(10)
     Ef.PlotProjectionXY(0.0, 0.0)
     Ef.PlotProjectionXY(AIMSBeam.target.VAngle, AIMSBeam.target.HAngle)
     w = 20
-    pl.xlim(-w, w)
-    pl.ylim(-w, w)
+    plt.xlim(-w, w)
+    plt.ylim(-w, w)
     # Reverse Trace Beam and Plot Ellises
 #	AIMSBeam.ReverseTrace(Beam.Sigma[-1])
 #	Ei = Ellipse(AIMSBeam.RevSigma[0][0]); Ei.Plot()
@@ -124,7 +124,7 @@ if False:
 #	Em2 = Ellipse(AIMSBeam.RevSigma[0][int(len(AIMSBeam.RevSigma[0])*0.66)]); Em2.Plot()
 #	Ef = Ellipse(AIMSBeam.RevSigma[0][-1]); Ef.Plot()
 
-    #pl.legend((r'$\Delta$s = 0.0 m',r'$\Delta$s = 0.5 m',r'$\Delta$s = 1.0 m','Target'))
+    #plt.legend((r'$\Delta$s = 0.0 m',r'$\Delta$s = 0.5 m',r'$\Delta$s = 1.0 m','Target'))
 
 if False:
     In = np.array([0.0])
@@ -211,7 +211,7 @@ if True:
         AIMSBeam.append(BeamNew)
 
         # Save Sigma Matrix
-        savetxt(Path + 'sigma/' + 'SigmaFinal_I_' +
+        np.savetxt(Path + 'sigma/' + 'SigmaFinal_I_' +
                 str(int(In[i])) + '.dat', AIMSBeam[-1].target.Sigma)
 
         # Save field and geometric parameters along trajectory
@@ -230,32 +230,32 @@ if True:
         T.Limits3D(ax)
 
         # Plot 2D projections of Trajectories
-        pl.figure(10)
+        plt.figure(10)
         T.Plot2D()
-        pl.figure(11)
+        plt.figure(11)
         T.Plot2D('top')
-    pl.figure(10)
+    plt.figure(10)
     Vessel.Border()
-    pl.xlim(0.2, 1.4)
-    pl.ylim(-0.7, 0.5)
-    pl.xlabel('R [m]')
-    pl.ylabel('Z [m]')
-    pl.title('Poloidal Projection')
-    pl.figure(11)
+    plt.xlim(0.2, 1.4)
+    plt.ylim(-0.7, 0.5)
+    plt.xlabel('R [m]')
+    plt.ylabel('Z [m]')
+    plt.title('Poloidal Projection')
+    plt.figure(11)
     Vessel.Border('top')
-    pl.xlim(0, 1.2)
-    pl.ylim(-0.6, 0.6)
-    pl.xlabel('x [m]')
-    pl.ylabel('y [m]')
-    pl.title('Midplane Projection')
+    plt.xlim(0, 1.2)
+    plt.ylim(-0.6, 0.6)
+    plt.xlabel('x [m]')
+    plt.ylabel('y [m]')
+    plt.title('Midplane Projection')
 
     # Save Angular and Detection Quantities
-    savetxt(Path + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
-    savetxt(Path + 'geometry/TargetCoordinates.dat', Coordinates)
+    np.savetxt(Path + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
+    np.savetxt(Path + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
-    savetxt(Path + 'geometry/DetectionParameters.dat',
+    np.savetxt(Path + 'geometry/DetectionParameters.dat',
             (np.array(Parameters)), header=Header0)
 
     Vessel.Plot3D(ax)
 
-pl.show()
+plt.show()

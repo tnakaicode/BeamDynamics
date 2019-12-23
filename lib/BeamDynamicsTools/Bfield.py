@@ -1,5 +1,7 @@
 import numpy as np
-from scipy.special import *
+import matplotlib.pyplot as plt
+import scipy.special as sp
+#from scipy.special import *
 
 # Br = B0*R0/R * (1 + f(r,z,phi))
 # Bz = BZ0
@@ -105,10 +107,10 @@ class BfieldTF:
             self.TFy[i] = TF[i][1]
             self.TFsign[i] = TF[i][2]
 
-    def PlotTF():
-        pl.figure(0)
+    def PlotTF(self):
+        plt.plt.figure(0)
         for n in range(len(TF)):
-            pl.plot(TF[n][0], TF[n][1], 'ob')
+            plt.plot(TF[n][0], TF[n][1], 'ob')
 
     # Function that calculates Toroidal field at position R
     def local(self, RIN):
@@ -199,8 +201,8 @@ class BfieldVF:
             z0 = self.RCoil[n][1]
             z = z1 - z0
             k = np.sqrt(4 * r * r0 / ((r + r0)**2 + z**2))
-            IE = ellipe(k)
-            IK = ellipk(k)
+            IE = sp.ellipe(k)
+            IK = sp.ellipk(k)
 
             Br = Br + (1.0 / r) * (z / np.sqrt((r + r0)**2 + z**2)) * \
                 (-IK + IE * (r0**2 + r**2 + z**2) / ((r0 - r)**2 + z**2))

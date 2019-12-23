@@ -36,13 +36,13 @@ Y = polyval(C, X)
 Yinv = polyval(Cinv, X)
 
 if True:
-    pl.figure()
-    pl.plot(X, Y)
-    pl.plot(FormF[:, 0], FormF[:, 1], '.')
-    pl.figure()
-    pl.plot(X, Yinv)
-    pl.plot(FormF[:, 2], FormF[:, 3], '.')
-    pl.show()
+    plt.figure()
+    plt.plot(X, Y)
+    plt.plot(FormF[:, 0], FormF[:, 1], '.')
+    plt.figure()
+    plt.plot(X, Yinv)
+    plt.plot(FormF[:, 2], FormF[:, 3], '.')
+    plt.show()
 
 # Fit results:
 # polynomial coefficients

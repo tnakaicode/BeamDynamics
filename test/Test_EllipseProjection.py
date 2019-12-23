@@ -29,6 +29,6 @@ E0.PlotProjectionXY(Axz=np.pi / 4, Ayz=0 * np.pi / 3)
 
 
 w = 2
-pl.xlim(-w, w)
-pl.ylim(-w, w)
-pl.show()
+plt.xlim(-w, w)
+plt.ylim(-w, w)
+plt.show()

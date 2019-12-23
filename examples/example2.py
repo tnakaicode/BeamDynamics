@@ -67,12 +67,12 @@ for i in range(len(TrajectoryList)):
 TrajectoryList[-1].Limits3D(ax)
 
 # Plot 2D projections of Trajectories
-#	pl.figure(10); T.Plot2D()
-#	pl.figure(11); T.Plot2D('top')
-#pl.figure(10); Vessel.Border(); pl.xlim(0.2,1.4); pl.ylim(-0.7,0.5)
-#pl.xlabel('R [m]'); pl.ylabel('Z [m]'); pl.title('Poloidal Projection')
-#pl.figure(11); Vessel.Border('top'); pl.xlim(0,1.2); pl.ylim(-0.6,0.6)
-#pl.xlabel('x [m]'); pl.ylabel('y [m]'); pl.title('Midplane Projection')
+#	plt.figure(10); T.Plot2D()
+#	plt.figure(11); T.Plot2D('top')
+#plt.figure(10); Vessel.Border(); plt.xlim(0.2,1.4); plt.ylim(-0.7,0.5)
+#plt.xlabel('R [m]'); plt.ylabel('Z [m]'); plt.title('Poloidal Projection')
+#plt.figure(11); Vessel.Border('top'); plt.xlim(0,1.2); plt.ylim(-0.6,0.6)
+#plt.xlabel('x [m]'); plt.ylabel('y [m]'); plt.title('Midplane Projection')
 
 
 # Save Angular and Detection Quantities
