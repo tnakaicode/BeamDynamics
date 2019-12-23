@@ -4,9 +4,9 @@ from numpy import *
 #import scipy as sp
 import pylab as pl
 from numpy.linalg import inv,norm
-from Trajectory import *
-from Target import *
-from Ellipse import *
+from .Trajectory import *
+from .Target import *
+from .Ellipse import *
 
 class Beam(Trajectory):
 	# inputs:
@@ -101,7 +101,7 @@ class Beam(Trajectory):
 			M = inv(B)
 			RevTransferM.append(M)
 			Revsigma.append( M * Revsigma[-1] * M.T )
-			print i
+			print (i)
 		self.Revsigma.append(Revsigma)
 		self.RevTransferM.append(RevTransferM)
 
@@ -144,8 +144,9 @@ class Beam(Trajectory):
 #		ky = QP * (self.gradBx[IND]);
 		ky = QP * (self.gradBy[IND]);
 		Kappay = QP * By
-		Ky = (ky + Kappay**2); #print kx,ky#'Ky %0.000f' %Ky   #/1000.0; print Ky
- 		Ay = sqrt(abs(Ky))
+		Ky = (ky + Kappay**2)
+		#print kx,ky#'Ky %0.000f' %Ky   #/1000.0; print Ky
+		Ay = sqrt(abs(Ky))
 
 #------------------------------------------------------------------------------ 
 # Generate matrix entries based on linear model

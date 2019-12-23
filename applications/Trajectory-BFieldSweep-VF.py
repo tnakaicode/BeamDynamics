@@ -19,7 +19,7 @@ alpha0 = 12.6
 beta0 = 8.0
 
 alpha = alpha0/180.0*pi; beta = beta0/180.0*pi; 
-print alpha, beta
+print (alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
 Vinjection = [-cos(alpha)*cos(beta), cos(alpha)*sin(beta), -sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
@@ -121,6 +121,6 @@ if True:
 	FigPath = '/home/hbar/Dropbox/Research/AIMS/Magnet supply upgrade/Beam Modeling Results - Vertical Field Sweep/'
 	pl.savefig(FigPath + FigName+'.pdf')
 	pl.savefig(FigPath + FigName+'.png')
-	print 'File saved: ' + FigName
+	print ('File saved: ' + FigName)
 
 pl.show()

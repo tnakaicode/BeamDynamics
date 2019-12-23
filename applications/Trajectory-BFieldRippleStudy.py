@@ -12,7 +12,7 @@ alpha0 = 12.6
 beta0 = 8.0
 
 alpha = alpha0/180.0*pi; beta = beta0/180.0*pi;
-print alpha, beta
+print (alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
 Vinjection = [-cos(alpha)*cos(beta), cos(alpha)*sin(beta), -sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
@@ -73,7 +73,7 @@ if False:
 		B1 = BfieldTF(B0=Bn[i]*(1+fB) ) # Bfield + fractional change
 		T1 = Trajectory(Vessel,B1,Bv,v0=Vinjection,T0=Energy)
 		dRdB.append(T1.Target.Distance(T)/(fB*100.0)) 	
-	print dRdB
+	print (dRdB)
 
 #------------------------------------------------------------------------------ 
 # Calculate Target Error trajectories given % Magnet Ripple
@@ -100,7 +100,7 @@ if True:
 #		fB = CalculateB0(dI) 
 		fB = CalculateB0(dI+0.0005*12.5e3) 
 		fB1 = [-fB,fB]
-		print dI, fB
+		print (dI, fB)
 		for j in range(len(fB1)):
 			fB1 = [-fB,fB]
 #			B1 = BfieldTF(B0=Bn[i]*(1+fB1[j]) ) # B * (1 + epsilon)
@@ -185,7 +185,7 @@ if False:
 	TrajectoryList[-1].Target.SaveTargetParameters(Path=FigPath+'Test_alpha%2.2f_beta%2.2f_UpDown'%(alpha0,beta0))
 	pl.savefig(FigPath + FigName+'_UpDown.pdf')
 	pl.savefig(FigPath + FigName+'_UpDown.png')
-	print 'File saved: ' + FigName
+	print ('File saved: ' + FigName)
 
 
 pl.show()

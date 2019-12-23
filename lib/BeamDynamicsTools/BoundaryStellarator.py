@@ -52,7 +52,7 @@ class BoundaryStellarator:
 		self.Tvec = Tvec; self.Tmatrix = Tmatrix
 		self.Nvec = Nvec; self.Nmatrix = Nmatrix
 		self.Nv = len(Nvec)
-		print 'boundary initialized'
+		print ('boundary initialized')
 		
 #===============================================================================
 # Boundary Class Methods

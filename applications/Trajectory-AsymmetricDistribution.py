@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../lib/')
-from BeamDynamicsTools import *
+from .BeamDynamicsTools import *
 import pylab as pl
 
 #===============================================================================
@@ -16,7 +16,7 @@ alpha0 = 12.6
 beta0 = 8.0
 
 alpha = alpha0/180.0*pi; beta = beta0/180.0*pi; 
-print alpha, beta
+print (alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
 Vinjection = [-cos(alpha)*cos(beta), cos(alpha)*sin(beta), -sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
@@ -45,7 +45,7 @@ Bn = array([0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40,0.45])
 AngleComponents=[]; Coordinates=[]; Parameters=[]; TrajectoryList=[]
 OutputPath = '../output/'
 Color=['k','g','r','c','b','m','g','r','c','b','m','g']
-print len(Energy)*len(Bn)*10.0/60.0
+print (len(Energy)*len(Bn)*10.0/60.0)
 for j in range(len(Energy)):
 	for i in range(len(Bn)):
 		B = BfieldTF(B0=Bn[i])
@@ -121,6 +121,6 @@ if True:
 #------------------------------------------------------------------------------ 
 # Save Figure
 pl.savefig(FigPath + FigName)
-print 'File saved: ' + FigName
+print ('File saved: ' + FigName)
 
 pl.show()

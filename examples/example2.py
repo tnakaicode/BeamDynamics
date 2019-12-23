@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../lib/')
-from BeamDynamicsTools import *
+from .BeamDynamicsTools import *
 from matplotlib.pyplot import show
 
 #===============================================================================

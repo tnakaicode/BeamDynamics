@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../lib/')
-from BeamDynamicsTools import *
+from .BeamDynamicsTools import *
 import pylab as pl
 
 # Define array of injection angles

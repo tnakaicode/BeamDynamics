@@ -29,8 +29,8 @@ X = linspace(0,1,100)
 C =  polyfit(FormF[:,0],FormF[:,1],4)
 Cinv = polyfit(FormF[:,2],FormF[:,3],4)
 
-print C
-print Cinv
+print (C)
+print (Cinv)
 
 Y = polyval(C,X)
 Yinv = polyval(Cinv,X)

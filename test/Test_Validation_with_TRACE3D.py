@@ -140,9 +140,9 @@ if True:
 
 	suptitle(r'Dynamics Comparison (90$^o$Bend, Uniform B, R$_c$ = 1 m)',size=16)
 
-	print E90.SpatialWidth()
-	print E90.AngularWidth()
-	print M90
+	print (E90.SpatialWidth())
+	print (E90.AngularWidth())
+	print (M90)
 
 # ======== Space Charge Effects ============================================
 

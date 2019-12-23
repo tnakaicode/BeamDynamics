@@ -4,8 +4,8 @@ sys.path.append('../lib/')
 from numpy import *
 from matplotlib.pyplot import *
 from numpy.linalg import inv
-from ConversionFunctions import *
-from ellipse import *
+from .ConversionFunctions import *
+from .ellipse import *
 
 Path0 = 'sigma_trace3d/'
 

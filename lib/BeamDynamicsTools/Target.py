@@ -3,9 +3,9 @@ from numpy import *
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm
-from Ellipse import *
-from AngleCorrection import *
-from Trajectory import *
+from .Ellipse import *
+from .AngleCorrection import *
+from .Trajectory import *
 
 class Target:
 	def __init__ (self,NORM,TAN,INC,BFieldTF,BFieldVF,RT,Xpol,Rdet=[1.3075, -0.2457, -0.05900],AxisDet=[1.0,0.0,0.0]):
@@ -63,7 +63,7 @@ class Target:
 
 #------------------------------------------------------------------------------ 
 # Calculate Angular parameters and vectors
-		print self.NormalV,self.IncidentV
+		print (self.NormalV,self.IncidentV)
 		self.BeamTargetAngle = pi-arccos(dot(self.NormalV,self.IncidentV))
 		self.GammaTargetAngle = arccos(dot(self.NormalV,self.DetectionVec))
 		self.DetectionTargetAngle = arccos(dot(self.DetectionVec,self.IncidentV))
@@ -183,7 +183,7 @@ class Target:
 
 		Parameters = array(self.GetDetectionParameters())
 #		Label = 'I0 [A]','B0 [T]','X [m]','Y [m]', 'Z [m]', 'incident angle [rad]','Detection Angle [rad]', 'Gamma path length [m]','Detection Angle [rad]','Detection Angle [deg]','Detector Eff'
-		print Parameters
+		print (Parameters)
 		FileName = 'TargetParameters(B=%0.3fT,I=%0.3fkA).dat'%(self.B0,self.I0/1000.0)
 		savetxt(Path+FileName,(Parameters),header=Header0)
 

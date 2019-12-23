@@ -17,3 +17,4 @@ data/Sigma_Trace3d/
 *.pyc
 *~
 .metadata
+.vscode/launch.json

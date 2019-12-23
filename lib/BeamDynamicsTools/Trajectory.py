@@ -5,9 +5,9 @@ from numpy import *
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm
-from Ellipse import *
-from AngleCorrection import *
-from Target import *
+from .Ellipse import *
+from .AngleCorrection import *
+from .Target import *
 import timeit
 
 #======= Default injection geometry ==================
@@ -154,8 +154,7 @@ class Trajectory:
 			self.BeamBasis()
 			stop = timeit.default_timer()
 			self.RunTime = stop-start
-			print 'trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime )
-			
+			print ('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime ))	
 #------------------------------------------------------------------------------ 
 		# Define Target
 			if i<Nmax-1 and self.s[-1]<=Smax:
@@ -170,7 +169,7 @@ class Trajectory:
 				IncidentV = array(self.BasisM3[-1][:,2]).flatten()
 				RT = self.r[-1]
 				self.target = Target(NormalV,TangentV,IncidentV,BFieldTF,BFieldVF,RT,Xpol)
-			print 'Beam Coordinates Complete'
+			print ('Beam Coordinates Complete')
 			
 #===============================================================================
 # # Leapfrog Integration:
@@ -236,7 +235,7 @@ class Trajectory:
 			self.BeamBasis()
 			stop = timeit.default_timer()
 			self.RunTime = stop-start
-			print 'trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime )
+			print ('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime ))
 			
 #------------------------------------------------------------------------------ 
 		# Define Target
@@ -251,7 +250,7 @@ class Trajectory:
 				IncidentV = array(self.BasisM3[-1][:,2]).flatten()
 				RT = self.r[-1]
 				self.target = Target(NormalV,TangentV,IncidentV,BFieldTF,BFieldVF,RT,Xpol)
-			print 'Beam Coordinates Complete'
+			print ('Beam Coordinates Complete')
 
 #===============================================================================
 # Euler Integration:
@@ -318,7 +317,7 @@ class Trajectory:
 			self.BeamBasis()
 			stop = timeit.default_timer()
 			self.RunTime = stop-start
-			print 'trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime )
+			print ('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (self.s[-1],self.BFieldTF.B0,self.BFieldVF.B0,self.RunTime ))
 			
 #------------------------------------------------------------------------------ 
 		# Define Target
@@ -333,7 +332,7 @@ class Trajectory:
 				IncidentV = array(self.BasisM3[-1][:,2]).flatten()
 				RT = self.r[-1]
 				self.target = Target(NormalV,TangentV,IncidentV,BFieldTF,BFieldVF,RT,Xpol)
-			print 'Beam Coordinates Complete'
+			print ('Beam Coordinates Complete')
 
 #===============================================================================
 # Class Methods
@@ -497,7 +496,7 @@ if False:
 
 		# Larmor radius
 		rL =  (self.m0*vMag) / (self.q0*BPerp)
-		print rL, Omega, (rL*dTheta)
+		print (rL, Omega, (rL*dTheta))
 		# Change in r
 
 		drPara = rL * sin(dTheta) * hPara
@@ -529,14 +528,14 @@ if False:
 		c1 = IN
 		c2 = self.s[-1] < Smin
 		i=i+1;
-		print i
+		print (i)
 #			self.Target = Target(NormalV,TangentV,IncidentV)
 
-	print 'trajectory complete'
+	print ('trajectory complete')
 	self.Target = Target(NormalV,TangentV,IncidentV,BFieldTF,BFieldVF,RT,Xpol)
 	self.BeamBasis()
-	print 'Beam Coordinates Complete'
-	print self.BasisM3
+	print ('Beam Coordinates Complete')
+	print (self.BasisM3)
 # Boris Method with constant dTheta = dS/R(B)
 if False:
 	while (c1 or c2) and i<Nmax:
@@ -589,14 +588,14 @@ if False:
 		c1 = IN
 		c2 = i*dS < Smin
 		i=i+1;
-		print i
+		print (i)
 #			self.Target = Target(NormalV,TangentV,IncidentV)
 
-	print 'trajectory complete'
+	print ('trajectory complete')
 	self.BeamBasis()
-	print 'Beam Coordinates Complete'
+	print ('Beam Coordinates Complete')
 	self.Target = Target(NormalV,TangentV,IncidentV,BFieldTF,BFieldVF,RT,Xpol)
-	print 'Target Complete'
+	print ('Target Complete')
 
 	self.NormalV = NormalV
 	self.IncidentV = IncidentV

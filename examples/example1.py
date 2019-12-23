@@ -1,6 +1,12 @@
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
-sys.path.append('../lib/')
-from BeamDynamicsTools import *
+import os
+sys.path.append(os.path.join('../'))
+from lib.BeamDynamicsTools.Boundary import Boundary
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Trajectory import Trajectory
+from lib.BeamDynamicsTools.Beam import Beam
 from matplotlib.pyplot import show
 
 #===============================================================================
@@ -8,11 +14,11 @@ from matplotlib.pyplot import show
 #===============================================================================
 
 # Input Sigma Matrix
-S1 = matrix(loadtxt('../data/SigmaInjection.dat'))
+S1 = np.matrix(np.loadtxt('../data/SigmaInjection.dat'))
 
 # Import poloidal boundary points
-Rb = loadtxt('../data/CmodCoordinatesRZ.dat',usecols=[0])
-Zb = loadtxt('../data/CmodCoordinatesRZ.dat',usecols=[1])
+Rb = np.loadtxt('../data/CmodCoordinatesRZ.dat',usecols=[0])
+Zb = np.loadtxt('../data/CmodCoordinatesRZ.dat',usecols=[1])
 
 # Generate vessel boundary
 Vessel = Boundary(Rb,Zb)
@@ -22,8 +28,8 @@ ax = Vessel.Figure3D(1)
 Vessel.Plot3D(ax)
 
 # Inputs for four B-field settings 
-In = array([0.0,1600.0,3120,4450.0])
-Bn = array([ 0.0, 0.05818182, 0.11345455, 0.16181818 ])
+In = np.array([0.0,1600.0,3120,4450.0])
+Bn = np.array([ 0.0, 0.05818182, 0.11345455, 0.16181818 ])
 
 #===============================================================================
 # Perform Trajectory and sigma dynamics calculation for B-Field Sweep
@@ -44,7 +50,7 @@ for i in [0,1,2,3]:#range(len(Bn)):
 
 #------------------------------------------------------------------------------ 
 	#Save Sigma Matrix
-	savetxt(OutputPath+'sigma/'+'SigmaFinal_I_'+str(int(In[i]))+'.dat',AIMSBeam[-1].target.Sigma)
+	np.savetxt(OutputPath+'sigma/'+'SigmaFinal_I_'+str(int(In[i]))+'.dat',AIMSBeam[-1].target.Sigma)
 
 #------------------------------------------------------------------------------ 
 # Save field and geometric parameters along trajectory
@@ -65,19 +71,31 @@ for i in [0,1,2,3]:#range(len(Bn)):
 
 #------------------------------------------------------------------------------ 
 # Plot 2D projections of Trajectories
-	pl.figure(10); T.Plot2D()
-	pl.figure(11); T.Plot2D('top')
-	pl.figure(10); Vessel.Border(); pl.xlim(0.2,1.4); pl.ylim(-0.7,0.5)
-	pl.xlabel('R [m]'); pl.ylabel('Z [m]'); pl.title('Poloidal Projection')
-	pl.figure(11); Vessel.Border('top'); pl.xlim(0,1.2); pl.ylim(-0.6,0.6)
-	pl.xlabel('x [m]'); pl.ylabel('y [m]'); pl.title('Midplane Projection')
+	plt.figure(10)
+	T.Plot2D()
+	plt.figure(11)
+	T.Plot2D('top')
+	plt.figure(10)
+	Vessel.Border()
+	plt.xlim(0.2,1.4)
+	plt.ylim(-0.7,0.5)
+	plt.xlabel('R [m]')
+	plt.ylabel('Z [m]')
+	plt.title('Poloidal Projection')
+	plt.figure(11)
+	Vessel.Border('top')
+	plt.xlim(0,1.2)
+	plt.ylim(-0.6,0.6)
+	plt.xlabel('x [m]')
+	plt.ylabel('y [m]')
+	plt.title('Midplane Projection')
 
 #------------------------------------------------------------------------------ 
 # Save Angular and Detection Quantities
 if False:
-	savetxt(OutputPath+'geometry/TargetAngle_Vert_Horiz.dat',AngleComponents)
-	savetxt(OutputPath+'geometry/TargetCoordinates.dat',Coordinates)
+	np.savetxt(OutputPath+'geometry/TargetAngle_Vert_Horiz.dat',AngleComponents)
+	np.savetxt(OutputPath+'geometry/TargetCoordinates.dat',Coordinates)
 	Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
-	savetxt(OutputPath+'geometry/DetectionParameters.dat', (array(Parameters)), header=Header0)
+	np.savetxt(OutputPath+'geometry/DetectionParameters.dat', (np.array(Parameters)), header=Header0)
 
 show()

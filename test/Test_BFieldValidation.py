@@ -28,7 +28,7 @@ VF = BfieldVF(B0=1.0)
 def PlotEllipticInt():
 	Ni = 1000; Ek=[]; Ee=[]
 	for i in range(Ni):
-		K1 = ellipk(1.0*i/Ni); print 1.0*i/Ni# K1
+		K1 = ellipk(1.0*i/Ni); print (1.0*i/Ni)# K1
 		Ek.append(K1); # print Ek[-1] 
 		E1 = ellipe(1.0*i/Ni)
 		Ee.append(E1); # print Ee[-1] 
@@ -99,7 +99,7 @@ def PlotTF2D(TF):
 
 	BMagMatrix = zeros((Nij,Nij),float)
 	for i in range(Nij):
-		print i
+		print (i)
 		for j in range(Nij):
 			R = array( [x[i] , y[j]] )
 			B = TF.local(R)
@@ -122,7 +122,7 @@ def PlotVF2D():
 	BMagMatrix = zeros((Nij,Nij),float)
 	BZ0 = pl.norm(VF.local(array([0.1,0,0])))
 	for i in range(Nij):
-		print i
+		print (i)
 		for j in range(Nij):
 			R = array( [r[i] , 0 , z[j]] )
 			B = VF.local(R)
@@ -147,7 +147,7 @@ def VectorVerticalField(VF):
 
 	Br=[]; Bz=[]; R=[]; Z=[]; Mag=[];
 	for i in range(Nij):
-		print i
+		print (i)
 		for j in range(Nij):
 			R1 = array( [r[i] , 0 , z[j]] )
 			B = VF.local(R1)

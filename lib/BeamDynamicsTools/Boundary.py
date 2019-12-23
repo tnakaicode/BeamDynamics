@@ -26,9 +26,9 @@ class Boundary:
 
 #------------------------------------------------------------------------------ 
 # Generate lists of Corners, Midpoints, Tangents, and Normals
- 		if Geometry =='Revolve' or Geometry =='Extrude':
- 			for i in range(len(Rb)):
-		 		Corner = array([Rb[i],Zb[i]])
+		if Geometry =='Revolve' or Geometry =='Extrude':
+			for i in range(len(Rb)):
+				Corner = array([Rb[i],Zb[i]])
 				MidPoint = array([(Rb[i]+Rb[i-1])/2,(Zb[i]+Zb[i-1])/2])
 				Tangent = array([Rb[i]-Rb[i-1],Zb[i]-Zb[i-1]]); Tangent=Tangent/norm(Tangent)
 				Normal = array([-Tangent[1],Tangent[0]]); Normal = Normal/norm(Normal)
@@ -54,7 +54,7 @@ class Boundary:
 			self.Tvec = Tvec; self.Tmatrix = Tmatrix
 			self.Nvec = Nvec; self.Nmatrix = Nmatrix
 			self.Nv = len(Nvec)
-			print 'boundary initialized'
+			print ('boundary initialized')
 
 #------------------------------------------------------------------------------ 
 # Generate list of poloidal points

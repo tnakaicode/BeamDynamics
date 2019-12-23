@@ -20,7 +20,7 @@ class Bfield:
 		self.R0 = R0
 		self.fR = fR
 		self.fz = fz
-		print 'Bfield initialized'
+		print ('Bfield initialized')
 
 	def localRZP(self,R,Z,Phi):
 		Btor = self.B0 * self.R0 / R * (1+self.fR)
@@ -54,7 +54,7 @@ class Bfieldc:
 		self.fR = fR
 		self.fz = fz
 		self.I0 = CalculateI0(self.B0,R0=0.66,NCoils=120.0)
-		print 'Bfield initialized'
+		print ('Bfield initialized')
 
 	def local(self,r):
 		Bx = 0.0
