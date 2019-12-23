@@ -192,11 +192,11 @@ class Boundary:
                 if dot(Di1, self.Nvec[i]) > 0 and dot(Di2, self.Nvec[i]) > 0:
                     if dot(Df, self.Nvec[i]) < 0 and dot(Df, self.Nvec[i]) < 0:
                         IN = False
-                        Phi = arctan(r0[1] / r0[0])
+                        Phi = np.arctan(r0[1] / r0[0])
                         NORM = array(
-                            [self.Nvec[i][0] * cos(Phi), self.Nvec[i][0] * sin(Phi), self.Nvec[i][1]])
+                            [self.Nvec[i][0] * np.cos(Phi), self.Nvec[i][0] * np.sin(Phi), self.Nvec[i][1]])
                         TAN = array(
-                            [self.Tvec[i][0] * cos(Phi), self.Tvec[i][0] * sin(Phi), self.Tvec[i][1]])
+                            [self.Tvec[i][0] * np.cos(Phi), self.Tvec[i][0] * np.sin(Phi), self.Tvec[i][1]])
                         TAN = TAN / norm(TAN)
                         INC = r1 - r0
                         INC = INC / sqrt(INC[0]**2 + INC[1]**2 + INC[2]**2)
@@ -212,8 +212,8 @@ class Boundary:
         ax = Axes3D(fig)
         return ax
 
-    def Plot3D(self, ax, Nt=16, Color='b', PhiMin=-pi / 8, PhiMax=pi / 2):
-        #Phi = linspace(0,2*pi*(1-1/Nt),Nt)
+    def Plot3D(self, ax, Nt=16, Color='b', PhiMin=-np.pi / 8, PhiMax=np.pi / 2):
+        #Phi = linspace(0,2*np.pi*(1-1/Nt),Nt)
         Phi = linspace(PhiMin, PhiMax, Nt)
         xp = []
         yp = []
@@ -224,8 +224,8 @@ class Boundary:
             y = []
             z = []
             for j in range(Nr):
-                x.append(cos(Phi[i]) * self.Rb[j - 1])
-                y.append(sin(Phi[i]) * self.Rb[j - 1])
+                x.append(np.cos(Phi[i]) * self.Rb[j - 1])
+                y.append(np.sin(Phi[i]) * self.Rb[j - 1])
                 z.append(self.Zb[j - 1])
             if i == 0 or i == Nt - 1:
                 ax.plot(x, y, z, 'k', linewidth=3)
@@ -244,8 +244,8 @@ class Boundary:
         zt = []
         for j in range(Nr):
             for i in range(Nc):
-                xp.append(cos(Phi[i]) * self.Rb[j - 1])
-                yp.append(sin(Phi[i]) * self.Rb[j - 1])
+                xp.append(np.cos(Phi[i]) * self.Rb[j - 1])
+                yp.append(np.sin(Phi[i]) * self.Rb[j - 1])
                 zp.append(self.Zb[j - 1])
             ax.plot(xp[-Nc:-1], yp[-Nc:-1], zp[-Nc:-1], Color)
         pl.xlim(-1, 1)
@@ -284,9 +284,9 @@ def Intersection(a1, a2, b1, b2):
 
 
 def Circle(R, Nt=100):
-    t = linspace(0, 2 * pi, Nt)
-    x = R * cos(t)
-    y = R * sin(t)
+    t = linspace(0, 2 * np.pi, Nt)
+    x = R * np.cos(t)
+    y = R * np.sin(t)
     return x, y
 
 #Rb = [ 0.2 , 0.25, 0.4 , 0.6 , 0.8 , 0.8 , 0.6 , 0.4 , 0.25, 0.2 ]

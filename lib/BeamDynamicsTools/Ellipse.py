@@ -77,7 +77,7 @@ class Ellipse:
 # ------------------------------------------------------------------------------
 # Generate points along an ellipse a give set of twiss parameters
     def GenerateXY(self, TWISS, NPoints=1000):
-        Theta = linspace(0, 2 * pi, NPoints)
+        Theta = linspace(0, 2 * np.pi, NPoints)
         XPoints = zeros((NPoints), float)
         YPoints = zeros((NPoints), float)
         m11 = math.sqrt(math.fabs(TWISS[1]))
@@ -85,10 +85,10 @@ class Ellipse:
         m22 = 1 / math.sqrt(math.fabs(TWISS[1]))
         Radius = math.sqrt(math.fabs(TWISS[3]))
         m12 = 0
-        PHI = arctan(2.0 * TWISS[0] / (TWISS[2] - TWISS[1])) / 2.0
+        PHI = np.arctan(2.0 * TWISS[0] / (TWISS[2] - TWISS[1])) / 2.0
         for i in range(NPoints):
-            XPoints[i] = Radius * (m11 * cos(Theta[i]) + m12 * sin(Theta[i]))
-            YPoints[i] = Radius * (m21 * cos(Theta[i]) + m22 * sin(Theta[i]))
+            XPoints[i] = Radius * (m11 * np.cos(Theta[i]) + m12 * np.sin(Theta[i]))
+            YPoints[i] = Radius * (m21 * np.cos(Theta[i]) + m22 * np.sin(Theta[i]))
         return XPoints, YPoints
 
 # ------------------------------------------------------------------------------
@@ -111,15 +111,15 @@ class Ellipse:
 
 #	def ProjectXY(XPoints,YPoints,Axz,Ayz): #Axz = angle in XZ plane
 #		for i in range(len(XPoints)):
-#			XPoints[i] = XPoints[i]/cos(Axz)/sin(Ayz)
-#			YPoints[i] = YPoints[i]/cos(Ayz)/sin(Axz)
+#			XPoints[i] = XPoints[i]/np.cos(Axz)/np.sin(Ayz)
+#			YPoints[i] = YPoints[i]/np.cos(Ayz)/np.sin(Axz)
 #		return XPoints,YPoints
 #
 #	def PlotProjectionXY(self,Axz=0,Ayz=0,FIG=0,NPoints=1000,Mod='-',Title = ' ',Label=''):
 # f=pl.figure(FIG)
 #		X,Y = self.GenerateXY(self.TwissXY,NPoints)
-#		X = X/cos(Axz)
-#		Y = Y/cos(Ayz)
+#		X = X/np.cos(Axz)
+#		Y = Y/np.cos(Ayz)
 #		pl.plot(X,Y,Mod,label=Label); pl.xlabel('X [mm]');  pl.ylabel('Y [mm]');
 
 # ------------------------------------------------------------------------------

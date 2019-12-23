@@ -25,7 +25,7 @@ S0 = matrix([
 E0 = Ellipse(S0)
 
 E0.PlotProjectionXY()
-E0.PlotProjectionXY(Axz=pi / 4, Ayz=0 * pi / 3)
+E0.PlotProjectionXY(Axz=np.pi / 4, Ayz=0 * np.pi / 3)
 
 
 w = 2

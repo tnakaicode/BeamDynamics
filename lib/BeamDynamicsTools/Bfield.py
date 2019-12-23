@@ -3,7 +3,7 @@ from scipy.special import *
 
 # Br = B0*R0/R * (1 + f(r,z,phi))
 # Bz = BZ0
-mu = 4 * pi * 1e-7
+mu = 4 * np.pi * 1e-7
 
 # ===============================================================================
 # A collection B-Field Classes
@@ -26,17 +26,17 @@ class Bfield:
 
     def localRZP(self, R, Z, Phi):
         Btor = self.B0 * self.R0 / R * (1 + self.fR)
-        Bx = Btor * sin(Phi)
-        By = Btor * cos(Phi)
+        Bx = Btor * np.sin(Phi)
+        By = Btor * np.cos(Phi)
         Bz = self.B0z
         return([Bx, By, Bz])
 
     def local(self, r):
         R = sqrt(r[0]**2 + r[1]**2)
-        Phi = arctan(r[1] / r[0])
+        Phi = np.arctan(r[1] / r[0])
         Btor = self.B0 * self.R0 / R * (1 + self.fR)
-        Bx = Btor * sin(Phi)
-        By = Btor * cos(Phi)
+        Bx = Btor * np.sin(Phi)
+        By = Btor * np.cos(Phi)
         Bz = self.B0z
         if R > 1.3:
             B = array([0.0, 0.0, Bz])
@@ -75,7 +75,7 @@ class Bfieldc:
 
 class BfieldTF:
     # Generates Toroidal Field Coils
-    def __init__(self, B0=1.0, R0=0.67, Phi0=2 * pi / 40, Ncoils=20, Rmin=0.1947965, Rmax=1.195229, Method='Filament'):
+    def __init__(self, B0=1.0, R0=0.67, Phi0=2 * np.pi / 40, Ncoils=20, Rmin=0.1947965, Rmax=1.195229, Method='Filament'):
 
         TF = []
         self.B0 = B0
@@ -87,13 +87,13 @@ class BfieldTF:
         self.Method = Method
 
         for n in range(Ncoils):  # Outer Legs of TF
-            TF.append(array([Rmax * cos(2 * pi * n / Ncoils + Phi0),
-                             Rmax * sin(2 * pi * n / Ncoils + Phi0), -1.0]))
+            TF.append(array([Rmax * np.cos(2 * np.pi * n / Ncoils + Phi0),
+                             Rmax * np.sin(2 * np.pi * n / Ncoils + Phi0), -1.0]))
 
         # Inner Legs of TF -> array([ x , y , +/- direction ])
         for n in range(Ncoils):
-            TF.append(array([Rmin * cos(2 * pi * n / Ncoils + Phi0),
-                             Rmin * sin(2 * pi * n / Ncoils + Phi0), 1.0]))
+            TF.append(array([Rmin * np.cos(2 * np.pi * n / Ncoils + Phi0),
+                             Rmin * np.sin(2 * np.pi * n / Ncoils + Phi0), 1.0]))
         self.TF = TF
 
         # create array of TF coordinates to faster computation
@@ -126,7 +126,7 @@ class BfieldTF:
         if self.Method == 'Filament0':
             R = array(RIN)
             B = array([0.0, 0.0, 0.0])
-            Nc = len(self.TF) / 2  # /(2*pi)
+            Nc = len(self.TF) / 2  # /(2*np.pi)
             for n in range(len(self.TF)):
                 AbsR = (R[0] - self.TF[n][0])**2 + (R[1] - self.TF[n][1])**2
                 B[0] = B[0] - (self.B0 * self.R0 / Nc) * \
@@ -147,7 +147,7 @@ class BfieldTF:
             r2 = 0.302262
             r1 = 0.087331
             BTF = 0
-            theta = arctan(RIN[1] / RIN[0])
+            theta = np.arctan(RIN[1] / RIN[0])
             if R >= r1 and R <= r2:
                 BTF = ((0.0 - (self.R0 * self.B0) / (r2)) / (r1 - r2)) * (R - r1)
             if R > r2 and R <= r3:
@@ -155,7 +155,7 @@ class BfieldTF:
             if R > r3 and R <= r4:
                 BTF = ((0.0 - (self.R0 * self.B0) / (r3)) / (r4 - r3)) * (R - r4)
 
-            B = BTF * array([-sin(theta), cos(theta), 0.0])
+            B = BTF * array([-np.sin(theta), np.cos(theta), 0.0])
             return B
 
 # ===============================================================================
@@ -190,7 +190,7 @@ class BfieldVF:
         #	RCoil=[array([1.0,0.0])]
         r = sqrt(R[0]**2 + R[1]**2)
         z1 = R[2]
-        theta = arctan(R[1] / R[0])
+        theta = np.arctan(R[1] / R[0])
         Br = 0.0
         Bz = 0.0
         BrR = 0.0
@@ -214,7 +214,7 @@ class BfieldVF:
                 break
 
         BV = (mu * self.I0) / (2.0 * r0) / self.nCoil * \
-            array([Br * cos(theta), Br * sin(theta), Bz])
+            array([Br * np.cos(theta), Br * np.sin(theta), Bz])
         return BV
 
 
@@ -223,12 +223,12 @@ class BfieldVF:
 # =============================================================================
 
 def CalculateB0(I0, R0=0.66, NCoils=120.0):
-    mu = 4.0e-7 * pi
-    B0 = (mu / (2 * pi)) * I0 * NCoils / R0
+    mu = 4.0e-7 * np.pi
+    B0 = (mu / (2 * np.pi)) * I0 * NCoils / R0
     return B0
 
 
 def CalculateI0(B0, R0=0.66, NCoils=120.0):
-    mu = 4.0e-7 * pi
-    I0 = ((2 * pi) / mu) * (R0 / NCoils) * B0
+    mu = 4.0e-7 * np.pi
+    I0 = ((2 * np.pi) / mu) * (R0 / NCoils) * B0
     return I0

@@ -161,20 +161,20 @@ class Beam(Trajectory):
                 Dx1 = 0.0
 
             if Kx > 0:
-                Cx = cos(Ax * dS)
-                Cx1 = - Ax * sin(Ax * dS)
-                Sx = (1.0 / Ax) * sin(Ax * dS)
-                Sx1 = cos(Ax * dS)
-                Dx = (1.0 / Ax) * (1.0 - cos(Ax * dS))
-                Dx1 = sin(Ax * dS)
+                Cx = np.cos(Ax * dS)
+                Cx1 = - Ax * np.sin(Ax * dS)
+                Sx = (1.0 / Ax) * np.sin(Ax * dS)
+                Sx1 = np.cos(Ax * dS)
+                Dx = (1.0 / Ax) * (1.0 - np.cos(Ax * dS))
+                Dx1 = np.sin(Ax * dS)
 
             if Kx < 0:
-                Cx = cosh(Ax * dS)
-                Cx1 = - Ax * sinh(Ax * dS)
-                Sx = (1.0 / Ax) * sinh(Ax * dS)
-                Sx1 = cosh(Ax * dS)
-                Dx = (1.0 / Ax) * (1.0 - cosh(Ax * dS))
-                Dx1 = sinh(Ax * dS)
+                Cx = np.cosh(Ax * dS)
+                Cx1 = - Ax * np.sinh(Ax * dS)
+                Sx = (1.0 / Ax) * np.sinh(Ax * dS)
+                Sx1 = np.cosh(Ax * dS)
+                Dx = (1.0 / Ax) * (1.0 - np.cosh(Ax * dS))
+                Dx1 = np.sinh(Ax * dS)
 
             if Ky == 0:
                 Cy = 1.0
@@ -185,20 +185,20 @@ class Beam(Trajectory):
                 Dy1 = 0.0
 
             if Ky > 0:
-                Cy = cos(Ay * dS)
-                Cy1 = - Ay * sin(Ay * dS)
-                Sy = (1.0 / Ay) * sin(Ay * dS)
-                Sy1 = cos(Ay * dS)
-                Dy = (1.0 / Ay) * (1.0 - cos(Ay * dS))
-                Dy1 = sin(Ay * dS)
+                Cy = np.cos(Ay * dS)
+                Cy1 = - Ay * np.sin(Ay * dS)
+                Sy = (1.0 / Ay) * np.sin(Ay * dS)
+                Sy1 = np.cos(Ay * dS)
+                Dy = (1.0 / Ay) * (1.0 - np.cos(Ay * dS))
+                Dy1 = np.sin(Ay * dS)
 
             if Ky < 0:
-                Cy = cosh(Ay * dS)
-                Cy1 = - Ay * sinh(Ay * dS)
-                Sy = (1.0 / Ay) * sinh(Ay * dS)
-                Sy1 = cosh(Ay * dS)
-                Dy = (1.0 / Ay) * (1.0 - cosh(Ay * dS))
-                Dy1 = sinh(Ay * dS)
+                Cy = np.cosh(Ay * dS)
+                Cy1 = - Ay * np.sinh(Ay * dS)
+                Sy = (1.0 / Ay) * np.sinh(Ay * dS)
+                Sy1 = np.cosh(Ay * dS)
+                Dy = (1.0 / Ay) * (1.0 - np.cosh(Ay * dS))
+                Dy1 = np.sinh(Ay * dS)
 
 # ------------------------------------------------------------------------------
 # Populate transfer matrices with calculated entry values
@@ -233,11 +233,11 @@ class Beam(Trajectory):
 
 # ------------------------------------------------------------------------------
 # Rotate upright in XY Plane
-        ThetaXY = 0.5 * arctan(2 * sigma[0, 2] / (sigma[2, 2] - sigma[0, 0]))
+        ThetaXY = 0.5 * np.arctan(2 * sigma[0, 2] / (sigma[2, 2] - sigma[0, 0]))
         if isnan(ThetaXY):
             ThetaXY = 0.0
-        C = cos(ThetaXY)
-        S = sin(ThetaXY)
+        C = np.cos(ThetaXY)
+        S = np.sin(ThetaXY)
         Rxy = matrix([
             [C, 0, -S, 0, 0, 0],
             [0, C, 0, -S, 0, 0],
@@ -249,11 +249,11 @@ class Beam(Trajectory):
 
 # ------------------------------------------------------------------------------
 # Rotate upright in YZ Plane (Most Important)
-        ThetaYZ = -0.5 * arctan(2 * sigma[2, 4] / (sigma[4, 4] - sigma[2, 2]))
+        ThetaYZ = -0.5 * np.arctan(2 * sigma[2, 4] / (sigma[4, 4] - sigma[2, 2]))
         if isnan(ThetaYZ):
             ThetaYZ = 0.0
-        C = cos(ThetaYZ)
-        S = sin(ThetaYZ)
+        C = np.cos(ThetaYZ)
+        S = np.sin(ThetaYZ)
         Ryz = matrix([
             [1, 0, 0, 0, 0, 0],
             [0, 1, 0, 0, 0, 0],
@@ -267,11 +267,11 @@ class Beam(Trajectory):
 # Rotate upright in XZ Plane
         C = 1.0
         S = 0.0
-        ThetaZX = -0.5 * arctan(2 * sigma[4, 0] / (sigma[0, 0] - sigma[4, 4]))
+        ThetaZX = -0.5 * np.arctan(2 * sigma[4, 0] / (sigma[0, 0] - sigma[4, 4]))
         if isnan(ThetaZX):
             ThetaZX = 0.0
-        C = cos(ThetaZX)
-        S = sin(ThetaZX)
+        C = np.cos(ThetaZX)
+        S = np.sin(ThetaZX)
         Rzx = matrix([
             [C, 0, 0, 0, -S, 0],
             [0, C, 0, 0, 0, -S],
@@ -288,7 +288,7 @@ class Beam(Trajectory):
 
         # print sigma[0,2],sigma[2,4], sigma[4,0]
 #		print ThetaXY, ThetaYZ, ThetaZX
-#		print 0.5 * arctan(2*sigma[0,2]/(sigma[2,2]-sigma[0,0])), 0.5 * arctan(2*sigma[2,4]/(sigma[4,4]-sigma[2,2])),-0.5 * arctan(2*sigma[4,0]/(sigma[0,0]-sigma[4,4]))
+#		print 0.5 * np.arctan(2*sigma[0,2]/(sigma[2,2]-sigma[0,0])), 0.5 * np.arctan(2*sigma[2,4]/(sigma[4,4]-sigma[2,2])),-0.5 * np.arctan(2*sigma[4,0]/(sigma[0,0]-sigma[4,4]))
 #		print sigma[0,2],sigma[2,4],sigma[4,0]
         # Beam semiaxes
         Const = 1.0e-3 * sqrt(5.0)
@@ -318,7 +318,7 @@ class Beam(Trajectory):
 
 # ------------------------------------------------------------------------------
 # Calculate Constants for E-Field Calculation
-        k = 1.0 / (4 * pi * 8.85e-12)
+        k = 1.0 / (4 * np.pi * 8.85e-12)
         Lambda = self.c0 / self.Frequency
         Q = 3.0 * self.I0 * Lambda / self.c0
 
@@ -369,12 +369,12 @@ class Beam(Trajectory):
         if B0 != 0:
             r = (self.m0 * self.v0) / (self.q0 * B0)
             da = dS / r
-            C = cos(da)
-            S = sin(da)
+            C = np.cos(da)
+            S = np.sin(da)
 
-            dA = arctan(Bperp[0, 0] / Bperp[1, 0])
-            Cr = cos(dA)
-            Sr = sin(dA)
+            dA = np.arctan(Bperp[0, 0] / Bperp[1, 0])
+            Cr = np.cos(dA)
+            Sr = np.sin(dA)
 
             R0 = matrix([
                 [Cr, 0, Sr, 0, 0, 0],

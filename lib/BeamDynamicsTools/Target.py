@@ -17,8 +17,8 @@ class Target:
         self.XYZ = array(RT)
         # Target Position (Toroidal Coordinates)
         self.R = sqrt(RT[0]**2 + RT[1]**2)
-        self.Phi = arctan(RT[1] / RT[0])
-        self.PhiDegrees = self.Phi * 180.0 / pi
+        self.Phi = np.arctan(RT[1] / RT[0])
+        self.PhiDegrees = self.Phi * 180.0 / np.pi
         RCenter = array([0.67, 0.0])
         dR = array([self.R, self.Z]) - RCenter
         self.r = norm(dR)
@@ -28,7 +28,7 @@ class Target:
         else:
             self.Theta = -1.0 * \
                 arccos(dot(-1.0 * RCenter / norm(RCenter), dR / norm(dR)))
-        self.ThetaDegrees = self.Theta * 180 / pi
+        self.ThetaDegrees = self.Theta * 180 / np.pi
         self.Xpol = Xpol
 
         # Detector Coordinates
@@ -54,7 +54,7 @@ class Target:
         self.DetectionVec = (self.XYZdetector - self.XYZ) / \
             self.DetectionLength
         self.DetectorAngle = arccos(dot(self.DetectionVec, self.AxisDetector))
-        self.DetectionDegree = self.DetectorAngle * 180.0 / pi
+        self.DetectionDegree = self.DetectorAngle * 180.0 / np.pi
         self.DetectionEff = AngularEff(self.DetectorAngle)
 
 # ------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ class Target:
 # ------------------------------------------------------------------------------
 # Calculate Angular parameters and vectors
         print(self.NormalV, self.IncidentV)
-        self.BeamTargetAngle = pi - arccos(dot(self.NormalV, self.IncidentV))
+        self.BeamTargetAngle = np.pi - arccos(dot(self.NormalV, self.IncidentV))
         self.GammaTargetAngle = arccos(dot(self.NormalV, self.DetectionVec))
         self.DetectionTargetAngle = arccos(
             dot(self.DetectionVec, self.IncidentV))
@@ -92,7 +92,7 @@ class Target:
         IncRZ = array(
             [sqrt(self.IncidentV[0]**2 + self.IncidentV[1]**2), self.IncidentV[2]])
         self.VAngle = arccos(dot(NormRZ, IncRZ))
-        self.Degrees = arccos(dot(self.NormalV, -self.IncidentV)) * 180.0 / pi
+        self.Degrees = arccos(dot(self.NormalV, -self.IncidentV)) * 180.0 / np.pi
 
 # ------------------------------------------------------------------------------
 # Calculate Basis vectors/matrices and initialize sigma matrices
@@ -198,7 +198,7 @@ class Target:
             self.Y,
             self.Z,
             self.R,
-            self.Phi * 180.0 / pi,
+            self.Phi * 180.0 / np.pi,
             self.BeamTargetAngle,
             self.GammaTargetAngle,
             self.DetectionTargetAngle,

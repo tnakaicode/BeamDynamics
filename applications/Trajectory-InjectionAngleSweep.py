@@ -7,13 +7,13 @@ import pylab as pl
 # (x,y,z) = (1.798m, -0.052m, 0.243m)
 #  alpha = 12.6 degrees (X-Z plane)
 #  beta = 8.0 degrees (X-Y plane)
-alpha = array([8, 10, 12, 14]) / 180.0 * pi
-beta = 8.0 / 180.0 * pi
+alpha = array([8, 10, 12, 14]) / 180.0 * np.pi
+beta = 8.0 / 180.0 * np.pi
 Rinjection = [1.798, 0.052, 0.243]
 Vinjection = []
 for i in range(len(alpha)):
-    Vinjection.append([-cos(alpha[i]) * cos(beta),
-                       cos(alpha[i]) * sin(beta), -sin(alpha[i])])
+    Vinjection.append([-np.cos(alpha[i]) * np.cos(beta),
+                       np.cos(alpha[i]) * np.sin(beta), -np.sin(alpha[i])])
 
 # ------------------------------------------------------------------------------
 # Import poloidal Boundary points

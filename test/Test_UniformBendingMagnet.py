@@ -27,7 +27,7 @@ Vessel.Plot2D(0)
 
 # R = sqrt(2 M E)*(c/B)
 R0 = 1.0
-Angle = pi / 2.0
+Angle = np.pi / 2.0
 BR = sqrt(2.0 * (2.0 * 1.67262158e-27) *
           (0.9e6 * 1.602e-19)) / (1.60217646e-19 * R0)
 Bv = BfieldVF(B0=0.00000)

@@ -14,11 +14,11 @@ import timeit
 # (x,y,z) = (1.798m, -0.052m, 0.243m)
 #  alpha = 12.6 degrees (X-Z plane)
 #  beta = 8.0 degrees (X-Y plane)
-alpha = 12.6 / 180.0 * pi
-beta = 8.0 / 180.0 * pi
+alpha = 12.6 / 180.0 * np.pi
+beta = 8.0 / 180.0 * np.pi
 
 Rinjection = [1.798, -0.052, 0.243]
-Vinjection = [-cos(alpha) * cos(beta), cos(alpha) * sin(beta), -sin(alpha)]
+Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
 
 Mass0 = 2.0 * (938.272e6)
 dLB = 2.0e-3  # scale length for B gradient
@@ -563,13 +563,13 @@ if False:
         print(rL, Omega, (rL * dTheta))
         # Change in r
 
-        drPara = rL * sin(dTheta) * hPara
+        drPara = rL * np.sin(dTheta) * hPara
 
-        drRad = rL * (cos(dTheta) - 1.0) * hRadius
+        drRad = rL * (np.cos(dTheta) - 1.0) * hRadius
 
-        vPara = vMag * cos(dTheta) * hPara
+        vPara = vMag * np.cos(dTheta) * hPara
 
-        vRad = vMag * sin(dTheta) * hRadius
+        vRad = vMag * np.sin(dTheta) * hRadius
 
         self.r.append(self.r[-1] + drPara + drRad)
 
@@ -630,9 +630,9 @@ if False:
 
         drPara = self.dt * dot(self.v[-1], hPara) * hPara
 
-        drPerp = (rL * sin(dTheta)) * hPerp
+        drPerp = (rL * np.sin(dTheta)) * hPerp
 
-        drRad = rL * (cos(dTheta) - 1.0) * hRad
+        drRad = rL * (np.cos(dTheta) - 1.0) * hRad
 
         self.r.append(self.r[-1] + drPara + drPerp + drRad)
 
@@ -641,7 +641,7 @@ if False:
         self.a.append(qm * cross(self.v[-1], self.B[-1]))
 
         dv = dot(self.v[-1], hPara) * hPara + dot(self.v[-1],
-                                                  hPerp) * (cos(dTheta) * hPerp - sin(dTheta) * hRad)
+                                                  hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
 
         self.v.append(self.v[-1] + dv)
 

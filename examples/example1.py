@@ -7,7 +7,6 @@ from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
-from matplotlib.pyplot import show
 
 # ===============================================================================
 # Calculate trajectory and sigma matrix evolution for 4 values of toroidal B
@@ -104,4 +103,4 @@ if False:
     np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
                (np.array(Parameters)), header=Header0)
 
-show()
+plt.show()

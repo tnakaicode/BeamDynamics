@@ -11,11 +11,11 @@ import matplotlib as mpl
 alpha0 = 12.6
 beta0 = 8.0
 
-alpha = alpha0 / 180.0 * pi
-beta = beta0 / 180.0 * pi
+alpha = alpha0 / 180.0 * np.pi
+beta = beta0 / 180.0 * np.pi
 print(alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
-Vinjection = [-cos(alpha) * cos(beta), cos(alpha) * sin(beta), -sin(alpha)]
+Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
 Energy = 0.9e6  # linspace(0.594e6,0.900e6,10)
 

@@ -253,11 +253,11 @@ alpha = 12.6 / 180.0 * pi
 beta = 8.0 / 180.0 * pi
 #Rinjection = [1.798, 0.052, 0.243]
 xTop = [RInj[0], 0.6]
-yTop = [RInj[1], RInj[1] + (xTop[0] - xTop[1]) * tan(beta)]
+yTop = [RInj[1], RInj[1] + (xTop[0] - xTop[1]) * np.tan(beta)]
 
 rTop = [2.0, 1.798, 0.6]
-zTop = [0.243 + (rTop[0] - rTop[1]) * tan(alpha), 0.243,
-        0.243 - (rTop[1] - rTop[2]) * tan(alpha)]
+zTop = [0.243 + (rTop[0] - rTop[1]) * np.tan(alpha), 0.243,
+        0.243 - (rTop[1] - rTop[2]) * np.tan(alpha)]
 
 
 if True:

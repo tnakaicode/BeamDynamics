@@ -22,11 +22,11 @@ mu = (MassLa * MuLa) + (MassBr * MuBr)
 w = 0.9e-2
 L = 3.5e-2
 
-Tmin = arctan(w / L)
-Tmax = pi / 2.0 - 0.1
+Tmin = np.arctan(w / L)
+Tmax = np.pi / 2.0 - 0.1
 theta = linspace(0.0, Tmax, 10000)
 
-P0 = 1.0 - exp(-mu * L)
+P0 = 1.0 - np.exp(-mu * L)
 A0 = w**2
 
 P4 = zeros(len(theta))
@@ -36,23 +36,23 @@ A3 = zeros(len(theta))
 
 for i in range(len(theta)):
     if theta[i] > Tmin:
-        P4[i] = 1.0 - exp(-mu * w / sin(theta[i]))
-        A4[i] = w * (L - w / tan(theta[i]))
+        P4[i] = 1.0 - np.exp(-mu * w / np.sin(theta[i]))
+        A4[i] = w * (L - w / np.tan(theta[i]))
 
-        Ftheta = 1.0 / tan(theta[i]) + tan(theta[i])
+        Ftheta = 1.0 / np.tan(theta[i]) + np.tan(theta[i])
 
-        P3[i] = (1.0 - exp(-mu * Ftheta * w * cos(theta[i]))) / (mu * Ftheta)
-        A3[i] = 2.0 * w**2 * cos(theta[i])
+        P3[i] = (1.0 - np.exp(-mu * Ftheta * w * np.cos(theta[i]))) / (mu * Ftheta)
+        A3[i] = 2.0 * w**2 * np.cos(theta[i])
     else:
-        P4[i] = 1.0 - exp(-mu * L / cos(theta[i]))
-        A4[i] = w * (w - L * sin(theta[i]))
+        P4[i] = 1.0 - np.exp(-mu * L / np.cos(theta[i]))
+        A4[i] = w * (w - L * np.sin(theta[i]))
 
-        Ftheta = 1.0 / tan(theta[i]) + tan(theta[i])
+        Ftheta = 1.0 / np.tan(theta[i]) + np.tan(theta[i])
 
-        P3[i] = (1.0 - exp(-mu * Ftheta * L * sin(theta[i]))) / (mu * Ftheta)
-        A3[i] = (2.0 * w * L * sin(theta[i]))
+        P3[i] = (1.0 - np.exp(-mu * Ftheta * L * np.sin(theta[i]))) / (mu * Ftheta)
+        A3[i] = (2.0 * w * L * np.sin(theta[i]))
 
-deg = 180.0 * theta / pi
+deg = 180.0 * theta / np.pi
 
 # Function For Calculating Anglular Correction ================================
 
@@ -60,26 +60,26 @@ deg = 180.0 * theta / pi
 def AngularEff(theta):
 
     if theta > Tmin:
-        P4 = 1.0 - exp(-mu * w / sin(theta))
-        A4 = w * (L - w / tan(theta))
+        P4 = 1.0 - np.exp(-mu * w / np.sin(theta))
+        A4 = w * (L - w / np.tan(theta))
 
-        Ftheta = 1.0 / tan(theta) + tan(theta)
+        Ftheta = 1.0 / np.tan(theta) + np.tan(theta)
 
-        P3 = (1.0 - exp(-mu * Ftheta * w * cos(theta))) / (mu * Ftheta)
-        A3 = 2.0 * w**2 * cos(theta)
+        P3 = (1.0 - np.exp(-mu * Ftheta * w * np.cos(theta))) / (mu * Ftheta)
+        A3 = 2.0 * w**2 * np.cos(theta)
         TotalEff = (A3 * P3 + A4 * P4) / (A0 * P0)
 
     elif theta == 0:
         TotalEff = 1.0
 
     else:
-        P4 = 1.0 - exp(-mu * L / cos(theta))
-        A4 = w * (w - L * sin(theta))
+        P4 = 1.0 - np.exp(-mu * L / np.cos(theta))
+        A4 = w * (w - L * np.sin(theta))
 
-        Ftheta = 1.0 / tan(theta) + tan(theta)
+        Ftheta = 1.0 / np.tan(theta) + np.tan(theta)
 
-        P3 = (1.0 - exp(-mu * Ftheta * L * sin(theta))) / (mu * Ftheta)
-        A3 = (2.0 * w * L * sin(theta))
+        P3 = (1.0 - np.exp(-mu * Ftheta * L * np.sin(theta))) / (mu * Ftheta)
+        A3 = (2.0 * w * L * np.sin(theta))
         TotalEff = (A3 * P3 + A4 * P4) / (A0 * P0)
 
     return TotalEff
