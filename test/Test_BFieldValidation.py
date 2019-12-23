@@ -189,7 +189,7 @@ def VectorVerticalField(VF):
             Z.append(z[j])
             Br.append(B[0])
             Bz.append(B[2])
-            Mag.append(sqrt(B[0]**2 + B[1]**2 + B[2]**2))
+            Mag.append(np.sqrt(B[0]**2 + B[1]**2 + B[2]**2))
 #	pl.figure()
     Q = pl.quiver(R, Z, Br, Bz, Mag, pivot='mid', scale=25,
                   width=0.005, cmap=mpl.cm.autumn)
@@ -227,7 +227,7 @@ def VectorToroidalField(TF):
             Y.append(y[j])
             Bx.append(B[0])
             By.append(B[1])
-            MAG = sqrt(B[0]**2 + B[1]**2 + B[2]**2)
+            MAG = np.sqrt(B[0]**2 + B[1]**2 + B[2]**2)
             if (MAG < 0.8 and pl.norm(R) < 1.0) or (MAG < 0.8):
                 Mag.append(MAG)
             else:

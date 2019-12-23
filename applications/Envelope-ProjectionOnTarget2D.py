@@ -27,7 +27,7 @@ Energy = 0.9e6  # linspace(0.594e6,0.900e6,10)
 
 # ------------------------------------------------------------------------------
 # Input Sigma Matrix
-SInput = matrix(loadtxt('../data/SigmaInjection.dat'))
+SInput = np.matrix(loadtxt('../data/SigmaInjection.dat'))
 
 # ------------------------------------------------------------------------------
 # Import poloidal Boundary points

@@ -14,7 +14,7 @@ Zb = [0.0, L1, L1, -L1, -L1]
 Vessel = Boundary(Rb, Zb)
 Vessel.Plot2D(0)
 
-# R = m v / q B -> v = sqrt(2 E / m) -> sqrt( 2 m E) / q B
+# R = m v / q B -> v = np.sqrt(2 E / m) -> np.sqrt( 2 m E) / q B
 
 #DATA = loadtxt('CmodCoordinatesRZ.txt')
 #Rb=[]; Zb=[];
@@ -25,10 +25,10 @@ Vessel.Plot2D(0)
 Vessel = Boundary(Rb, Zb)
 Vessel.Plot2D(0)
 
-# R = sqrt(2 M E)*(c/B)
+# R = np.sqrt(2 M E)*(c/B)
 R0 = 1.0
 Angle = np.pi / 2.0
-BR = sqrt(2.0 * (2.0 * 1.67262158e-27) *
+BR = np.sqrt(2.0 * (2.0 * 1.67262158e-27) *
           (0.9e6 * 1.602e-19)) / (1.60217646e-19 * R0)
 Bv = BfieldVF(B0=0.00000)
 
@@ -55,7 +55,7 @@ if True:
 #	pl.figure(); pl.plot(Y)
 
 if False:
-    S0 = matrix([
+    S0 = np.matrix([
         [0.577100, 0.398000, 0.000000, 0.000000, 0.000000, 0.000000],
         [0.398000, 171.8262, 0.000000, 0.000000, 0.000000, 0.000000],
         [0.000000, 0.000000, 0.343900, -0.27150, 0.000000, 0.000000],
@@ -63,7 +63,7 @@ if False:
         [0.000000, 0.000000, 0.000000, 0.000000, 1.297156, 2.343722],
         [0.000000, 0.000000, 0.000000, 0.000000, 2.343722, 134.9344]], float)
 
-    S0 = matrix(loadtxt('data/SigmaFinal/SigmaInj.txt'))
+    S0 = np.matrix(loadtxt('data/SigmaFinal/SigmaInj.txt'))
 
     Beam = beam(T, S0, Target=False)
 

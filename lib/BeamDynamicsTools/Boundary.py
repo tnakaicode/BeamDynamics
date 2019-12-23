@@ -145,7 +145,7 @@ class Boundary:
 
 
     def InBoundary(self, r):
-        x = sqrt(r[0]**2 + r[1]**2)
+        x = np.sqrt(r[0]**2 + r[1]**2)
         y = r[2]
         inside = False
         p1x = self.Rb[0]
@@ -168,8 +168,8 @@ class Boundary:
 # Xboundary determines the line drawn between two points r0 and r1 crosses a the boundary.
 # This function returns: boolean (IN), normal vector, tangent vector, incident vector, target position.
     def Xboundary(self, r0, r1):
-        x0 = array([sqrt(r0[0]**2 + r0[1]**2), r0[2]])
-        x1 = array([sqrt(r1[0]**2 + r1[1]**2), r1[2]])
+        x0 = array([np.sqrt(r0[0]**2 + r0[1]**2), r0[2]])
+        x1 = array([np.sqrt(r1[0]**2 + r1[1]**2), r1[2]])
         # Offset subtracted so zero occurs at the midplane
         Xpol = 0.0 - (1.7335261798429005 + 0.068944835197059254)
         IN = True
@@ -199,7 +199,7 @@ class Boundary:
                             [self.Tvec[i][0] * np.cos(Phi), self.Tvec[i][0] * np.sin(Phi), self.Tvec[i][1]])
                         TAN = TAN / norm(TAN)
                         INC = r1 - r0
-                        INC = INC / sqrt(INC[0]**2 + INC[1]**2 + INC[2]**2)
+                        INC = INC / np.sqrt(INC[0]**2 + INC[1]**2 + INC[2]**2)
                         RT = r1
                         Xpol = Xpol - norm(self.Cvec[i] - x1)
             i = i + 1

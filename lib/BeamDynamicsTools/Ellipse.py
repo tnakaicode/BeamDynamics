@@ -16,9 +16,9 @@ class Ellipse:
 # ------------------------------------------------------------------------------
 # Emittance in each phase place
         # self.EpsilonX = self.Sigma[0,0]*self.Sigma[1,1] - self.Sigma[0,1]**2
-        self.EmittenceX = sqrt(math.fabs(det(self.SigX)))
-        self.EmittenceY = sqrt(math.fabs(det(self.SigY)))
-        self.EmittenceZ = sqrt(math.fabs(det(self.SigZ)))
+        self.EmittenceX = np.sqrt(math.fabs(det(self.SigX)))
+        self.EmittenceY = np.sqrt(math.fabs(det(self.SigY)))
+        self.EmittenceZ = np.sqrt(math.fabs(det(self.SigZ)))
 
 # ------------------------------------------------------------------------------
 # Ellipse (Twiss) parameters in each phase plane
@@ -31,30 +31,30 @@ class Ellipse:
 
 # ------------------------------------------------------------------------------
 # Beam's spatial width in each phase plane
-        self.WidthX = sqrt(self.TwissXX1[1] * self.TwissXX1[3])
-        self.WidthY = sqrt(self.TwissYY1[1] * self.TwissYY1[3])
-        self.WidthZ = sqrt(self.TwissZZ1[1] * self.TwissZZ1[3])
+        self.WidthX = np.sqrt(self.TwissXX1[1] * self.TwissXX1[3])
+        self.WidthY = np.sqrt(self.TwissYY1[1] * self.TwissYY1[3])
+        self.WidthZ = np.sqrt(self.TwissZZ1[1] * self.TwissZZ1[3])
 
 # ------------------------------------------------------------------------------
 # Beam's angular envelope in each phase plane
-        self.DivergenceX = sqrt(self.TwissXX1[2] * self.TwissXX1[3])
-        self.DivergenceY = sqrt(self.TwissYY1[2] * self.TwissYY1[3])
-        self.DivergenceZ = sqrt(self.TwissZZ1[2] * self.TwissZZ1[3])
+        self.DivergenceX = np.sqrt(self.TwissXX1[2] * self.TwissXX1[3])
+        self.DivergenceY = np.sqrt(self.TwissYY1[2] * self.TwissYY1[3])
+        self.DivergenceZ = np.sqrt(self.TwissZZ1[2] * self.TwissZZ1[3])
 
 # ------------------------------------------------------------------------------
 # Ellipse parameter in the transverse spatial plane
-        self.EmittenceXY = sqrt(
-            det(matrix([[SIG[0, 0], SIG[0, 2]], [SIG[2, 0], SIG[2, 2]]])))
+        self.EmittenceXY = np.sqrt(
+            det(np.matrix([[SIG[0, 0], SIG[0, 2]], [SIG[2, 0], SIG[2, 2]]])))
         self.TwissXY = array(
             [-SIG[0, 2], SIG[0, 0], SIG[2, 2], self.EmittenceXY**2]) / self.EmittenceXY
 
-        self.EmittenceXZ = sqrt(
-            det(matrix([[SIG[0, 0], SIG[0, 4]], [SIG[4, 0], SIG[4, 4]]])))
+        self.EmittenceXZ = np.sqrt(
+            det(np.matrix([[SIG[0, 0], SIG[0, 4]], [SIG[4, 0], SIG[4, 4]]])))
         self.TwissXZ = array(
             [-SIG[0, 4], SIG[0, 0], SIG[4, 4], self.EmittenceXZ**2]) / self.EmittenceXZ
 
-        self.EmittenceYZ = sqrt(
-            det(matrix([[SIG[2, 2], SIG[2, 4]], [SIG[4, 2], SIG[4, 4]]])))
+        self.EmittenceYZ = np.sqrt(
+            det(np.matrix([[SIG[2, 2], SIG[2, 4]], [SIG[4, 2], SIG[4, 4]]])))
         self.TwissYZ = array(
             [-SIG[2, 4], SIG[2, 2], SIG[4, 4], self.EmittenceYZ**2]) / self.EmittenceYZ
 
@@ -80,10 +80,10 @@ class Ellipse:
         Theta = linspace(0, 2 * np.pi, NPoints)
         XPoints = zeros((NPoints), float)
         YPoints = zeros((NPoints), float)
-        m11 = math.sqrt(math.fabs(TWISS[1]))
-        m21 = -TWISS[0] / math.sqrt(math.fabs(TWISS[1]))
-        m22 = 1 / math.sqrt(math.fabs(TWISS[1]))
-        Radius = math.sqrt(math.fabs(TWISS[3]))
+        m11 = math.np.sqrt(math.fabs(TWISS[1]))
+        m21 = -TWISS[0] / math.np.sqrt(math.fabs(TWISS[1]))
+        m22 = 1 / math.np.sqrt(math.fabs(TWISS[1]))
+        Radius = math.np.sqrt(math.fabs(TWISS[3]))
         m12 = 0
         PHI = np.arctan(2.0 * TWISS[0] / (TWISS[2] - TWISS[1])) / 2.0
         for i in range(NPoints):
@@ -98,7 +98,7 @@ class Ellipse:
         def MFactor(Twiss0, Twiss1, Type):
             R = Twiss0[1] * Twiss1[2] + Twiss0[2] * \
                 Twiss1[1] - 2.0 * Twiss0[0] * Twiss1[0]
-            M = (0.5 * (R + sqrt(R**2 - 4.0)))**(0.5 * Type) - 1.0
+            M = (0.5 * (R + np.sqrt(R**2 - 4.0)))**(0.5 * Type) - 1.0
             return M
 
         Mx = MFactor(self.TwissXX1, E1.TwissXX1, Type)
@@ -179,23 +179,23 @@ class Ellipse:
 # Project transverse beam spot onto off-normal surface
     def ProjectOffNormal(self, SigmaBasis, TargetBasis, Scale=1.0, Label='', Title=' ', NPoints=1000, Mod='-'):
         X, Y = self.GenerateXY(self.TwissXY, NPoints)
-        Bs = matrix(SigmaBasis[:, [0, 2]])
-        Bt = matrix(TargetBasis[:, [0, 2]])
+        Bs = np.matrix(SigmaBasis[:, [0, 2]])
+        Bt = np.matrix(TargetBasis[:, [0, 2]])
         Ms = Scale * eye(2)
         Xp = []
         Yp = []
         Bdot = Bt * Bs.T
-        Bproj = matrix(zeros((2, 2), float))
+        Bproj = np.matrix(zeros((2, 2), float))
         for i in [0, 1]:
             for j in [0, 1]:
                 Bproj[i, j] = 1.0 / (Bdot[i, j])
         b11 = 1.0 / (Bt[:, 0].T * Bs[:, 0])**2
         b22 = 1.0 / (Bt[:, 1].T * Bs[:, 1])**2
-        Bproj = matrix([[b11[0, 0], 0.0], [0.0, b22[0, 0]]])
+        Bproj = np.matrix([[b11[0, 0], 0.0], [0.0, b22[0, 0]]])
 #		Ang =
 #		print Bproj
         for i in range(len(X)):
-            V = transpose(matrix([X[i], Y[i]]))
+            V = transpose(np.matrix([X[i], Y[i]]))
 #			Vp = Bproj * (Bt.T * Bs) * Bs * V
 #			Vp = Mrot * Bproj *V
 #			Vp =Bt.T * Bs * V

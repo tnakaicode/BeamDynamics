@@ -58,7 +58,7 @@ class Beam(Trajectory):
 #		self.e3=trajectory.e3
 
 # ===============================================================================
-# Calculate evolution of sigma matrix along trajectory
+# Calculate evolution of sigma np.matrix along trajectory
 # ===============================================================================
 
     def Trace(self):
@@ -67,7 +67,7 @@ class Beam(Trajectory):
         for i in range(Ni):
             #			D = self.Drift(self.dS[i])
             # Mb is the matrix form of Acc = (q/m) v x B
-            S = self.BasisM3[i]  # matrix(identity(6))
+            S = self.BasisM3[i]  # np.matrix(identity(6))
 #			print self.B[i]
 #			B = self.BMatrix(S,self.B[i],self.dS[i])
             M = self.BMatrix(i)
@@ -97,7 +97,7 @@ class Beam(Trajectory):
         for i in range(Ni - 1, -1, -1):
             D = self.Drift(self.dS[i])
             # Mb is the matrix form of Acc = (q/m) v x B
-            S = self.BasisM3[i]  # matrix(identity(6))
+            S = self.BasisM3[i]  # np.matrix(identity(6))
             B = self.BMatrix(S, self.B[i], self.dS[i])
             M = inv(B)
             RevTransferM.append(M)
@@ -107,7 +107,7 @@ class Beam(Trajectory):
         self.RevTransferM.append(RevTransferM)
 
     def Drift(self, ds=1e-3):
-        Mdrift = matrix([
+        Mdrift = np.matrix([
             [1, ds, 0, 0, 0, 0],
             [0, 1, 0, 0, 0, 0],
             [0, 0, 1, ds, 0, 0],
@@ -140,14 +140,14 @@ class Beam(Trajectory):
         kx = QP * (self.gradBx[IND])
         Kappax = QP * Bx
         Kx = (kx + Kappax**2)  # /1000.0;
-        Ax = sqrt(abs(Kx))
+        Ax = np.sqrt(abs(Kx))
 
 #		ky = QP * (self.gradBx[IND]);
         ky = QP * (self.gradBy[IND])
         Kappay = QP * By
         Ky = (ky + Kappay**2)
         # print kx,ky#'Ky %0.000f' %Ky   #/1000.0; print Ky
-        Ay = sqrt(abs(Ky))
+        Ay = np.sqrt(abs(Ky))
 
 # ------------------------------------------------------------------------------
 # Generate matrix entries based on linear model
@@ -202,7 +202,7 @@ class Beam(Trajectory):
 
 # ------------------------------------------------------------------------------
 # Populate transfer matrices with calculated entry values
-            Mb = matrix([
+            Mb = np.matrix([
                 [Cx, Sx, 0, 0, 0, Dx],
                 [Cx1, Sx1, 0, 0, 0, Dx1],
                 [0, 0, Cy, Sy, 0, Dy],
@@ -213,7 +213,7 @@ class Beam(Trajectory):
 # ------------------------------------------------------------------------------
 # If there is no field, use tranfer matrix for field free drift
         else:
-            Mb = matrix([
+            Mb = np.matrix([
                 [1, dS, 0, 0, 0, 0],
                 [0, 1, 0, 0, 0, 0],
                 [0, 0, 1, dS, 0, 0],
@@ -238,7 +238,7 @@ class Beam(Trajectory):
             ThetaXY = 0.0
         C = np.cos(ThetaXY)
         S = np.sin(ThetaXY)
-        Rxy = matrix([
+        Rxy = np.matrix([
             [C, 0, -S, 0, 0, 0],
             [0, C, 0, -S, 0, 0],
             [S, 0, C, 0, 0, 0],
@@ -254,7 +254,7 @@ class Beam(Trajectory):
             ThetaYZ = 0.0
         C = np.cos(ThetaYZ)
         S = np.sin(ThetaYZ)
-        Ryz = matrix([
+        Ryz = np.matrix([
             [1, 0, 0, 0, 0, 0],
             [0, 1, 0, 0, 0, 0],
             [0, 0, C, 0, -S, 0],
@@ -272,7 +272,7 @@ class Beam(Trajectory):
             ThetaZX = 0.0
         C = np.cos(ThetaZX)
         S = np.sin(ThetaZX)
-        Rzx = matrix([
+        Rzx = np.matrix([
             [C, 0, 0, 0, -S, 0],
             [0, C, 0, 0, 0, -S],
             [0, 0, 1, 0, 0, 0],
@@ -291,11 +291,11 @@ class Beam(Trajectory):
 #		print 0.5 * np.arctan(2*sigma[0,2]/(sigma[2,2]-sigma[0,0])), 0.5 * np.arctan(2*sigma[2,4]/(sigma[4,4]-sigma[2,2])),-0.5 * np.arctan(2*sigma[4,0]/(sigma[0,0]-sigma[4,4]))
 #		print sigma[0,2],sigma[2,4],sigma[4,0]
         # Beam semiaxes
-        Const = 1.0e-3 * sqrt(5.0)
+        Const = 1.0e-3 * np.sqrt(5.0)
 
-        rx = sqrt(abs(sigma[0, 0])) * Const
-        ry = sqrt(abs(sigma[2, 2])) * Const
-        rz = sqrt(abs(sigma[4, 4])) * Const / self.gamma[IND]
+        rx = np.sqrt(abs(sigma[0, 0])) * Const
+        ry = np.sqrt(abs(sigma[2, 2])) * Const
+        rz = np.sqrt(abs(sigma[4, 4])) * Const / self.gamma[IND]
 
 #		sigma = (1.0/5.0)*sigma
 
@@ -303,7 +303,7 @@ class Beam(Trajectory):
 
 # ------------------------------------------------------------------------------
 # calculate normalized radial component for form factor fit
-        p = self.gamma[IND] * rz / sqrt(rx * ry)
+        p = self.gamma[IND] * rz / np.sqrt(rx * ry)
 
         # Form factor f polyfit Coefficient
         f = 0.0
@@ -326,17 +326,17 @@ class Beam(Trajectory):
 # Calculate Space charge E-Field Components
         Ex = (k * Q / self.gamma[IND]**2) * (1.0 - f) / (rx * (rx + ry) * rz)
         Ey = (k * Q / self.gamma[IND]**2) * (1.0 - f) / (ry * (rx + ry) * rz)
-        Ez = (k * Q) * f / (rx * ry * rz)  # /sqrt(5)
+        Ez = (k * Q) * f / (rx * ry * rz)  # /np.sqrt(5)
 
 # ------------------------------------------------------------------------------
 # Constant to convert E-field to delta Xi'
         d = (self.q0 * self.dS[IND]) / (self.m0 * self.c0 **
-                                        2 * self.beta[IND]) * 1e3 * sqrt(1 / 5.0)
+                                        2 * self.beta[IND]) * 1e3 * np.sqrt(1 / 5.0)
 #		print d*Ez
 
 # ------------------------------------------------------------------------------
 # Apply SPace Charge Impulses to momentum
-        ME = matrix([
+        ME = np.matrix([
             [1, 0, 0, 0, 0, 0],
             [d * Ex, 1, 0, 0, 0, 0],
             [0, 0, 1, 0, 0, 0],
@@ -344,7 +344,7 @@ class Beam(Trajectory):
             [0, 0, 0, 0, 1, 0],
             [0, 0, 0, 0, d * Ez, 1]], float)
 
-#		print d*Ex/sqrt(sigma[1,1]),d*Ey/sqrt(sigma[3,3]),d*Ez/sqrt(sigma[5,5])
+#		print d*Ex/np.sqrt(sigma[1,1]),d*Ey/np.sqrt(sigma[3,3]),d*Ez/np.sqrt(sigma[5,5])
         # Rotate back to orignial orientation
 ##		sigma = (Rxy.T * Ryz.T * Rzx.T) * sigma * (Rzx * Ryz * Rxy)
 #		return (Rzx.T * Ryz.T * Rxy.T) * ME * sigma * ME.T * ( Rxy *Ryz * Rzx )
@@ -362,7 +362,7 @@ class Beam(Trajectory):
 
     def BMatrix1(self, Basis, Bin, dS):
 
-        Bperp = matrix([[dot(Bin, Basis[:, 0])], [
+        Bperp = np.matrix([[dot(Bin, Basis[:, 0])], [
                        dot(Bin, Basis[:, 1])], [0.0]])
 
         B0 = norm(Bperp)
@@ -376,7 +376,7 @@ class Beam(Trajectory):
             Cr = np.cos(dA)
             Sr = np.sin(dA)
 
-            R0 = matrix([
+            R0 = np.matrix([
                 [Cr, 0, Sr, 0, 0, 0],
                 [0, Cr, 0, Sr, 0, 0],
                 [-Sr, 0, Cr, 0, 0, 0],
@@ -384,7 +384,7 @@ class Beam(Trajectory):
                 [0, 0, 0, 0, 1, 0],
                 [0, 0, 0, 0, 0, 1]], float)
 
-            Mb = matrix([
+            Mb = np.matrix([
                 [1, dS, 0, 0, 0, 0],
                 [0, 1, 0, 0, 0, 0],
                 [0, 0, C, r * S, 0, r - r * C],
@@ -410,7 +410,7 @@ class Beam(Trajectory):
         Fzx = Vn[2] * Bn[0]
         Fxz = -Vn[0] * Bn[2]
 
-        Mb = matrix([
+        Mb = np.matrix([
             [1, 0, 0, 0, 0, 0],
             [0, 1, 0, Fyz, 0, Fyx],
             [0, 0, 1, 0, 0, 0],

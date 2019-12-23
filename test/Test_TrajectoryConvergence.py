@@ -24,7 +24,7 @@ if False:
         RL = (T[-1].m0 * T[-1].v0) / (T[-1].q0 * B.B0)
         R = T[-1].r[-1] - array([20.0 - RL, 0, 0.0])
         # -RL)/d0 ) #/T.s[-1]*d0 - RL)
-        dr.append(sqrt(R[0]**2 + R[1]**2 + R[2]**2) * (d0 / T[-1].s[-1]) - RL)
+        dr.append(np.sqrt(R[0]**2 + R[1]**2 + R[2]**2) * (d0 / T[-1].s[-1]) - RL)
         # T.Plot2D()
     pl.figure(1)
     pl.loglog(dS, dr, '.')
@@ -67,7 +67,7 @@ if True:
             y.append(R[i][1])
             z.append(R[i][2])
             S.append(T.s[i])
-            r.append(sqrt(x[-1]**2 + y[-1]**2 + z[-1]**2))
+            r.append(np.sqrt(x[-1]**2 + y[-1]**2 + z[-1]**2))
             rN.append((r[-1] - RL) / T.s[i])
 
         pl.figure(1)

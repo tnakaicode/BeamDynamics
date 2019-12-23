@@ -16,7 +16,7 @@ class Target:
         self.Z = RT[2]
         self.XYZ = array(RT)
         # Target Position (Toroidal Coordinates)
-        self.R = sqrt(RT[0]**2 + RT[1]**2)
+        self.R = np.sqrt(RT[0]**2 + RT[1]**2)
         self.Phi = np.arctan(RT[1] / RT[0])
         self.PhiDegrees = self.Phi * 180.0 / np.pi
         RCenter = array([0.67, 0.0])
@@ -88,9 +88,9 @@ class Target:
         self.Test = [NormXY, IncXY]
         self.HAngle = arccos(dot(NormXY, IncXY))
         NormRZ = array(
-            [sqrt(self.NormalV[0]**2 + self.NormalV[1]**2), self.NormalV[2]])
+            [np.sqrt(self.NormalV[0]**2 + self.NormalV[1]**2), self.NormalV[2]])
         IncRZ = array(
-            [sqrt(self.IncidentV[0]**2 + self.IncidentV[1]**2), self.IncidentV[2]])
+            [np.sqrt(self.IncidentV[0]**2 + self.IncidentV[1]**2), self.IncidentV[2]])
         self.VAngle = arccos(dot(NormRZ, IncRZ))
         self.Degrees = arccos(dot(self.NormalV, -self.IncidentV)) * 180.0 / np.pi
 
@@ -219,7 +219,7 @@ class Target:
 
 
 def Basis3(e1, e2, e3):
-    Basis = matrix([
+    Basis = np.matrix([
         [e1[0], e2[0], e3[0]],
         [e1[1], e2[1], e3[1]],
         [e1[2], e2[2], e3[2]]], float)
@@ -227,7 +227,7 @@ def Basis3(e1, e2, e3):
 
 
 def Basis6(e1, e2, e3):
-    Basis = matrix([
+    Basis = np.matrix([
         [e1[0], 0.0, e2[0], 0.0, e3[0], 0.0],
         [0.0, e1[0], 0.0, e2[0], 0.0, e3[0]],
         [e1[1], 0.0, e2[1], 0.0, e3[1], 0.0],

@@ -8,7 +8,7 @@ from numpy import *
 def ConverM6toM3(M6):
     i3 = [0, 1, 2]
     i6 = [0, 2, 4]
-    M3 = matrix(zeros((3, 3), float))
+    M3 = np.matrix(zeros((3, 3), float))
     for i in i3:
         for j in i3:
             M3[i, j] = M6[i6[i], i6[j]]
@@ -24,7 +24,7 @@ def ConverM6toM3(M6):
 # ====== Convert from trace 3D modified Sigma to Standard Sigma Matrix =========
 # ==============================================================================
 
-Sigma0 = matrix([
+Sigma0 = np.matrix([
     [0.5771000, 0.3980000, 0.000000, 0.000000, 0.000000, 0.000000],
     [0.3980000, 171.8262, 0.000000, 0.000000, 0.000000, 0.000000],
     [0.000000, 0.000000, 0.3439000, -.2715000, 0.000000, 0.000000],
@@ -44,7 +44,7 @@ def ConvertT3D(MS, S0=Sigma0):
     for i in range(6):
         for j in range(6):
             if i != j and i < 5:
-                S[i, j] = MS[i + 1, j] * sqrt(S[i, i] * S[j, j])
+                S[i, j] = MS[i + 1, j] * np.sqrt(S[i, i] * S[j, j])
 
 # Copy lower right triangle to upper right to symmetrize
     for i in range(6):

@@ -23,15 +23,15 @@ SigmaXT3D = []
 SigmaYT3D = []
 
 SigmaLC = loadtxt(Path0 + 'Trace3DSigma_I_0LC.txt')
-SigmaInj = matrix(loadtxt(Path0 + 'SigmaInj.txt'))
+SigmaInj = np.matrix(loadtxt(Path0 + 'SigmaInj.txt'))
 ellipseInj = Ellipse(SigmaInj)
 
 for i in range(len(FileList)):
-    Sigma.append(matrix(loadtxt(Path0 + FileList[i])))
+    Sigma.append(np.matrix(loadtxt(Path0 + FileList[i])))
     ellipse.append(Ellipse(Sigma[-1]))
 
 for i in range(len(FileListT3D)):
-    SigmaT3D.append(matrix(loadtxt(Path0 + FileListT3D[i])))
+    SigmaT3D.append(np.matrix(loadtxt(Path0 + FileListT3D[i])))
     EllipseT3D.append(Ellipse(SigmaT3D[-1]))
 
 # ======== Calculate Mismatch =================================================
@@ -48,7 +48,7 @@ for i in [0, 1, 2, 3]:
 # ======== All in one plot ====================================================
 if False:
     figure(figsize=(12, 4))
-    C1 = 1.0  # /sqrt(5.0)#0.9
+    C1 = 1.0  # /np.sqrt(5.0)#0.9
     for i in [0, 1]:
         subplot(1, 3, 1, aspect='equal')
         ellipse[i].PlotXX1(Mod=Color[i])

@@ -32,7 +32,7 @@ class Bfield:
         return([Bx, By, Bz])
 
     def local(self, r):
-        R = sqrt(r[0]**2 + r[1]**2)
+        R = np.sqrt(r[0]**2 + r[1]**2)
         Phi = np.arctan(r[1] / r[0])
         Btor = self.B0 * self.R0 / R * (1 + self.fR)
         Bx = Btor * np.sin(Phi)
@@ -140,7 +140,7 @@ class BfieldTF:
             return B
 
         if self.Method == 'Simple':
-            R = sqrt(RIN[0]**2 + RIN[1]**2)
+            R = np.sqrt(RIN[0]**2 + RIN[1]**2)
             B = array([0.0, 0.0, 0.0])
             r4 = 1.290259
             r3 = 1.100303  # coil Width [m]
@@ -188,7 +188,7 @@ class BfieldVF:
 
     def local(self, R):
         #	RCoil=[array([1.0,0.0])]
-        r = sqrt(R[0]**2 + R[1]**2)
+        r = np.sqrt(R[0]**2 + R[1]**2)
         z1 = R[2]
         theta = np.arctan(R[1] / R[0])
         Br = 0.0
@@ -198,14 +198,14 @@ class BfieldVF:
             r0 = self.RCoil[n][0]
             z0 = self.RCoil[n][1]
             z = z1 - z0
-            k = sqrt(4 * r * r0 / ((r + r0)**2 + z**2))
+            k = np.sqrt(4 * r * r0 / ((r + r0)**2 + z**2))
             IE = ellipe(k)
             IK = ellipk(k)
 
-            Br = Br + (1.0 / r) * (z / sqrt((r + r0)**2 + z**2)) * \
+            Br = Br + (1.0 / r) * (z / np.sqrt((r + r0)**2 + z**2)) * \
                 (-IK + IE * (r0**2 + r**2 + z**2) / ((r0 - r)**2 + z**2))
 
-            Bz = Bz + (1.0 / sqrt((r + r0)**2 + z**2)) * \
+            Bz = Bz + (1.0 / np.sqrt((r + r0)**2 + z**2)) * \
                 (IK + IE * (r0**2 - r**2 - z**2) / ((r0 - r)**2 + z**2))
 
             if ((r - r0)**2 + z**2 < 0.1**2):

@@ -57,13 +57,13 @@ class Trajectory:
         BFieldVF = Bv
 
         # Beam
-#		v0 = pl.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
+#		v0 = pl.np.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
         self.r = [array(r0)]
-#		self.v0 = sqrt(2.0*T0*self.q0/(self.m0))
+#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.gamma = 1.0 + T0 / M0
-        self.beta = sqrt(1.0 - 1.0 / self.gamma**2)
+        self.beta = np.sqrt(1.0 - 1.0 / self.gamma**2)
         self.Beta = [self.beta * array(v0) / norm(v0)]
-#		self.v0 = sqrt(2.0*T0*self.q0/(self.m0))
+#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.v0 = self.beta * c0
         self.v = [self.v0 * array(v0) / norm(v0)]
         self.beta = [norm(self.Beta[-1])]
@@ -404,7 +404,7 @@ class Trajectory:
             x.append(self.r[i][0])
             y.append(self.r[i][1])
             z.append(self.r[i][2])
-            R.append(sqrt(x[-1]**2 + y[-1]**2))
+            R.append(np.sqrt(x[-1]**2 + y[-1]**2))
         if Type == 'poloidal':
             PLOT = pl.plot(R, z, color=self.LineColor,
                            linestyle=self.LineStyle, linewidth=self.LineWidth)
@@ -503,7 +503,7 @@ class Trajectory:
 
 
 def Basis3(e1, e2, e3):
-    Basis = matrix([
+    Basis = np.matrix([
         [e1[0], e2[0], e3[0]],
         [e1[1], e2[1], e3[1]],
         [e1[2], e2[2], e3[2]]], float)
@@ -511,7 +511,7 @@ def Basis3(e1, e2, e3):
 
 
 def Basis6(e1, e2, e3):
-    Basis = matrix([
+    Basis = np.matrix([
         [e1[0], 0.0, e2[0], 0.0, e3[0], 0.0],
         [0.0, e1[0], 0.0, e2[0], 0.0, e3[0]],
         [e1[1], 0.0, e2[1], 0.0, e3[1], 0.0],
