@@ -21,10 +21,10 @@ class BoundaryStellarator:
         self.Zb = np.array(Zb)
         self.Zb1 = np.roll(Zb, 1)
         self.NCorners = len(Rb)
-        Cmatrix = matrix(np.zeros((len(Rb), 2), float))
-        Mmatrix = matrix(np.zeros((len(Rb), 2), float))
-        Tmatrix = matrix(np.zeros((len(Rb), 2), float))
-        Nmatrix = matrix(np.zeros((len(Rb), 2), float))
+        Cmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Mmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Tmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Nmatrix = np.matrix(np.zeros((len(Rb), 2), float))
 
 # ------------------------------------------------------------------------------
 # Generate lists of Corners, Midpoints, Tangents, and Normals

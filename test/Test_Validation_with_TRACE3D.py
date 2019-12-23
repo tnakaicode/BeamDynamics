@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.special as sp
 import sys
 import os
 sys.path.append(os.path.join('../'))
@@ -36,7 +37,7 @@ ellipseInj = Ellipse(SigmaInj)
 
 for i in range(len(FileList)):
     Sigma.append(np.matrix(np.loadtxt(Path0 + FileList[i])))
-    ellipse.append(Ellipse(Sigma[-1]))
+    sp.ellipse.append(Ellipse(Sigma[-1]))
 
 for i in range(len(FileListT3D)):
     SigmaT3D.append(np.matrix(np.loadtxt(Path0 + FileListT3D[i])))
@@ -44,14 +45,14 @@ for i in range(len(FileListT3D)):
 
 # ======== Calculate Mismatch =================================================
 
-M0000 = ellipse[0].MismatchFactor(EllipseT3D[0])
-M1600 = ellipse[1].MismatchFactor(EllipseT3D[1])
-M3120 = ellipse[2].MismatchFactor(EllipseT3D[2])
-M4500 = ellipse[3].MismatchFactor(EllipseT3D[3])
+M0000 = sp.ellipse[0].MismatchFactor(EllipseT3D[0])
+M1600 = sp.ellipse[1].MismatchFactor(EllipseT3D[1])
+M3120 = sp.ellipse[2].MismatchFactor(EllipseT3D[2])
+M4500 = sp.ellipse[3].MismatchFactor(EllipseT3D[3])
 
 M = []
 for i in [0, 1, 2, 3]:
-    M.append(EllipseT3D[i].MismatchFactor(ellipse[i]))
+    M.append(EllipseT3D[i].MismatchFactor(sp.ellipse[i]))
 
 # ======== All in one plot ====================================================
 if False:
@@ -59,13 +60,13 @@ if False:
     C1 = 1.0  # /np.sqrt(5.0)#0.9
     for i in [0, 1]:
         subplot(1, 3, 1, aspect='equal')
-        ellipse[i].PlotXX1(Mod=Color[i])
+        sp.ellipse[i].PlotXX1(Mod=Color[i])
         EllipseT3D[i].PlotXX1(Mod='--' + Color[i])
         subplot(1, 3, 2, aspect='equal')
-        ellipse[i].PlotYY1(Mod=Color[i])
+        sp.ellipse[i].PlotYY1(Mod=Color[i])
         EllipseT3D[i].PlotYY1(Mod='--' + Color[i])
         subplot(1, 3, 3, aspect='equal')
-        ellipse[i].PlotXY(Mod=Color[i])
+        sp.ellipse[i].PlotXY(Mod=Color[i])
         EllipseT3D[i].PlotXY(Mod='--' + Color[i], Rotate=False)
         xlim(-LIM, LIM)
         ylim(-LIM, LIM)
@@ -82,7 +83,7 @@ if True:
 #		title(FileList[i])
         subplot(2, 2, 1, aspect='equal')
         ellipseInj.PlotXX1(Mod=':r')
-        ellipse[i].PlotXX1(Mod=Color[0])
+        sp.ellipse[i].PlotXX1(Mod=Color[0])
         EllipseT3D[i].PlotXX1(Mod='--' + Color[1])
         text(0, 0, 'M=%0.4f' % M[i][0], va='center',
              ha='center', color='r', size=16)
@@ -91,7 +92,7 @@ if True:
 
         subplot(2, 2, 2, aspect='equal')
         ellipseInj.PlotYY1(Mod=':r')
-        ellipse[i].PlotYY1(Mod=Color[0])
+        sp.ellipse[i].PlotYY1(Mod=Color[0])
         EllipseT3D[i].PlotYY1(Mod='--' + Color[1])
         text(0, 0, 'M=%0.4f' % M[i][1], va='center',
              ha='center', color='r', size=16)
@@ -99,7 +100,7 @@ if True:
 
         subplot(2, 2, 3, aspect='equal')
         ellipseInj.PlotZZ1(Mod=':r')
-        ellipse[i].PlotZZ1(Mod=Color[0])
+        sp.ellipse[i].PlotZZ1(Mod=Color[0])
         EllipseT3D[i].PlotZZ1(Mod='--' + Color[1])
         text(0, 0, 'M=%0.4f' % M[i][2], va='center',
              ha='center', color='r', size=16)
@@ -107,13 +108,13 @@ if True:
 
         subplot(2, 2, 4, aspect='equal')
         ellipseInj.PlotXY(Mod=':r')
-        ellipse[i].PlotXY(Mod=Color[0], Rotate=False)
+        sp.ellipse[i].PlotXY(Mod=Color[0], Rotate=False)
         EllipseT3D[i].PlotXY(Mod='--' + Color[1])
         text(0, 0, 'M=%0.4f' % M[i][3], va='center',
              ha='center', color='r', size=16)
         title('Transverse Projection')
 
-        E = ellipse[i]
+        E = sp.ellipse[i]
         np.savetxt('Maxima.txt', [E.WidthX, E.WidthY, E.WidthZ, E.DivergenceX,
                                E.DivergenceY, E.DivergenceZ, M[i][0], M[i][1], M[i][2], M[i][3]])
         suptitle(Title + r' (B$_\phi$= ' + BList[i] + ')', size=16)
@@ -202,6 +203,6 @@ if False:
 if True:
     plt.figure()
     for i in [0, 1, 2, 3]:
-        ellipse[i].PlotXY()
+        sp.ellipse[i].PlotXY()
 
 show()

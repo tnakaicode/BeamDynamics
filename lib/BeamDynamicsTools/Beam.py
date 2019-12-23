@@ -306,7 +306,7 @@ class Beam(Trajectory):
 # calculate normalized radial component for form factor fit
         p = self.gamma[IND] * rz / np.sqrt(rx * ry)
 
-        # Form factor f polyfit Coefficient
+        # Form factor f np.polyfit Coefficient
         f = 0.0
         if p < 1.0:
             C0 = [0.32685993, -1.10422029, 1.64157723, -1.52987752, 0.99919503]

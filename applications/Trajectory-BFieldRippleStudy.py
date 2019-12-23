@@ -25,7 +25,8 @@ alpha = alpha0 / 180.0 * np.pi
 beta = beta0 / 180.0 * np.pi
 print(alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
-Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
+Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha)
+              * np.sin(beta), -np.sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
 Energy = 0.9e6  # np.linspace(0.594e6,0.900e6,10)
 
@@ -205,11 +206,12 @@ plt.title('Beam centroid error due to TF current error')
 # ===============================================================================
 
 if False:
-    np.savetxt(OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
+    np.savetxt(OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat',
+               AngleComponents)
     np.savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-            (np.array(Parameters)), header=Header0)
+               (np.array(Parameters)), header=Header0)
 
 if False:
     FigName = 'TrajectoryProjections_alpha%2.2f_beta%2.2f_' % (

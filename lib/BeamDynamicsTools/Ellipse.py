@@ -215,7 +215,7 @@ class Ellipse:
         plt.xlabel('X [mm]')
         plt.ylabel('Y [mm]')
 
-    def PlotProjectionPolPhi(self):  # NOT FINISHED
+    def PlotProjectionPolPhi(self, Mod='-', Label=''):  # NOT FINISHED
         Xp = self.ProjectionX
         Yp = self.ProjectionY
         plt.plot(Xp, Yp, Mod, label=Label)
@@ -227,7 +227,7 @@ class Ellipse:
 # Save XY projection points
 
     def PrintProjection(self, FileName='ProjectionXY'):
-        Output = np.transpose(vstack((self.ProjectionX, self.ProjectionY)))
+        Output = np.transpose(np.vstack((self.ProjectionX, self.ProjectionY)))
         np.savetxt(FileName, Output)
 
 # ------------------------------------------------------------------------------

@@ -1,5 +1,14 @@
 import sys
-sys.path.append('../lib/BeamDynamicsTools/')
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+import os
+sys.path.append(os.path.join('../'))
+from lib.BeamDynamicsTools.Boundary import Boundary
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Trajectory import Trajectory
+from lib.BeamDynamicsTools.Beam import Beam
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 from BoundaryStellarator import *
 import numpy as np
 import pylab as pl

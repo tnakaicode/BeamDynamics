@@ -1,10 +1,16 @@
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
-sys.path.append('../lib/BeamDynamicsTools/')
-from Bfield import *
-
+import os
+sys.path.append(os.path.join('../'))
+from lib.BeamDynamicsTools.Boundary import Boundary
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Trajectory import Trajectory
+from lib.BeamDynamicsTools.Beam import Beam
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import numpy as np
 import pylab as pl
-from scipy.special import *
+import scipy.special as sp
 from numpy.linalg import norm
 import matplotlib as mpl
 
@@ -32,10 +38,10 @@ def PlotEllipticInt():
     Ek = []
     Ee = []
     for i in range(Ni):
-        K1 = ellipk(1.0 * i / Ni)
+        K1 = sp.ellipk(1.0 * i / Ni)
         print(1.0 * i / Ni)  # K1
         Ek.append(K1)  # print Ek[-1]
-        E1 = ellipe(1.0 * i / Ni)
+        E1 = sp.ellipe(1.0 * i / Ni)
         Ee.append(E1)  # print Ee[-1]
     plt.plot(Ek)
     plt.plot(Ee)
@@ -231,7 +237,7 @@ def VectorToroidalField(TF):
             if (MAG < 0.8 and plt.norm(R) < 1.0) or (MAG < 0.8):
                 Mag.append(MAG)
             else:
-                Mag.append(nan)
+                Mag.append(None)
     Q = plt.quiver(X, Y, Bx, By, np.array(Mag), pivot='mid', scale=10,
                   width=0.005, cmap=mpl.cm.winter)  # ,cmap=mpl.cm.winter
 #	plt.title(r'Toroidal B($r,\phi$)-field (uniform in $z$)')
@@ -249,8 +255,8 @@ def VectorToroidalField(TF):
 
 # ------------------------------------------------------------------------------
 # Draw Beam
-alpha = 12.6 / 180.0 * pi
-beta = 8.0 / 180.0 * pi
+alpha = 12.6 / 180.0 * np.pi
+beta = 8.0 / 180.0 * np.pi
 #Rinjection = [1.798, 0.052, 0.243]
 xTop = [RInj[0], 0.6]
 yTop = [RInj[1], RInj[1] + (xTop[0] - xTop[1]) * np.tan(beta)]

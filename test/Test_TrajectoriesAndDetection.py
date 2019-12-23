@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.join('../'))
 from lib.BeamDynamicsTools.Boundary import Boundary
-from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF, CalculateB0, CalculateI0
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
 from lib.BeamDynamicsTools.Ellipse import Ellipse

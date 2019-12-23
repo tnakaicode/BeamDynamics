@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.append(os.path.join('../'))
 from lib.BeamDynamicsTools.Boundary import Boundary
-from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF, Bfieldc
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
 from lib.BeamDynamicsTools.Ellipse import Ellipse
@@ -22,7 +22,7 @@ if False:
     B = Bfieldc(B0=0.1)
     Bv = Bfieldc(B0=0.0001)
     d0 = 10.0
-    dS = logspace(-5, -2, 15)
+    dS = np.logspace(-5, -2, 15)
     dr = []
     T = []
     for i in range(len(dS)):

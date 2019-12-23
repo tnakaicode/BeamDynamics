@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import pylab as pl
 
 # p      f    1/p     f
@@ -26,14 +27,14 @@ FormF = np.array([
     [1.00, 0.333, 1.00, 0.333]], float)
 
 X = np.linspace(0, 1, 100)
-C = polyfit(FormF[:, 0], FormF[:, 1], 4)
-Cinv = polyfit(FormF[:, 2], FormF[:, 3], 4)
+C = np.polyfit(FormF[:, 0], FormF[:, 1], 4)
+Cinv = np.polyfit(FormF[:, 2], FormF[:, 3], 4)
 
 print(C)
 print(Cinv)
 
-Y = polyval(C, X)
-Yinv = polyval(Cinv, X)
+Y = np.polyval(C, X)
+Yinv = np.polyval(Cinv, X)
 
 if True:
     plt.figure()

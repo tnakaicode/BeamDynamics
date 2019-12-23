@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.join('../'))
 from lib.BeamDynamicsTools.Boundary import Boundary
-from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF, Bfieldc
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
 from lib.BeamDynamicsTools.Ellipse import Ellipse
@@ -46,14 +46,14 @@ if True:
     B = Bfieldc(B0=BR)
     T = Trajectory(Vessel, B, Bv, r0=[
                    10.0, 0.0, 1.0], v0=[-1.0, 0.0, 0.0], Nmax=100)
-    plot(Rb, Zb)
+    plt.plot(Rb, Zb)
     T.Plot2D()
 #	T.PlotB()
     plt.xlabel(r'X')
     plt.ylabel(r'Y')
     plt.title(r'?')
-    xlim(-L0, L1 * 1.1)
-    ylim(-L1 * 1.1, L1 * 1.1)
+    plt.xlim(-L0, L1 * 1.1)
+    plt.ylim(-L1 * 1.1, L1 * 1.1)
     Y = []
     for i in range(len(T.B)):
         #		Y.append(norm( cross(T.v[i],T.B[i]) ) )
@@ -73,11 +73,11 @@ if False:
 
     S0 = np.matrix(np.loadtxt('data/SigmaFinal/SigmaInj.txt'))
 
-    Beam = beam(T, S0, Target=False)
+    Beam = Beam(T, S0, Target=False)
 
     Beam.Trace(Target=False)
 
-    plt.figure(
+    plt.figure()
     STR = r'1m Radius 90$^o$ Bend in Uniform B$_x$- Field'
     Ei = Ellipse(Beam.Sigma[0])
     Ei.PlotALL()

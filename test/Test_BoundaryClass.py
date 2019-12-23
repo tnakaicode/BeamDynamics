@@ -1,6 +1,14 @@
 import sys
-sys.path.append('../lib/BeamDynamicsTools/')
-from Boundary import *
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+import os
+sys.path.append(os.path.join('../'))
+from lib.BeamDynamicsTools.Boundary import Boundary
+from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
+from lib.BeamDynamicsTools.Trajectory import Trajectory
+from lib.BeamDynamicsTools.Beam import Beam
+from lib.BeamDynamicsTools.Ellipse import Ellipse
 import numpy as np
 import pylab as pl
 import timeit
@@ -38,8 +46,8 @@ Zrange = [0.8, -0.8]
 
 # ------------------------------------------------------------------------------
 # Generate Ni Random X,Z points
-Xrand = random.rand(Ni) * (Xrange[1] - Xrange[0]) + Xrange[0]
-Zrand = random.rand(Ni) * (Zrange[1] - Zrange[0]) + Zrange[0]
+Xrand = np.random.rand(Ni) * (Xrange[1] - Xrange[0]) + Xrange[0]
+Zrand = np.random.rand(Ni) * (Zrange[1] - Zrange[0]) + Zrange[0]
 
 # ------------------------------------------------------------------------------
 # Test Each Point to determine if is in the boundary
