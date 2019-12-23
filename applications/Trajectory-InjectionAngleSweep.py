@@ -3,11 +3,11 @@ sys.path.append('../lib/')
 from .BeamDynamicsTools import *
 import pylab as pl
 
-# Define array of injection angles
+# Define np.array of injection angles
 # (x,y,z) = (1.798m, -0.052m, 0.243m)
 #  alpha = 12.6 degrees (X-Z plane)
 #  beta = 8.0 degrees (X-Y plane)
-alpha = array([8, 10, 12, 14]) / 180.0 * np.pi
+alpha = np.array([8, 10, 12, 14]) / 180.0 * np.pi
 beta = 8.0 / 180.0 * np.pi
 Rinjection = [1.798, 0.052, 0.243]
 Vinjection = []
@@ -31,8 +31,8 @@ Vessel.Plot3D(ax)
 
 # ------------------------------------------------------------------------------
 # Inputs for B-field settings
-In = array([0.0, 1600.0, 3120, 4450.0])
-Bn = array([0.0, 0.05818182, 0.11345455, 0.16181818])
+In = np.array([0.0, 1600.0, 3120, 4450.0])
+Bn = np.array([0.0, 0.05818182, 0.11345455, 0.16181818])
 
 # ===============================================================================
 # Perform Trajectory calculation for Trajectory Sweep
@@ -85,6 +85,6 @@ if False:
     savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-            (array(Parameters)), header=Header0)
+            (np.array(Parameters)), header=Header0)
 
 pl.show()

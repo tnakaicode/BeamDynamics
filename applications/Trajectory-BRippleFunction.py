@@ -1,7 +1,7 @@
-from numpy import *
+import numpy as np
 from matplotlib.pyplot import *
 
-I0 = linspace(-12.5e3, 12.5e3, 10000)
+I0 = np.linspace(-12.5e3, 12.5e3, 10000)
 
 
 def RippleFunction(I0):

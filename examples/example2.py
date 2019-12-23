@@ -28,8 +28,8 @@ Vessel.Plot3D(ax)
 
 # ------------------------------------------------------------------------------
 # Inputs for four B-field settings
-In = np.array([0.0, 1600.0, 3120, 4450.0])
-Bn = np.array([0.0, 0.05818182, 0.11345455, 0.16181818])
+In = np.np.array([0.0, 1600.0, 3120, 4450.0])
+Bn = np.np.array([0.0, 0.05818182, 0.11345455, 0.16181818])
 
 # ===============================================================================
 # Perform Trajectory and sigma dynamics calculation for B-Field Sweep
@@ -82,6 +82,6 @@ if False:
     np.savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-               (np.array(Parameters)), header=Header0)
+               (np.np.array(Parameters)), header=Header0)
 
 plt.show()

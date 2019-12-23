@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 
 ApplicationTF = "Trajectory-BFieldSweep-TF.py"
 ApplicationVF = "Trajectory-BFieldSweep-VF.py"
@@ -7,8 +7,8 @@ ApplicationE = "Trajectory-AsymmetricDistribution.py"
 #Alpha = [ 0.0 ,12.6 , 5.0 ,23.0 , 12.6 , 5.0 ,23.0 ]
 #Beta = [ 0.0 , 8.0 , 8.0 , 8.0 ,  0.0 , 0.0 , 0.0 ]
 
-#Alpha = linspace(1,11,6)
-#Beta  =  linspace(0,8,5)
+#Alpha = np.linspace(1,11,6)
+#Beta  =  np.linspace(0,8,5)
 
 Alpha = [12.6, 12.6]
 Beta = [8.0, 0.0]

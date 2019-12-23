@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../lib/BeamDynamicsTools/')
 from Boundary import *
-from numpy import *
+import numpy as np
 import pylab as pl
 import timeit
 
@@ -31,7 +31,7 @@ Vessel.Plot3D(ax)
 # ===============================================================================
 
 pl.figure(4)
-Xrand = array([0.0, 0.0])
+Xrand = np.array([0.0, 0.0])
 Ni = 10000
 Xrange = [0.2, 1.2]
 Zrange = [0.8, -0.8]

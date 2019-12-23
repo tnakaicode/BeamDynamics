@@ -1,8 +1,8 @@
-from numpy import *
+import numpy as np
 import pylab as pl
 
 # p      f    1/p     f
-FormF = array([
+FormF = np.array([
     [0.00, 1.000, 0.00, 0.000],
     [0.05, 0.926, 0.05, 0.007],
     [0.10, 0.861, 0.10, 0.020],
@@ -25,7 +25,7 @@ FormF = array([
     [0.95, 0.347, 0.95, 0.320],
     [1.00, 0.333, 1.00, 0.333]], float)
 
-X = linspace(0, 1, 100)
+X = np.linspace(0, 1, 100)
 C = polyfit(FormF[:, 0], FormF[:, 1], 4)
 Cinv = polyfit(FormF[:, 2], FormF[:, 3], 4)
 

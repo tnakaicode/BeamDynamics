@@ -69,7 +69,7 @@ if False:
         [0.000000, 0.000000, 0.000000, 0.000000, 1.297156, 2.343722],
         [0.000000, 0.000000, 0.000000, 0.000000, 2.343722, 134.9344]], float)
 
-    S0 = zeros((6, 6), float)
+    S0 = np.zeros((6, 6), float)
     S0[2:4, 2:4] = S1[0:2, 0:2]
     S0[0:2, 0:2] = S1[2:4, 2:4]
     S0[4:6, 4:6] = S1[4:6, 4:6]
@@ -119,18 +119,18 @@ if False:
     #pl.legend((r'$\Delta$s = 0.0 m',r'$\Delta$s = 0.5 m',r'$\Delta$s = 1.0 m','Target'))
 
 if False:
-    In = array([0.0])
-    Bn = array([0.0])
+    In = np.array([0.0])
+    Bn = np.array([0.0])
 
 if True:
     #   Inputs for 4 B-field settings
-    In = array([0.0, 1600.0, 3120, 4450.0])
-#	Bn = array([ 0.0, 0.00969697, 0.01890909, 0.0269697 ])
-    Bn = array([0.0, 0.05818182, 0.11345455, 0.16181818])
+    In = np.array([0.0, 1600.0, 3120, 4450.0])
+#	Bn = np.array([ 0.0, 0.00969697, 0.01890909, 0.0269697 ])
+    Bn = np.array([0.0, 0.05818182, 0.11345455, 0.16181818])
 
 if False:
     #	Inputs for Fine poloidal sweep
-    In = array([
+    In = np.array([
         0.0000,
         620.00,
         1110.0,
@@ -144,7 +144,7 @@ if False:
         4450.0,
         4800.0])
 
-    Bn = array([
+    Bn = np.array([
         0.0000000000,
         0.0225454545,
         0.0403636364,
@@ -160,7 +160,7 @@ if False:
 
 # List of All TF currents used
 if False:
-    In = array([
+    In = np.array([
         0.00,
         0.62,
         1.11,
@@ -246,7 +246,7 @@ if True:
     savetxt(Path + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     savetxt(Path + 'geometry/DetectionParameters.dat',
-            (array(Parameters)), header=Header0)
+            (np.array(Parameters)), header=Header0)
 
     Vessel.Plot3D(ax)
 

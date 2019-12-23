@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../lib/')
 
-from numpy import *
+import numpy as np
 from matplotlib.pyplot import *
 from numpy.linalg import inv
 from .ConversionFunctions import *

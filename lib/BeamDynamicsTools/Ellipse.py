@@ -1,6 +1,7 @@
 import pylab as pl
 from pylab import det
-from numpy import *
+import numpy as np
+import math
 from numpy.linalg import inv
 
 
@@ -22,11 +23,11 @@ class Ellipse:
 
 # ------------------------------------------------------------------------------
 # Ellipse (Twiss) parameters in each phase plane
-        self.TwissXX1 = array([-(self.SigX[0, 1]), self.SigX[0, 0],
+        self.TwissXX1 = np.array([-(self.SigX[0, 1]), self.SigX[0, 0],
                                self.SigX[1, 1], self.EmittenceX**2] / self.EmittenceX)
-        self.TwissYY1 = array([-(self.SigY[0, 1]), self.SigY[0, 0],
+        self.TwissYY1 = np.array([-(self.SigY[0, 1]), self.SigY[0, 0],
                                self.SigY[1, 1], self.EmittenceY**2] / self.EmittenceY)
-        self.TwissZZ1 = array([-(self.SigZ[0, 1]), self.SigZ[0, 0],
+        self.TwissZZ1 = np.array([-(self.SigZ[0, 1]), self.SigZ[0, 0],
                                self.SigZ[1, 1], self.EmittenceZ**2] / self.EmittenceZ)
 
 # ------------------------------------------------------------------------------
@@ -45,17 +46,17 @@ class Ellipse:
 # Ellipse parameter in the transverse spatial plane
         self.EmittenceXY = np.sqrt(
             det(np.matrix([[SIG[0, 0], SIG[0, 2]], [SIG[2, 0], SIG[2, 2]]])))
-        self.TwissXY = array(
+        self.TwissXY = np.array(
             [-SIG[0, 2], SIG[0, 0], SIG[2, 2], self.EmittenceXY**2]) / self.EmittenceXY
 
         self.EmittenceXZ = np.sqrt(
             det(np.matrix([[SIG[0, 0], SIG[0, 4]], [SIG[4, 0], SIG[4, 4]]])))
-        self.TwissXZ = array(
+        self.TwissXZ = np.array(
             [-SIG[0, 4], SIG[0, 0], SIG[4, 4], self.EmittenceXZ**2]) / self.EmittenceXZ
 
         self.EmittenceYZ = np.sqrt(
             det(np.matrix([[SIG[2, 2], SIG[2, 4]], [SIG[4, 2], SIG[4, 4]]])))
-        self.TwissYZ = array(
+        self.TwissYZ = np.array(
             [-SIG[2, 4], SIG[2, 2], SIG[4, 4], self.EmittenceYZ**2]) / self.EmittenceYZ
 
 # ------------------------------------------------------------------------------
@@ -77,13 +78,13 @@ class Ellipse:
 # ------------------------------------------------------------------------------
 # Generate points along an ellipse a give set of twiss parameters
     def GenerateXY(self, TWISS, NPoints=1000):
-        Theta = linspace(0, 2 * np.pi, NPoints)
-        XPoints = zeros((NPoints), float)
-        YPoints = zeros((NPoints), float)
-        m11 = math.np.sqrt(math.fabs(TWISS[1]))
-        m21 = -TWISS[0] / math.np.sqrt(math.fabs(TWISS[1]))
-        m22 = 1 / math.np.sqrt(math.fabs(TWISS[1]))
-        Radius = math.np.sqrt(math.fabs(TWISS[3]))
+        Theta = np.linspace(0, 2 * np.pi, NPoints)
+        XPoints = np.zeros((NPoints), float)
+        YPoints = np.zeros((NPoints), float)
+        m11 = np.sqrt(math.fabs(TWISS[1]))
+        m21 = -TWISS[0] / np.sqrt(math.fabs(TWISS[1]))
+        m22 = 1 / np.sqrt(math.fabs(TWISS[1]))
+        Radius = np.sqrt(math.fabs(TWISS[3]))
         m12 = 0
         PHI = np.arctan(2.0 * TWISS[0] / (TWISS[2] - TWISS[1])) / 2.0
         for i in range(NPoints):
@@ -181,11 +182,11 @@ class Ellipse:
         X, Y = self.GenerateXY(self.TwissXY, NPoints)
         Bs = np.matrix(SigmaBasis[:, [0, 2]])
         Bt = np.matrix(TargetBasis[:, [0, 2]])
-        Ms = Scale * eye(2)
+        Ms = Scale * np.eye(2)
         Xp = []
         Yp = []
         Bdot = Bt * Bs.T
-        Bproj = np.matrix(zeros((2, 2), float))
+        Bproj = np.matrix(np.zeros((2, 2), float))
         for i in [0, 1]:
             for j in [0, 1]:
                 Bproj[i, j] = 1.0 / (Bdot[i, j])
@@ -195,15 +196,15 @@ class Ellipse:
 #		Ang =
 #		print Bproj
         for i in range(len(X)):
-            V = transpose(np.matrix([X[i], Y[i]]))
+            V = np.transpose(np.matrix([X[i], Y[i]]))
 #			Vp = Bproj * (Bt.T * Bs) * Bs * V
 #			Vp = Mrot * Bproj *V
 #			Vp =Bt.T * Bs * V
             Vp = Ms * inv(Bs.T * Bt) * V
             Xp.append(Vp[0, 0])
             Yp.append(-Vp[1, 0])
-        self.ProjectionX = array(Xp) / 1000.0
-        self.ProjectionY = array(Yp) / 1000.0
+        self.ProjectionX = np.array(Xp) / 1000.0
+        self.ProjectionY = np.array(Yp) / 1000.0
         return self.ProjectionX, self.ProjectionY
 
     def PlotProjectionXY(self, offsetX=0.0, offsetY=0.0, Mod='-', Label=''):
@@ -225,7 +226,7 @@ class Ellipse:
 # Save XY projection points
 
     def PrintProjection(self, FileName='ProjectionXY'):
-        Output = transpose(vstack((self.ProjectionX, self.ProjectionY)))
+        Output = np.transpose(vstack((self.ProjectionX, self.ProjectionY)))
         savetxt(FileName, Output)
 
 # ------------------------------------------------------------------------------

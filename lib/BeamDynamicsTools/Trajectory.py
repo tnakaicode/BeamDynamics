@@ -1,6 +1,6 @@
 # Trajectory.py
 
-from numpy import *
+import numpy as np
 #import scipy as sp
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -58,19 +58,19 @@ class Trajectory:
 
         # Beam
 #		v0 = pl.np.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
-        self.r = [array(r0)]
+        self.r = [np.array(r0)]
 #		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.gamma = 1.0 + T0 / M0
         self.beta = np.sqrt(1.0 - 1.0 / self.gamma**2)
-        self.Beta = [self.beta * array(v0) / norm(v0)]
+        self.Beta = [self.beta * np.array(v0) / norm(v0)]
 #		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.v0 = self.beta * c0
-        self.v = [self.v0 * array(v0) / norm(v0)]
+        self.v = [self.v0 * np.array(v0) / norm(v0)]
         self.beta = [norm(self.Beta[-1])]
         self.gamma = [1.0 / (1.0 - self.beta[-1]**2)]
-        self.a = [array(a0)]
+        self.a = [np.array(a0)]
         self.F = [0.0]
-        self.B = [array(B.local(r0))]
+        self.B = [np.array(B.local(r0))]
         self.s = [0.0]
         dt = dS / self.v0
         self.dt = dt
@@ -94,10 +94,10 @@ class Trajectory:
         c2 = True
         i = 0
         IN = False
-        NormalV = zeros(3)
-        TangentV = zeros(3)
-        IncidentV = zeros(3)
-        RT = zeros(3)
+        NormalV = np.zeros(3)
+        TangentV = np.zeros(3)
+        IncidentV = np.zeros(3)
+        RT = np.zeros(3)
 
 # ===============================================================================
 # # Relativistic Euler Integration:
@@ -111,10 +111,10 @@ class Trajectory:
 
                 self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
 
-                self.F.append(self.q0 * cross(self.v[-1], self.B[-1]))
+                self.F.append(self.q0 * np.cross(self.v[-1], self.B[-1]))
 
                 self.a.append(self.c0**2 / (self.gamma[-1] * self.m0 * self.q0) * (
-                    self.F[-1] - (dot(self.v[-1], self.F[-1]) * self.v[-1] / self.c0**2)))
+                    self.F[-1] - (np.dot(self.v[-1], self.F[-1]) * self.v[-1] / self.c0**2)))
 
                 self.v.append(self.v[-1] + self.a[-1] * dt)
 
@@ -147,7 +147,7 @@ class Trajectory:
                 Br1 = norm(B.local(self.r[-1] - vecR * dLB))
                 Bb2 = norm(B.local(self.r[-1] + vecB * dLB))
                 Bb1 = norm(B.local(self.r[-1] - vecB * dLB))
-                # ( array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
+                # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
                 self.gradB.append((Br2 - Br1) / (2.0 * dLB))
                 # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
                 self.gradBk.append(self.gradB[-1] * qm / (c0 * self.v0))
@@ -179,9 +179,9 @@ class Trajectory:
 # ------------------------------------------------------------------------------
         # If no boundary was reached assume normal incidence
             else:
-                NormalV = array(self.BasisM3[-1][:, 2]).flatten()
-                TangentV = array(self.BasisM3[-1][:, 1]).flatten()
-                IncidentV = array(self.BasisM3[-1][:, 2]).flatten()
+                NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
+                TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
+                IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
                 RT = self.r[-1]
                 self.target = Target(
                     NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
@@ -201,7 +201,7 @@ class Trajectory:
 
                 self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
 
-                self.a.append(qm * cross(self.v[-1], self.B[-1]))
+                self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
 
                 self.v.append(self.v[-1] + 0.5 *
                               (self.a[-1] + self.a[-2]) * dt)
@@ -238,7 +238,7 @@ class Trajectory:
                 Br1 = norm(B.local(self.r[-1] - vecR * dLB))
                 Bb2 = norm(B.local(self.r[-1] + vecB * dLB))
                 Bb1 = norm(B.local(self.r[-1] - vecB * dLB))
-                # ( array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
+                # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
                 self.gradB.append((Br2 - Br1) / (2.0 * dLB))
                 # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
                 self.gradBk.append(self.gradB[-1] * qm / (c0 * self.v0))
@@ -270,9 +270,9 @@ class Trajectory:
 # ------------------------------------------------------------------------------
         # If no boundary was reached assume normal incidence
             else:
-                NormalV = array(self.BasisM3[-1][:, 2]).flatten()
-                TangentV = array(self.BasisM3[-1][:, 1]).flatten()
-                IncidentV = array(self.BasisM3[-1][:, 2]).flatten()
+                NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
+                TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
+                IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
                 RT = self.r[-1]
                 self.target = Target(
                     NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
@@ -290,7 +290,7 @@ class Trajectory:
 
                 self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
 
-                self.a.append(qm * cross(self.v[-1], self.B[-1]))
+                self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
 
                 self.v.append(self.v[-1] + (self.a[-1]) * dt)
 
@@ -303,7 +303,7 @@ class Trajectory:
                 self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
 
 # ------------------------------------------------------------------------------
-            # Check to see if beam crosses boundary
+            # Check to see if beam np.crosses boundary
                 IN = True
                 c3 = self.s[-1] > Smin
                 c4 = Vessel.InBoundary(self.r[-1])
@@ -327,7 +327,7 @@ class Trajectory:
                 Br1 = norm(B.local(self.r[-1] - vecR * dLB))
                 Bb2 = norm(B.local(self.r[-1] + vecB * dLB))
                 Bb1 = norm(B.local(self.r[-1] - vecB * dLB))
-                # ( array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
+                # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
                 self.gradB.append((Br2 - Br1) / (2.0 * dLB))
                 # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
                 self.gradBk.append(self.gradB[-1] * qm / (c0 * self.v0))
@@ -359,9 +359,9 @@ class Trajectory:
 # ------------------------------------------------------------------------------
         # If no boundary was reached assume normal incidence
             else:
-                NormalV = array(self.BasisM3[-1][:, 2]).flatten()
-                TangentV = array(self.BasisM3[-1][:, 1]).flatten()
-                IncidentV = array(self.BasisM3[-1][:, 2]).flatten()
+                NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
+                TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
+                IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
                 RT = self.r[-1]
                 self.target = Target(
                     NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
@@ -378,16 +378,16 @@ class Trajectory:
     def BeamBasis(self):
         Ni = len(self.v)
         e3 = [self.v[0] / norm(self.v[0])]
-        e2 = [cross(e3[0], array([0, -1, 0]))]
+        e2 = [np.cross(e3[0], np.array([0, -1, 0]))]
         e2[0] = e2[0] / norm(e2[0])
-        e1 = [cross(e2[0], e3[0])]
+        e1 = [np.cross(e2[0], e3[0])]
         self.BasisM3 = [Basis3(e1[0], e2[0], e3[0])]
         self.BasisM6 = [Basis6(e1[0], e2[0], e3[0])]
         for i in range(1, Ni):
             e3.append(self.v[i] / norm(self.v[i]))
-            e2.append(cross(e3[-1], e1[-1]))
+            e2.append(np.cross(e3[-1], e1[-1]))
             e2[-1] = e2[-1] / norm(e2[-1])
-            e1.append(cross(e2[-1], e3[-1]))
+            e1.append(np.cross(e2[-1], e3[-1]))
             self.BasisM3.append(Basis3(e1[-1], e2[-1], e3[-1]))
             self.BasisM6.append(Basis6(e1[-1], e2[-1], e3[-1]))
             # print i
@@ -530,8 +530,8 @@ def Basis6(e1, e2, e3):
 # Radius of Curvature method with perpendicular projection of B and constant dTheta = dS/R(B)
 BMag = 0.0
 vMag = 0.0
-hPara = zeros(3, float)
-hPerp = zeros(3, float)
+hPara = np.zeros(3, float)
+hPerp = np.zeros(3, float)
 if False:
     while (c1 or c2) and i < Nmax:
 
@@ -545,14 +545,14 @@ if False:
         hPara = self.v[-1] / vMag
 
         # Vector along bending Radius
-        hRadius = cross(self.v[-1], self.B[-1])
+        hRadius = np.cross(self.v[-1], self.B[-1])
         hRadius = hRadius / norm(hRadius)
 
         # perpendicular to B unit vector
-        hPerp = cross(hRadius, hPara)
+        hPerp = np.cross(hRadius, hPara)
 
         # Magnitude of perpendicular projection of B
-        BPerp = dot(self.B[-1], hPerp)
+        BPerp = np.dot(self.B[-1], hPerp)
 
         # Cyclotron Frequency
         Omega = self.q0 * BPerp / self.m0
@@ -577,7 +577,7 @@ if False:
 
         self.dS.append(self.s[-1] - self.s[-2])
 
-        self.a.append(qm * cross(self.v[-1], self.B[-1]))
+        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
 
         self.v.append(vPara + vRad)
 
@@ -586,7 +586,7 @@ if False:
         self.beta.append(norm(self.Beta[-1]))
         self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
 
-        # Check to see if beam crosses boundary
+        # Check to see if beam np.crosses boundary
         IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
             self.r[-2], self.r[-1])
 
@@ -606,7 +606,7 @@ if False:
 if False:
     while (c1 or c2) and i < Nmax:
 
-        self.B.append(array(B.local(self.r[-1])) + array(Bv.local(self.r[-1])))
+        self.B.append(np.array(B.local(self.r[-1])) + np.array(Bv.local(self.r[-1])))
         BMag = norm(self.B[-1])
 
         # parallel to B unit vector
@@ -617,18 +617,18 @@ if False:
         hPerp = hPerp / norm(hPerp)
 
         # Vector along bending Radius
-        hRadius = cross(hPara, hPerp)
+        hRadius = np.cross(hPara, hPerp)
 
         # Cyclotron Frequency
         Omega = self.q0 * BMag / self.m0
         dTheta = Omega * self.dt
 
         # Larmor radius
-        rL = (self.m0 * dot(self.v[-1], hPerp)) / (self.q0 * BMag)
+        rL = (self.m0 * np.dot(self.v[-1], hPerp)) / (self.q0 * BMag)
 
         # Change in r
 
-        drPara = self.dt * dot(self.v[-1], hPara) * hPara
+        drPara = self.dt * np.dot(self.v[-1], hPara) * hPara
 
         drPerp = (rL * np.sin(dTheta)) * hPerp
 
@@ -638,9 +638,9 @@ if False:
 
         self.s.append(self.s[-1] + norm(self.r[-1] - self.r[-2]))
 
-        self.a.append(qm * cross(self.v[-1], self.B[-1]))
+        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
 
-        dv = dot(self.v[-1], hPara) * hPara + dot(self.v[-1],
+        dv = np.dot(self.v[-1], hPara) * hPara + np.dot(self.v[-1],
                                                   hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
 
         self.v.append(self.v[-1] + dv)
@@ -650,7 +650,7 @@ if False:
         self.beta.append(norm(self.Beta[-1]))
         self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
 
-        # Check to see if beam crosses boundary
+        # Check to see if beam np.crosses boundary
         IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
             self.r[-2], self.r[-1])
 

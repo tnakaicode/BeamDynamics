@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 from scipy.special import *
 
 # Br = B0*R0/R * (1 + f(r,z,phi))
@@ -39,9 +39,9 @@ class Bfield:
         By = Btor * np.cos(Phi)
         Bz = self.B0z
         if R > 1.3:
-            B = array([0.0, 0.0, Bz])
+            B = np.array([0.0, 0.0, Bz])
         else:
-            B = array([Bx, By, Bz])
+            B = np.array([Bx, By, Bz])
         return B
 
 # ===============================================================================
@@ -63,7 +63,7 @@ class Bfieldc:
         Bx = 0.0
         By = self.B0
         Bz = 0.0
-        return(array([Bx, By, Bz]))
+        return(np.array([Bx, By, Bz]))
 
 # ===============================================================================
 # Toroidal B-Field with discrete filament model
@@ -87,19 +87,19 @@ class BfieldTF:
         self.Method = Method
 
         for n in range(Ncoils):  # Outer Legs of TF
-            TF.append(array([Rmax * np.cos(2 * np.pi * n / Ncoils + Phi0),
-                             Rmax * np.sin(2 * np.pi * n / Ncoils + Phi0), -1.0]))
+            TF.append(np.array([Rmax * np.cos(2 * np.pi * n / Ncoils + Phi0),
+                                Rmax * np.sin(2 * np.pi * n / Ncoils + Phi0), -1.0]))
 
-        # Inner Legs of TF -> array([ x , y , +/- direction ])
+        # Inner Legs of TF -> np.array([ x , y , +/- direction ])
         for n in range(Ncoils):
-            TF.append(array([Rmin * np.cos(2 * np.pi * n / Ncoils + Phi0),
-                             Rmin * np.sin(2 * np.pi * n / Ncoils + Phi0), 1.0]))
+            TF.append(np.array([Rmin * np.cos(2 * np.pi * n / Ncoils + Phi0),
+                                Rmin * np.sin(2 * np.pi * n / Ncoils + Phi0), 1.0]))
         self.TF = TF
 
-        # create array of TF coordinates to faster computation
-        self.TFx = zeros(len(TF))
-        self.TFy = zeros(len(TF))
-        self.TFsign = zeros(len(TF))
+        # create np.array of TF coordinates to faster computation
+        self.TFx = np.zeros(len(TF))
+        self.TFy = np.zeros(len(TF))
+        self.TFsign = np.zeros(len(TF))
         for i in range(len(TF)):
             self.TFx[i] = TF[i][0]
             self.TFy[i] = TF[i][1]
@@ -121,11 +121,11 @@ class BfieldTF:
             By = (self.B0 * self.R0 / self.Ncoils) * \
                 (self.TFsign / AbsR) * (Rx - self.TFx)
 
-            return array([sum(Bx), sum(By), 0.0])
+            return np.array([sum(Bx), sum(By), 0.0])
 
         if self.Method == 'Filament0':
-            R = array(RIN)
-            B = array([0.0, 0.0, 0.0])
+            R = np.array(RIN)
+            B = np.array([0.0, 0.0, 0.0])
             Nc = len(self.TF) / 2  # /(2*np.pi)
             for n in range(len(self.TF)):
                 AbsR = (R[0] - self.TF[n][0])**2 + (R[1] - self.TF[n][1])**2
@@ -141,7 +141,7 @@ class BfieldTF:
 
         if self.Method == 'Simple':
             R = np.sqrt(RIN[0]**2 + RIN[1]**2)
-            B = array([0.0, 0.0, 0.0])
+            B = np.array([0.0, 0.0, 0.0])
             r4 = 1.290259
             r3 = 1.100303  # coil Width [m]
             r2 = 0.302262
@@ -155,7 +155,7 @@ class BfieldTF:
             if R > r3 and R <= r4:
                 BTF = ((0.0 - (self.R0 * self.B0) / (r3)) / (r4 - r3)) * (R - r4)
 
-            B = BTF * array([-np.sin(theta), np.cos(theta), 0.0])
+            B = BTF * np.array([-np.sin(theta), np.cos(theta), 0.0])
             return B
 
 # ===============================================================================
@@ -168,7 +168,7 @@ class BfieldTF:
 
 class BfieldVF:
 
-    def __init__(self, B0=nan, I0=nan, RCoil=[array([1.504188, 0.440817]), array([1.504188, -0.440817])]):
+    def __init__(self, B0=None, I0=None, RCoil=[np.array([1.504188, 0.440817]), np.array([1.504188, -0.440817])]):
 
         self.RCoil = RCoil
         self.B0 = B0
@@ -177,17 +177,17 @@ class BfieldVF:
         self.r0 = r0
         self.nCoil = len(RCoil)
 
-        if isnan(I0) and (not isnan(B0)):
+        if I0 == None and B0 != None:
             self.B0 = B0
             # /n0 #(2*r0)/(mu*self.B0)
             self.I0 = ((5.0 / 4.0)**(3.0 / 2.0) * (B0 * r0 / mu))
 
-        if isnan(B0) and (not isnan(I0)):
+        if B0 == None and I0 != None:
             self.I0 = I0
             self.B0 = mu * I0 / (2.0 * r0)
 
     def local(self, R):
-        #	RCoil=[array([1.0,0.0])]
+        #	RCoil=[np.array([1.0,0.0])]
         r = np.sqrt(R[0]**2 + R[1]**2)
         z1 = R[2]
         theta = np.arctan(R[1] / R[0])
@@ -214,7 +214,7 @@ class BfieldVF:
                 break
 
         BV = (mu * self.I0) / (2.0 * r0) / self.nCoil * \
-            array([Br * np.cos(theta), Br * np.sin(theta), Bz])
+            np.array([Br * np.cos(theta), Br * np.sin(theta), Bz])
         return BV
 
 

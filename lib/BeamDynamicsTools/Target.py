@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 #import scipy as sp
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
@@ -14,52 +14,52 @@ class Target:
         self.X = RT[0]
         self.Y = RT[1]
         self.Z = RT[2]
-        self.XYZ = array(RT)
+        self.XYZ = np.array(RT)
         # Target Position (Toroidal Coordinates)
         self.R = np.sqrt(RT[0]**2 + RT[1]**2)
         self.Phi = np.arctan(RT[1] / RT[0])
         self.PhiDegrees = self.Phi * 180.0 / np.pi
-        RCenter = array([0.67, 0.0])
-        dR = array([self.R, self.Z]) - RCenter
+        RCenter = np.array([0.67, 0.0])
+        dR = np.array([self.R, self.Z]) - RCenter
         self.r = norm(dR)
         if dR[0] > 0:
-            self.Theta = arccos(
-                dot(-1.0 * RCenter / norm(RCenter), dR / norm(dR)))
+            self.Theta = np.arccos(
+                np.dot(-1.0 * RCenter / norm(RCenter), dR / norm(dR)))
         else:
             self.Theta = -1.0 * \
-                arccos(dot(-1.0 * RCenter / norm(RCenter), dR / norm(dR)))
+                np.arccos(np.dot(-1.0 * RCenter / norm(RCenter), dR / norm(dR)))
         self.ThetaDegrees = self.Theta * 180 / np.pi
         self.Xpol = Xpol
 
         # Detector Coordinates
-        self.XYZdetector = array(Rdet)
-        self.AxisDetector = array(AxisDet)
+        self.XYZdetector = np.array(Rdet)
+        self.AxisDetector = np.array(AxisDet)
         # Magnetic Field parameters
         self.B0 = BFieldTF.B0
         self.B0z = BFieldVF.B0
         self.I0 = BFieldTF.I0
         # Beam Vectors
-        self.NormalV = array(NORM)  # Normal to Tile
-        self.IncidentV = array(INC)  # Incident Vector
+        self.NormalV = np.array(NORM)  # Normal to Tile
+        self.IncidentV = np.array(INC)  # Incident Vector
         self.TangentV = TAN  # Poloidal Direction
         # Basis Vectors
-        e3 = array(NORM) / norm(NORM)
+        e3 = np.array(NORM) / norm(NORM)
         self.NormalV = e3  # self.e3=e3
-        e2 = array(TAN) / norm(TAN)
+        e2 = np.array(TAN) / norm(TAN)
         self.PoloidalV = e2  # self.e2=e2; #Poloidal Direction
-        e1 = cross(e3, e2)
+        e1 = np.cross(e3, e2)
         e1 = e1 / norm(e1)
         self.ToroidalV = e1  # self.e1=e1; self.e1=e1; # Toroidal Direction
         self.DetectionLength = norm(self.XYZ - self.XYZdetector)
         self.DetectionVec = (self.XYZdetector - self.XYZ) / \
             self.DetectionLength
-        self.DetectorAngle = arccos(dot(self.DetectionVec, self.AxisDetector))
+        self.DetectorAngle = np.arccos(np.dot(self.DetectionVec, self.AxisDetector))
         self.DetectionDegree = self.DetectorAngle * 180.0 / np.pi
         self.DetectionEff = AngularEff(self.DetectorAngle)
 
 # ------------------------------------------------------------------------------
 # Draw detection line
-        dl = linspace(0.0, 1.0, 101)
+        dl = np.linspace(0.0, 1.0, 101)
         self.LineVector = []
         self.LineX = []
         self.LineY = []
@@ -70,29 +70,29 @@ class Target:
             self.LineX.append(RLine[0])
             self.LineY.append(RLine[1])
             self.LineZ.append(RLine[2])
-        self.LineX = array(self.LineX)
-        self.LineY = array(self.LineY)
-        self.LineZ = array(self.LineZ)
+        self.LineX = np.array(self.LineX)
+        self.LineY = np.array(self.LineY)
+        self.LineZ = np.array(self.LineZ)
 
 # ------------------------------------------------------------------------------
 # Calculate Angular parameters and vectors
         print(self.NormalV, self.IncidentV)
-        self.BeamTargetAngle = np.pi - arccos(dot(self.NormalV, self.IncidentV))
-        self.GammaTargetAngle = arccos(dot(self.NormalV, self.DetectionVec))
-        self.DetectionTargetAngle = arccos(
-            dot(self.DetectionVec, self.IncidentV))
-        NormXY = array([self.NormalV[0], self.NormalV[1]])
+        self.BeamTargetAngle = np.pi - np.arccos(np.dot(self.NormalV, self.IncidentV))
+        self.GammaTargetAngle = np.arccos(np.dot(self.NormalV, self.DetectionVec))
+        self.DetectionTargetAngle = np.arccos(
+            np.dot(self.DetectionVec, self.IncidentV))
+        NormXY = np.array([self.NormalV[0], self.NormalV[1]])
         NormXY / norm(NormXY)
-        IncXY = -1.0 * array([self.IncidentV[0], self.IncidentV[1]])
+        IncXY = -1.0 * np.array([self.IncidentV[0], self.IncidentV[1]])
         IncXY / norm(IncXY)
         self.Test = [NormXY, IncXY]
-        self.HAngle = arccos(dot(NormXY, IncXY))
-        NormRZ = array(
+        self.HAngle = np.arccos(np.dot(NormXY, IncXY))
+        NormRZ = np.array(
             [np.sqrt(self.NormalV[0]**2 + self.NormalV[1]**2), self.NormalV[2]])
-        IncRZ = array(
+        IncRZ = np.array(
             [np.sqrt(self.IncidentV[0]**2 + self.IncidentV[1]**2), self.IncidentV[2]])
-        self.VAngle = arccos(dot(NormRZ, IncRZ))
-        self.Degrees = arccos(dot(self.NormalV, -self.IncidentV)) * 180.0 / np.pi
+        self.VAngle = np.arccos(np.dot(NormRZ, IncRZ))
+        self.Degrees = np.arccos(np.dot(self.NormalV, -self.IncidentV)) * 180.0 / np.pi
 
 # ------------------------------------------------------------------------------
 # Calculate Basis vectors/matrices and initialize sigma matrices
@@ -103,13 +103,13 @@ class Target:
 # ------------------------------------------------------------------------------
 # initialize sigma matrices and projected ellipses
 
-        self.Sigma = eye(6, 6)
-        self.SigmaProj = eye(6, 6)
-        self.SigmaBasis = eye(6, 6)
+        self.Sigma = np.eye(6, 6)
+        self.SigmaProj = np.eye(6, 6)
+        self.SigmaBasis = np.eye(6, 6)
         self.TransverseEllipse = False
-        self.ProjEllipse = Ellipse(eye(6, 6))
-        self.ProjectionX = zeros(1)
-        self.ProjectionY = zeros(1)
+        self.ProjEllipse = Ellipse(np.eye(6, 6))
+        self.ProjectionX = np.zeros(1)
+        self.ProjectionY = np.zeros(1)
 
 # ------------------------------------------------------------------------------
         # Plotting attributes
@@ -146,15 +146,15 @@ class Target:
         if Type == 'ThetaPhi':
             dX = self.R * self.Phi
             dY = self.Z  # self.r*self.Theta
-            XLAB = r'Toroidal Position $R\cdot\phi$ [cm]'
+            XLAB = r'Toroidal Position $R\cnp.dot\phi$ [cm]'
             xscale = 100.0
-            YLAB = r'Polidal Position $r\cdot\theta$ [cm]'
+            YLAB = r'Polidal Position $r\cnp.dot\theta$ [cm]'
             yscale = 100.0
 
         if Type == 'PolPhi':
             dX = self.R * self.Phi
             dY = self.Xpol
-            XLAB = r'Toroidal Position $R\cdot\phi$ [cm]'
+            XLAB = r'Toroidal Position $R\cnp.dot\phi$ [cm]'
             xscale = 100.0
             YLAB = r'Polidal Position $X_p$ [cm]'
             yscale = 100.0
@@ -210,7 +210,7 @@ class Target:
         #		Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
         Header0 = '(0) I0 [A], \n(1) B0 [T], \n(2) X [m] , \n(3) Y [m], \n(4) Z [m], \n(5) incident angle [rad], \n(6) Detection Angle [rad], \n(7) optical path length [m] , \n(8) Detection Angle [rad], \n(9) Detection Angle [deg], \n(10) Detector Eff\n\n'
 
-        Parameters = array(self.GetDetectionParameters())
+        Parameters = np.array(self.GetDetectionParameters())
 #		Label = 'I0 [A]','B0 [T]','X [m]','Y [m]', 'Z [m]', 'incident angle [rad]','Detection Angle [rad]', 'Gamma path length [m]','Detection Angle [rad]','Detection Angle [deg]','Detector Eff'
         print(Parameters)
         FileName = 'TargetParameters(B=%0.3fT,I=%0.3fkA).dat' % (

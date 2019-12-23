@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../lib/')
 from BeamDynamicsTools import *
-from numpy import *
+import numpy as np
 from matplotlib.pyplot import *
 
 Path0 = '../output/sigma_trace3d/igmaFinal/'

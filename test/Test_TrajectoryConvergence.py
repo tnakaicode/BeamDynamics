@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../lib/')
 from BeamDynamicsTools import *
-from numpy import *
+import numpy as np
 import pylab as pl
 
 Rb = [0.1, 0.1, 100.0, 100.0]
@@ -22,7 +22,7 @@ if False:
         T.append(Trajectory(Vessel, B, Bv, r0=[20.0, 0.0, 0.0], v0=[
                  0.0, 0.0, 1.0], dS=dS[i], Nmax=round(d0 / dS[i])))
         RL = (T[-1].m0 * T[-1].v0) / (T[-1].q0 * B.B0)
-        R = T[-1].r[-1] - array([20.0 - RL, 0, 0.0])
+        R = T[-1].r[-1] - np.array([20.0 - RL, 0, 0.0])
         # -RL)/d0 ) #/T.s[-1]*d0 - RL)
         dr.append(np.sqrt(R[0]**2 + R[1]**2 + R[2]**2) * (d0 / T[-1].s[-1]) - RL)
         # T.Plot2D()
@@ -57,7 +57,7 @@ if True:
         rN = []
         # RL = (T.m0*T.v0) / (T.q0*B.B0)  # mV/qB
         RL = T.m0 / T.c0 * T.beta[-1] / (B.B0)  # mV/qB
-        R0 = array([20.0 - RL, 0, 0.0])
+        R0 = np.array([20.0 - RL, 0, 0.0])
 
         for i in range(len(T.r)):
             R.append(T.r[i] - R0)
@@ -80,12 +80,12 @@ if True:
 #		pl.figure(3); pl.loglog(S,abs(1-r/RL));
 #		pl.xlabel('S Coordinate [m]'); pl.ylabel(r'$\epsilon $'); pl.title(r'$\epsilon = \Delta $r/Rc')
         pl.figure(4)
-        pl.plot(S, array(rN))
+        pl.plot(S, np.array(rN))
         pl.xlabel('S Coordinate [m]')
         pl.ylabel(r'Normalized Error $\epsilon_N $')
         pl.title(r'$\epsilon_N = \Delta$ r/S')
         pl.figure(5)
-        pl.semilogx(S, array(rN))
+        pl.semilogx(S, np.array(rN))
         pl.xlabel('S Coordinate [m]')
         pl.ylabel(r'Normalized Error $\epsilon_N $')
         pl.title(r'$\epsilon_N = \Delta$ r/S')
@@ -98,7 +98,7 @@ if True:
         pl.title(r'Radius of Curvature Error $\epsilon_r = \Delta$r/Rc')
         pl.xlim(0, 100)
         pl.subplot(2, 1, 2)
-        pl.semilogx(S, array(rN))
+        pl.semilogx(S, np.array(rN))
         pl.xlabel('S Coordinate [m]')
         pl.ylabel(r'Error $\epsilon_N $')
         pl.title(

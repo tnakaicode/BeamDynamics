@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm, det
@@ -18,26 +18,26 @@ class Boundary:
         Mvec = []  # List of Middle of line locations
         Tvec = []  # List of Tangent vectors of border
         Nvec = []  # List of Normal Vectors of border
-        self.Rb = array(Rb)
-        self.Rb1 = roll(Rb, 1)
-        self.Zb = array(Zb)
-        self.Zb1 = roll(Zb, 1)
+        self.Rb = np.array(Rb)
+        self.Rb1 = np.roll(Rb, 1)
+        self.Zb = np.array(Zb)
+        self.Zb1 = np.roll(Zb, 1)
         self.NCorners = len(Rb)
-        Cmatrix = matrix(zeros((len(Rb), 2), float))
-        Mmatrix = matrix(zeros((len(Rb), 2), float))
-        Tmatrix = matrix(zeros((len(Rb), 2), float))
-        Nmatrix = matrix(zeros((len(Rb), 2), float))
+        Cmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Mmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Tmatrix = np.matrix(np.zeros((len(Rb), 2), float))
+        Nmatrix = np.matrix(np.zeros((len(Rb), 2), float))
 
 # ------------------------------------------------------------------------------
 # Generate lists of Corners, Midpoints, Tangents, and Normals
         if Geometry == 'Revolve' or Geometry == 'Extrude':
             for i in range(len(Rb)):
-                Corner = array([Rb[i], Zb[i]])
-                MidPoint = array(
+                Corner = np.array([Rb[i], Zb[i]])
+                MidPoint = np.array(
                     [(Rb[i] + Rb[i - 1]) / 2, (Zb[i] + Zb[i - 1]) / 2])
-                Tangent = array([Rb[i] - Rb[i - 1], Zb[i] - Zb[i - 1]])
+                Tangent = np.array([Rb[i] - Rb[i - 1], Zb[i] - Zb[i - 1]])
                 Tangent = Tangent / norm(Tangent)
-                Normal = array([-Tangent[1], Tangent[0]])
+                Normal = np.array([-Tangent[1], Tangent[0]])
                 Normal = Normal / norm(Normal)
                 Cvec.append(Corner)
                 Mvec.append(MidPoint)
@@ -54,7 +54,7 @@ class Boundary:
                     Nmatrix[i, j] = Nvec[i][j]
 
 # ------------------------------------------------------------------------------
-# Save arrays,list, and matrices as class variables
+# Save np.arrays,list, and matrices as class variables
 
             self.Cvec = Cvec
             self.Cmatrix = Cmatrix
@@ -69,7 +69,7 @@ class Boundary:
 
 # ------------------------------------------------------------------------------
 # Generate list of poloidal points
-        Xpol = zeros(len(Rb))
+        Xpol = np.zeros(len(Rb))
         # Offset subtracted so zero occurs at the midplane
         Xpol[0] = 0.215700 - 1.7335261798429005
         for i in range(1, len(Rb)):
@@ -168,8 +168,8 @@ class Boundary:
 # Xboundary determines the line drawn between two points r0 and r1 crosses a the boundary.
 # This function returns: boolean (IN), normal vector, tangent vector, incident vector, target position.
     def Xboundary(self, r0, r1):
-        x0 = array([np.sqrt(r0[0]**2 + r0[1]**2), r0[2]])
-        x1 = array([np.sqrt(r1[0]**2 + r1[1]**2), r1[2]])
+        x0 = np.array([np.sqrt(r0[0]**2 + r0[1]**2), r0[2]])
+        x1 = np.array([np.sqrt(r1[0]**2 + r1[1]**2), r1[2]])
         # Offset subtracted so zero occurs at the midplane
         Xpol = 0.0 - (1.7335261798429005 + 0.068944835197059254)
         IN = True
@@ -188,14 +188,14 @@ class Boundary:
             Di1 = Di1 / norm(Di1)
             Df = x1 - self.Cvec[i - 1]
             Xpol = Xpol + norm(self.Cvec[i] - self.Cvec[i - 1])
-            if dot(Di1, self.Tvec[i]) > 0 and dot(Di2, self.Tvec[i]) < 0:
-                if dot(Di1, self.Nvec[i]) > 0 and dot(Di2, self.Nvec[i]) > 0:
-                    if dot(Df, self.Nvec[i]) < 0 and dot(Df, self.Nvec[i]) < 0:
+            if np.dot(Di1, self.Tvec[i]) > 0 and np.dot(Di2, self.Tvec[i]) < 0:
+                if np.dot(Di1, self.Nvec[i]) > 0 and np.dot(Di2, self.Nvec[i]) > 0:
+                    if np.dot(Df, self.Nvec[i]) < 0 and np.dot(Df, self.Nvec[i]) < 0:
                         IN = False
                         Phi = np.arctan(r0[1] / r0[0])
-                        NORM = array(
+                        NORM = np.array(
                             [self.Nvec[i][0] * np.cos(Phi), self.Nvec[i][0] * np.sin(Phi), self.Nvec[i][1]])
-                        TAN = array(
+                        TAN = np.array(
                             [self.Tvec[i][0] * np.cos(Phi), self.Tvec[i][0] * np.sin(Phi), self.Tvec[i][1]])
                         TAN = TAN / norm(TAN)
                         INC = r1 - r0
@@ -213,8 +213,8 @@ class Boundary:
         return ax
 
     def Plot3D(self, ax, Nt=16, Color='b', PhiMin=-np.pi / 8, PhiMax=np.pi / 2):
-        #Phi = linspace(0,2*np.pi*(1-1/Nt),Nt)
-        Phi = linspace(PhiMin, PhiMax, Nt)
+        #Phi = np.linspace(0,2*np.pi*(1-1/Nt),Nt)
+        Phi = np.linspace(PhiMin, PhiMax, Nt)
         xp = []
         yp = []
         zp = []
@@ -238,7 +238,7 @@ class Boundary:
 #		d1=1.25; d2=1.8; dz=(d2+d1)/2.0
 
         Nc = Nt * 10
-        Phi = linspace(PhiMin, PhiMax, Nc)
+        Phi = np.linspace(PhiMin, PhiMax, Nc)
         xt = []
         yt = []
         zt = []
@@ -255,10 +255,10 @@ class Boundary:
 
     def PlotCorners2D(self, Xlim=[-1, 1], scale=1.0):
         for i in range(len(self.PoloidalLines)):
-            pl.plot(scale * array(Xlim), scale *
-                    array([self.PoloidalLines[i], self.PoloidalLines[i]]), color='k', linewidth=0.7)
-            pl.plot(scale * array(Xlim), scale *
-                    array([0.0, 0.0]), color='r', linewidth=1.5, linestyle=':')
+            pl.plot(scale * np.array(Xlim), scale *
+                    np.array([self.PoloidalLines[i], self.PoloidalLines[i]]), color='k', linewidth=0.7)
+            pl.plot(scale * np.array(Xlim), scale *
+                    np.array([0.0, 0.0]), color='r', linewidth=1.5, linestyle=':')
 
 # ===============================================================================
 # Extra Functions
@@ -280,11 +280,11 @@ def Intersection(a1, a2, b1, b2):
     yOut = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 -
                                                            y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
 
-    return array([xOut, yOut])
+    return np.array([xOut, yOut])
 
 
 def Circle(R, Nt=100):
-    t = linspace(0, 2 * np.pi, Nt)
+    t = np.linspace(0, 2 * np.pi, Nt)
     x = R * np.cos(t)
     y = R * np.sin(t)
     return x, y

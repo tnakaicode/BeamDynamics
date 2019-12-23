@@ -2,7 +2,7 @@
 import sys
 sys.path.append('../lib/')
 from BeamDynamicsTools import *
-from numpy import *
+import numpy as np
 import pylab as pl
 
 L0 = 0.1
@@ -49,7 +49,7 @@ if True:
     Y = []
     for i in range(len(T.B)):
         #		Y.append(norm( cross(T.v[i],T.B[i]) ) )
-        Yi = cross(T.v[i], T.B[i])
+        Yi = np.cross(T.v[i], T.B[i])
         Y.append(Yi[2])
 
 #	pl.figure(); pl.plot(Y)

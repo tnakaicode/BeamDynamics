@@ -2,13 +2,13 @@ import sys
 sys.path.append('../lib/BeamDynamicsTools/')
 from Bfield import *
 
-from numpy import *
+import numpy as np
 import pylab as pl
 from scipy.special import *
 from numpy.linalg import norm
 import matplotlib as mpl
 
-R = array([1, 0, 0])
+R = np.array([1, 0, 0])
 RInj = [1.798, -0.052, 0.243]
 
 # ------------------------------------------------------------------------------
@@ -50,17 +50,17 @@ def PlotTF1D(TF):
     Ni = 1000
     R0 = 0.66
     B0 = 1.0
-    R = linspace(0.05, 1.6, Ni)
-    B = zeros(Ni)
-    BIdeal = zeros(Ni)
+    R = np.linspace(0.05, 1.6, Ni)
+    B = np.zeros(Ni)
+    BIdeal = np.zeros(Ni)
     TF.Method = 'Filament'
     for i in range(Ni):
-        Rvec = array([R[i], 0, 0])
+        Rvec = np.array([R[i], 0, 0])
         Bvec = TF.local(Rvec)
         B[i] = norm(Bvec)
     TF.Method = 'Simple'
     for i in range(Ni):
-        Rvec = array([R[i], 0, 0])
+        Rvec = np.array([R[i], 0, 0])
         BIdeal[i] = norm(TF.local(Rvec))
 
     pl.plot(R, B)
@@ -77,16 +77,16 @@ def PlotTF1D(TF):
 
 def PlotVF1D(VF):
     Ni = 1000
-    R = linspace(0.15, 2.0, Ni)
+    R = np.linspace(0.15, 2.0, Ni)
     Z = [0.1, 0.2, 0.3]
-    BNorm = zeros(Ni)
-    BVert = zeros(Ni)
-    BIdeal = zeros(Ni)
+    BNorm = np.zeros(Ni)
+    BVert = np.zeros(Ni)
+    BIdeal = np.zeros(Ni)
     Bvector = []
     Bmag = []
     for j in range(len(Z)):
         for i in range(Ni):
-            Rvec = array([R[i], 0, Z[j]])
+            Rvec = np.array([R[i], 0, Z[j]])
             Bvec = VF.local(Rvec)
             #BIdeal[i] = B0*R0/R[i]
             Bvector.append(Bvec)
@@ -119,14 +119,14 @@ def PlotVF1D(VF):
 
 def PlotTF2D(TF):
     Nij = 100
-    x = linspace(0, 1.4, Nij, float)
-    y = linspace(0, 1.4, Nij, float)
+    x = np.linspace(0, 1.4, Nij, float)
+    y = np.linspace(0, 1.4, Nij, float)
 
-    BMagMatrix = zeros((Nij, Nij), float)
+    BMagMatrix = np.zeros((Nij, Nij), float)
     for i in range(Nij):
         print(i)
         for j in range(Nij):
-            R = array([x[i], y[j]])
+            R = np.array([x[i], y[j]])
             B = TF.local(R)
             Mag = pl.norm(B)
             if (Mag < 2.5 and pl.norm(R) < 1.0) or (Mag < 0.75):
@@ -145,14 +145,14 @@ def PlotTF2D(TF):
 
 def PlotVF2D():
     Nij = 200
-    r = linspace(0.2, 2.2, Nij)
-    z = linspace(-1.0, 1.0, Nij)
-    BMagMatrix = zeros((Nij, Nij), float)
-    BZ0 = pl.norm(VF.local(array([0.1, 0, 0])))
+    r = np.linspace(0.2, 2.2, Nij)
+    z = np.linspace(-1.0, 1.0, Nij)
+    BMagMatrix = np.zeros((Nij, Nij), float)
+    BZ0 = pl.norm(VF.local(np.array([0.1, 0, 0])))
     for i in range(Nij):
         print(i)
         for j in range(Nij):
-            R = array([r[i], 0, z[j]])
+            R = np.array([r[i], 0, z[j]])
             B = VF.local(R)
             Mag = pl.norm(B)
             if True:  # (Mag < 100.0):
@@ -170,10 +170,10 @@ def PlotVF2D():
 # Vector plot of Vertical B-Field in 2D
 def VectorVerticalField(VF):
     Nij = 25
-#	r = linspace(0.2,2.2,Nij)
-#	z = linspace(-1.0,1.0,Nij)
-    r = linspace(1.0, 2.0, Nij)
-    z = linspace(-0.5, 0.5, Nij)
+#	r = np.linspace(0.2,2.2,Nij)
+#	z = np.linspace(-1.0,1.0,Nij)
+    r = np.linspace(1.0, 2.0, Nij)
+    z = np.linspace(-0.5, 0.5, Nij)
 
     Br = []
     Bz = []
@@ -183,7 +183,7 @@ def VectorVerticalField(VF):
     for i in range(Nij):
         print(i)
         for j in range(Nij):
-            R1 = array([r[i], 0, z[j]])
+            R1 = np.array([r[i], 0, z[j]])
             B = VF.local(R1)
             R.append(r[i])
             Z.append(z[j])
@@ -207,11 +207,11 @@ def VectorVerticalField(VF):
 
 def VectorToroidalField(TF):
     Nij = 25
-#	x = linspace(0,1.4,Nij)
-#	y = linspace(0,1.4,Nij)
-#	x = linspace(1.0,1.4,Nij,float)
-    x = linspace(0.9, RInj[0], Nij, float)
-    y = linspace(-0.4, 0.4, Nij, float)
+#	x = np.linspace(0,1.4,Nij)
+#	y = np.linspace(0,1.4,Nij)
+#	x = np.linspace(1.0,1.4,Nij,float)
+    x = np.linspace(0.9, RInj[0], Nij, float)
+    y = np.linspace(-0.4, 0.4, Nij, float)
 
     X = []
     Y = []
@@ -221,7 +221,7 @@ def VectorToroidalField(TF):
     for i in range(Nij):
         # print i
         for j in range(Nij):
-            R = array([x[i], y[j], 0.0])
+            R = np.array([x[i], y[j], 0.0])
             B = TF.local(R)
             X.append(x[i])
             Y.append(y[j])
@@ -232,7 +232,7 @@ def VectorToroidalField(TF):
                 Mag.append(MAG)
             else:
                 Mag.append(nan)
-    Q = pl.quiver(X, Y, Bx, By, array(Mag), pivot='mid', scale=10,
+    Q = pl.quiver(X, Y, Bx, By, np.array(Mag), pivot='mid', scale=10,
                   width=0.005, cmap=mpl.cm.winter)  # ,cmap=mpl.cm.winter
 #	pl.title(r'Toroidal B($r,\phi$)-field (uniform in $z$)')
     pl.title(r'Toroidal Field Map (Top View) B($r,\phi$)/|B$(R_o,\phi)$|')

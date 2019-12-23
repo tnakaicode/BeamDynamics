@@ -12,5 +12,5 @@ int pnpoly(int nvert, float *vertx, float *verty, float testx, float testy)
 
 // Argument	Meaning
 // nvert 	Number of vertices in the polygon. Whether to repeat the first vertex at the end is discussed below.
-// vertx, verty 	Arrays containing the x- and y-coordinates of the polygon's vertices.
+// vertx, verty 	np.arrays containing the x- and y-coordinates of the polygon's vertices.
 // testx, testy	X- and y-coordinate of the test point.

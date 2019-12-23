@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 
 # ==============================================================================
 # ====== Convert 6x6 Basis Matrix to 3x3 Basis Matrix ==========================
@@ -8,7 +8,7 @@ from numpy import *
 def ConverM6toM3(M6):
     i3 = [0, 1, 2]
     i6 = [0, 2, 4]
-    M3 = np.matrix(zeros((3, 3), float))
+    M3 = np.matrix(np.zeros((3, 3), float))
     for i in i3:
         for j in i3:
             M3[i, j] = M6[i6[i], i6[j]]
@@ -34,7 +34,7 @@ Sigma0 = np.matrix([
 
 
 def ConvertT3D(MS, S0=Sigma0):
-    S = zeros((6, 6), float)
+    S = np.zeros((6, 6), float)
 # Calculate Diagonal Elements
     for i in range(6):
         S[i, i] = MS[i, 0]**2
@@ -52,7 +52,7 @@ def ConvertT3D(MS, S0=Sigma0):
             S[j, i] = S[i, j]
 
     # calculate change
-    dS = zeros((6, 6), float)
+    dS = np.zeros((6, 6), float)
     for i in range(6):
         for j in range(6):
             if S0[i, j] != 0:

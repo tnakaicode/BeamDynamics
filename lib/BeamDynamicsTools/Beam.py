@@ -1,6 +1,6 @@
 # Beam.py
 
-from numpy import *
+import numpy as np
 #import scipy as sp
 import pylab as pl
 from numpy.linalg import inv, norm
@@ -124,11 +124,11 @@ class Beam(Trajectory):
 
     def BMatrix(self, IND):
         #		print 'Index = '+str(IND)
-        #		Bperp = matrix([[dot(self.B[IND],BasisM3[IND][:,0])],[dot(self.B[IND],BasisM3[IND][:,1])],[0.0]])
+        #		Bperp = matrix([[np.dot(self.B[IND],BasisM3[IND][:,0])],[np.dot(self.B[IND],BasisM3[IND][:,1])],[0.0]])
         # ------------------------------------------------------------------------------
         # project B onto local coordinates
-        Bx = dot(self.B[IND], self.BasisM3[IND][:, 0])
-        By = dot(self.B[IND], self.BasisM3[IND][:, 1])
+        Bx = np.dot(self.B[IND], self.BasisM3[IND][:, 0])
+        By = np.dot(self.B[IND], self.BasisM3[IND][:, 1])
         dS = self.dS[IND]
         G2 = self.gamma[IND]**2
 
@@ -234,7 +234,7 @@ class Beam(Trajectory):
 # ------------------------------------------------------------------------------
 # Rotate upright in XY Plane
         ThetaXY = 0.5 * np.arctan(2 * sigma[0, 2] / (sigma[2, 2] - sigma[0, 0]))
-        if isnan(ThetaXY):
+        if np.isnan(ThetaXY):
             ThetaXY = 0.0
         C = np.cos(ThetaXY)
         S = np.sin(ThetaXY)
@@ -250,7 +250,7 @@ class Beam(Trajectory):
 # ------------------------------------------------------------------------------
 # Rotate upright in YZ Plane (Most Important)
         ThetaYZ = -0.5 * np.arctan(2 * sigma[2, 4] / (sigma[4, 4] - sigma[2, 2]))
-        if isnan(ThetaYZ):
+        if np.isnan(ThetaYZ):
             ThetaYZ = 0.0
         C = np.cos(ThetaYZ)
         S = np.sin(ThetaYZ)
@@ -268,7 +268,7 @@ class Beam(Trajectory):
         C = 1.0
         S = 0.0
         ThetaZX = -0.5 * np.arctan(2 * sigma[4, 0] / (sigma[0, 0] - sigma[4, 4]))
-        if isnan(ThetaZX):
+        if np.isnan(ThetaZX):
             ThetaZX = 0.0
         C = np.cos(ThetaZX)
         S = np.sin(ThetaZX)
@@ -309,12 +309,12 @@ class Beam(Trajectory):
         f = 0.0
         if p < 1.0:
             C0 = [0.32685993, -1.10422029, 1.64157723, -1.52987752, 0.99919503]
-            f = polyval(C0, p)
+            f = np.polyval(C0, p)
         if p >= 1.0:
             C0 = [0.39122685, -0.97242357, 0.74316934, 0.1744343, -0.0020169]
 # ------------------------------------------------------------------------------
 # Calculate space charge form factor f from polynomial fit
-            f = polyval(C0, 1.0 / p)
+            f = np.polyval(C0, 1.0 / p)
 
 # ------------------------------------------------------------------------------
 # Calculate Constants for E-Field Calculation
@@ -362,8 +362,8 @@ class Beam(Trajectory):
 
     def BMatrix1(self, Basis, Bin, dS):
 
-        Bperp = np.matrix([[dot(Bin, Basis[:, 0])], [
-                       dot(Bin, Basis[:, 1])], [0.0]])
+        Bperp = np.matrix([[np.dot(Bin, Basis[:, 0])], [
+                       np.dot(Bin, Basis[:, 1])], [0.0]])
 
         B0 = norm(Bperp)
         if B0 != 0:

@@ -4,7 +4,7 @@ from BeamDynamicsTools import *
 import pylab as pl
 import matplotlib as mpl
 
-# Define array of injection angles
+# Define np.array of injection angles
 # (x,y,z) = (1.798m, -0.052m, 0.243m)
 #  alpha = 12.6 degrees (X-Z plane)
 #  beta = 8.0 degrees (X-Y plane)
@@ -17,7 +17,7 @@ print(alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
 Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
-Energy = 0.9e6  # linspace(0.594e6,0.900e6,10)
+Energy = 0.9e6  # np.linspace(0.594e6,0.900e6,10)
 
 # ------------------------------------------------------------------------------
 # Import poloidal Boundary points
@@ -35,8 +35,8 @@ Vessel.Plot3D(ax)
 
 # ------------------------------------------------------------------------------
 # Inputs for four B-field settings
-Bn = linspace(-0.45, 0.45, 41)
-#Bn = array([0.0])
+Bn = np.linspace(-0.45, 0.45, 41)
+#Bn = np.array([0.0])
 
 # ------------------------------------------------------------------------------
 # Generate Color Map
@@ -100,7 +100,7 @@ if True:
         TrajectoryList.append(T)
 
 # Error Trajectories
-    RError = [zeros(3), zeros(3)]
+    RError = [np.zeros(3), np.zeros(3)]
     DeltaR = []
     for i in range(len(Bn)):
         I1 = CalculateI0(Bn[i])
@@ -185,7 +185,7 @@ if True:
 # ------------------------------------------------------------------------------
 # Plot Error vs I0
 pl.figure()
-pl.plot(array(I0) * 1e-3, array(DeltaR) * 1e3)
+pl.plot(np.array(I0) * 1e-3, np.array(DeltaR) * 1e3)
 pl.xlabel('Current [kA]')
 pl.ylabel('peak-peak Error [mm]')
 pl.title('Beam centroid error due to TF current error')
@@ -199,7 +199,7 @@ if False:
     savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-            (array(Parameters)), header=Header0)
+            (np.array(Parameters)), header=Header0)
 
 if False:
     FigName = 'TrajectoryProjections_alpha%2.2f_beta%2.2f_' % (

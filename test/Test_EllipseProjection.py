@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../lib/BeamDynamicsTools/')
 
-from numpy import *
+import numpy as np
 from Ellipse import *
 import pylab as pl
 

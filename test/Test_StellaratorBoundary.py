@@ -1,12 +1,12 @@
 import sys
 sys.path.append('../lib/BeamDynamicsTools/')
 from BoundaryStellarator import *
-from numpy import *
+import numpy as np
 import pylab as pl
 import timeit
 
 # Import poloidal boundary points
-Rb = array(loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0]))  # -0.66
+Rb = np.array(loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[0]))  # -0.66
 Zb = loadtxt('../data/CmodCoordinatesRZ.dat', usecols=[1])
 
 # ------------------------------------------------------------------------------

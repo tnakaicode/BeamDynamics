@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 from matplotlib.pyplot import *
 
 
@@ -6,8 +6,8 @@ mu = 0.1
 Egamma = 0.953  # MeV
 ALanthanum = 138.91  # [g/mole]
 ABromine = 79.904  # [g/mole]
-MuLa = interp(Egamma, [8.0E-01, 1.0E+00], [6.843E-02, 5.876E-02])
-MuBr = interp(Egamma, [8.0E-01, 1.0E+00], [6.443E-02, 5.728E-02])
+MuLa = np.interp(Egamma, [8.0E-01, 1.0E+00], [6.843E-02, 5.876E-02])
+MuBr = np.interp(Egamma, [8.0E-01, 1.0E+00], [6.443E-02, 5.728E-02])
 DensityLaBr3 = 5.06  # [g/cm^3]
 
 nLa = DensityLaBr3 / (ALanthanum + 3.0 * ABromine)  # [moles/cm^3]
@@ -24,15 +24,15 @@ L = 3.5e-2
 
 Tmin = np.arctan(w / L)
 Tmax = np.pi / 2.0 - 0.1
-theta = linspace(0.0, Tmax, 10000)
+theta = np.linspace(0.0, Tmax, 10000)
 
 P0 = 1.0 - np.exp(-mu * L)
 A0 = w**2
 
-P4 = zeros(len(theta))
-A4 = zeros(len(theta))
-P3 = zeros(len(theta))
-A3 = zeros(len(theta))
+P4 = np.zeros(len(theta))
+A4 = np.zeros(len(theta))
+P3 = np.zeros(len(theta))
+A3 = np.zeros(len(theta))
 
 for i in range(len(theta)):
     if theta[i] > Tmin:

@@ -10,7 +10,7 @@ import matplotlib as mpl
 # ===============================================================================
 
 # ------------------------------------------------------------------------------
-# Define array of injection angles
+# Define np.array of injection angles
 # (x,y,z) = (1.798m, -0.052m, 0.243m)
 #  alpha = 12.6 degrees (X-Z plane)
 #  beta = 8.0 degrees (X-Y plane)
@@ -23,7 +23,7 @@ print(alpha, beta)
 Rinjection = [1.798, -0.052, 0.243]
 Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
 #Energy = [0.594e6, 0.740e6, 0.900e6]
-Energy = 0.9e6  # linspace(0.594e6,0.900e6,10)
+Energy = 0.9e6  # np.linspace(0.594e6,0.900e6,10)
 
 # ------------------------------------------------------------------------------
 # Import poloidal Boundary points
@@ -41,13 +41,13 @@ Vessel.Plot3D(ax)
 
 # ------------------------------------------------------------------------------
 # Inputs for B-field settings
-#In = array([ 0.0, 1600.0 ,3120 ,4450.0])
-#Bn = array([ 0.0, 0.05818182, 0.11345455, 0.16181818 ])
-#Bn = array([0.10,0.20, 0.30, 0.40])
-#Bn = array([0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40,0.45])
-#Bn = linspace(0.0,0.45,19)
-Bn = linspace(-0.45, 0.45, 50)
-#Bn = array([0.0])
+#In = np.array([ 0.0, 1600.0 ,3120 ,4450.0])
+#Bn = np.array([ 0.0, 0.05818182, 0.11345455, 0.16181818 ])
+#Bn = np.array([0.10,0.20, 0.30, 0.40])
+#Bn = np.array([0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40,0.45])
+#Bn = np.linspace(0.0,0.45,19)
+Bn = np.linspace(-0.45, 0.45, 50)
+#Bn = np.array([0.0])
 
 # ------------------------------------------------------------------------------
 # Generate Color Map
@@ -138,7 +138,7 @@ if False:
     savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
     Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
     savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-            (array(Parameters)), header=Header0)
+            (np.array(Parameters)), header=Header0)
 
 # ------------------------------------------------------------------------------
 # Save Figure
