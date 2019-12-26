@@ -28,20 +28,100 @@ dLB = 2.0e-3  # scale length for B gradient
 # ====== \Default injection geometry ==================
 
 
-class Trajectory:
+class Trajectory(object):
+
     def __init__(self, Vessel, B, Bv, dS=1e-3, r0=Rinjection, v0=Vinjection, a0=[0.0, 0.0, 0.0], M0=Mass0, T0=0.9e6, I0=1e-3, Freq=425e6, Nmax=5000, Smin=1.1, Smax=5.0, Method='Relativistic'):
         self.start = timeit.default_timer()
 
-        #self.fig_3d = plt.figure(1)
-        #self.axs_3d = Axes3D(self.fig_3d)
+        self.fig_3d = plt.figure(1)
+        self.axs_3d = Axes3D(self.fig_3d)
 
-        #self.fig_2d, self.axs_2d = plt.subplots(1,2)
-        #self.axs_pol = self.axs_2d[0]
-        #self.axs_top = self.axs_2d[1]
+        self.fig_2d, self.axs_2d = plt.subplots(1, 2)
+        self.axs_pol = self.axs_2d[0]
+        self.axs_top = self.axs_2d[1]
 
         # Method == 'Relativistic'
         # Method == 'LeapFrog'
         # Method == 'Euler'
+
+        # B = Magnetic Field [T] (BfieldTF class)
+        # Vessel = Defines wall (Boundary class)
+        # M0 = Rest Mass [MeV/c^2]
+        # T0 = kinetic energy beam [eV]
+        # r  = position vector [x, y, z]
+        # v  = velocity vector [Vx, Vy, Vz]
+        # a  = acceleration vector [ax, ay, az]
+        # Proton Mass: 938.272e6
+        # Electron Charge: 1.60217646e-19
+
+        # Particle and beam constants
+        self.c0 = cnt.c
+        self.A0 = M0 / 938.272e6
+        self.q0 = 1.60217646e-19
+        self.qm = self.q0 / (M0 * self.q0 / self.c0**2)
+        self.m0 = M0
+        self.I0 = I0
+        self.Frequency = Freq
+        self.T0 = T0
+
+        # Vessel Boundary
+        self.Vessel = Vessel
+
+        # Magnetic coil sets
+        self.BFieldTF = B
+        self.BFieldVF = Bv
+
+        # Beam
+        self.r = [np.array(r0)]
+        self.gamma = 1.0 + T0 / M0
+        self.beta = np.sqrt(1.0 - 1.0 / self.gamma**2)
+        self.Beta = [self.beta * np.array(v0) / norm(v0)]
+#		self.v0 = np.sqrt(2.0*T0*1.602e-16/(A0*1.67e-27))
+#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
+#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
+        self.v0 = self.beta * self.c0
+        self.v = [self.v0 * np.array(v0) / norm(v0)]
+        self.beta = [norm(self.Beta[-1])]
+        self.gamma = [1.0 / (1.0 - self.beta[-1]**2)]
+        self.a = [np.array(a0)]
+        self.F = [0.0]
+        self.B = [np.array(B.local(r0))]
+        self.s = [0.0]
+        self.dt = dS / self.v0
+        self.dS = [dS]
+
+        # Gradient and curvature attributes
+        self.k = [0.0]
+        self.Rc = []
+        self.gradB = [0.0]
+        self.gradBk = [0.0]
+        self.gradBn = [0.0]
+        self.gradBx = [0.0]
+        self.gradBy = [0.0]
+
+        # Plotting attributes
+        self.LineColor = 'r'
+        self.LineWidth = 2
+        self.LineStyle = '-'
+
+        # num Limit
+        self.Nmax = Nmax
+        self.Smax = Smax
+        self.Smin = Smin
+
+        if Method == 'Relativistic':
+            self.Method_Relativistic()
+        elif Method == 'LeapFrog':
+            self.Method_LeapFrog()
+        elif Method == 'Euler':
+            self.Method_Euler()
+        elif Method == None:
+            pass
+        else:
+            self.Method_Relativistic()
+
+    def init_condition(self, Vessel, B, Bv, dS=1e-3, r0=Rinjection, v0=Vinjection, a0=[0.0, 0.0, 0.0], M0=Mass0, T0=0.9e6, I0=1e-3, Freq=425e6, Nmax=5000, Smin=1.1, Smax=5.0, Method='Relativistic'):
+        self.start = timeit.default_timer()
 
         # B = Magnetic Field [T] (BfieldTF class)
         # Vessel = Defines wall (Boundary class)
@@ -108,36 +188,22 @@ class Trajectory:
         self.Smax = Smax
         self.Smin = Smin
 
-        c1 = True
-        c2 = True
-        i = 0
-        IN = False
-        NormalV = np.zeros(3)
-        TangentV = np.zeros(3)
-        IncidentV = np.zeros(3)
-        RT = np.zeros(3)
-
-# ===============================================================================
-# Run Relativistic Euler Integration:
-# ===============================================================================
         if Method == 'Relativistic':
             self.Method_Relativistic()
-
-# ===============================================================================
-# Run Leapfrog Integration:
-# ===============================================================================
-        if Method == 'LeapFrog':
+        elif Method == 'LeapFrog':
             self.Method_LeapFrog()
-
-# ===============================================================================
-# Euler Integration:
-# ===============================================================================
-        if Method == 'Euler':
+        elif Method == 'Euler':
             self.Method_Euler()
+        elif Method == None:
+            pass
+        else:
+            self.Method_Relativistic()
+
 
 # ===============================================================================
 # Euler Integration:
 # ===============================================================================
+
     def Method_Euler(self):
         c1 = True
         c2 = True
@@ -151,7 +217,8 @@ class Trajectory:
         while (c1 or c2) and (i < self.Nmax and self.s[-1] < self.Smax):
             self.r.append(self.r[-1] + self.v[-1] * self.dt)
             self.s.append(self.s[-1] + self.dS[-1])
-            self.B.append(self.BFieldTF.local(self.r[-1]) + self.BFieldVF.local(self.r[-1]))
+            self.B.append(self.BFieldTF.local(
+                self.r[-1]) + self.BFieldVF.local(self.r[-1]))
             self.a.append(self.qm * np.cross(self.v[-1], self.B[-1]))
             self.v.append(self.v[-1] + (self.a[-1]) * self.dt)
             self.dS.append(self.s[-1] - self.s[-2])
@@ -206,8 +273,8 @@ class Trajectory:
 # ------------------------------------------------------------------------------
         # Define Target
         if i < self.Nmax - 1 and self.s[-1] <= self.Smax:
-            self.target = Target(
-                NormalV, TangentV, IncidentV, self.BFieldTFBFieldTF, self.BFieldTFBFieldVF, RT, Xpol)
+            self.target = Target(NormalV, TangentV, IncidentV,
+                                 self.BFieldTFBFieldTF, self.BFieldTFBFieldVF, RT, Xpol)
             self.target.SigmaBasis = self.BasisM6[-1]
 # ----------------------------------------------------------------------------
         # If no boundary was reached assume normal incidence
@@ -216,8 +283,8 @@ class Trajectory:
             TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
             IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
             RT = self.r[-1]
-            self.target = Target(
-                NormalV, TangentV, IncidentV, self.BFieldTF, self.BFieldVF, RT, Xpol)
+            self.target = Target(NormalV, TangentV, IncidentV,
+                                 self.BFieldTF, self.BFieldVF, RT, Xpol)
         print('Beam Coordinates Complete')
 # ===============================================================================
 # End
@@ -436,16 +503,26 @@ class Trajectory:
             self.BasisM6.append(Basis6(e1[-1], e2[-1], e3[-1]))
             # print i
 
-    def PlotAll(self):
+    def PlotParticle(self, box=1.5, offsetX=0.5, offsetY=0.5, offsetZ=0):
         x = []
         y = []
         z = []
+        R = []
         for i in range(len(self.r)):
             x.append(self.r[i][0])
             y.append(self.r[i][1])
             z.append(self.r[i][2])
-        #ax.plot(x, y, z, color=self.LineColor, linewidth=self.LineWidth)
-        #ax.scatter(x[-1], y[-1], z[-1], s=15, c=self.LineColor)
+            R.append(np.sqrt(x[-1]**2 + y[-1]**2))
+        self.axs_3d.plot(x, y, z, color=self.LineColor,
+                         linewidth=self.LineWidth)
+        self.axs_3d.scatter(x[-1], y[-1], z[-1], s=15, c=self.LineColor)
+        self.axs_pol.plot(R, z, color=self.LineColor,
+                          linestyle=self.LineStyle, linewidth=self.LineWidth)
+        self.axs_top.plot(x, y, color=self.LineColor,
+                          linestyle=self.LineStyle, linewidth=self.LineWidth)
+        self.axs_3d.set_xlim3d(-box / 2 + offsetX, box / 2 + offsetX)
+        self.axs_3d.set_ylim3d(-box / 2 + offsetY, box / 2 + offsetY)
+        self.axs_3d.set_zlim3d(-box / 2 + offsetZ, box / 2 + offsetZ)
 
 # ------------------------------------------------------------------------------
 # Plot 2D projection of trajectory

@@ -36,9 +36,6 @@ if __name__ == "__main__":
     Vessel = Boundary(Rb, Zb)
 
     # ------------------------------------------------------------------------------
-    # 3D plot of vessel Boundary
-    ax = Vessel.Figure3D(1)
-    Vessel.Plot3D(ax)
 
     # ------------------------------------------------------------------------------
     # Inputs for B-field settings
@@ -55,15 +52,20 @@ if __name__ == "__main__":
     TrajectoryList = []
     OutputPath = './tmp/'
     Color = ['b', 'g', 'r', 'c']
+
+    B = BfieldTF(B0=0.0)
+    Bv = BfieldVF(B0=0.0)
+    T = Trajectory(Vessel, B, Bv, v0=Vinjection[0], Method=None)
     for j, alph in enumerate(alpha):
         for i, B0 in enumerate(Bn):
             B = BfieldTF(B0=B0)
             Bv = BfieldVF(B0=0.00000)
-            T = Trajectory(Vessel, B, Bv, v0=Vinjection[j], Method='Euler')
+            V0 = Vinjection[j]
+            T.init_condition(Vessel, B, Bv, v0=V0, Method='LeapFrog')
             T.LineColor = Color[j]
-            T.Plot3D(ax)
-            T.PlotB(FIG=2)
-            T.PlotV(FIG=3)
+            T.PlotParticle()
+            # T.PlotB(FIG=2)
+            # T.PlotV(FIG=3)
             TrajectoryList.append(T)
 
             np.savetxt(
@@ -72,15 +74,8 @@ if __name__ == "__main__":
             Coordinates.append([T.target.R, T.target.Z, T.target.Phi])
             Parameters.append(T.target.GetDetectionParameters())
 
-    T.Limits3D(ax)
-
-    plt.figure(figsize=(20, 8))
-    for T in TrajectoryList:
-        plt.subplot(1, 2, 1)
-        T.Plot2D('poloidal')
-    for T in TrajectoryList:
-        plt.subplot(1, 2, 2)
-        T.Plot2D('top')
+    # 3D plot of vessel Boundary
+    T.Vessel.Plot3D(T.axs_3d)
 
     # ------------------------------------------------------------------------------
     # Save Angular and Detection Quantities
