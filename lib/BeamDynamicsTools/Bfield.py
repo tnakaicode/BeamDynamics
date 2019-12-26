@@ -88,14 +88,19 @@ class BfieldTF:
         self.I0 = CalculateI0(self.B0, R0=0.67, NCoils=120.0)
         self.Method = Method
 
-        for n in range(Ncoils):  # Outer Legs of TF
-            TF.append(np.array([Rmax * np.cos(2 * np.pi * n / Ncoils + Phi0),
-                                Rmax * np.sin(2 * np.pi * n / Ncoils + Phi0), -1.0]))
+        # Outer Legs of TF
+        for rad in np.linspace(0,2*np.pi,Ncoils):
+            x = Rmax * np.cos(rad + Phi0)
+            y = Rmax * np.sin(rad + Phi0)
+            z = -1.0
+            TF.append(np.array([x, y, z]))
 
         # Inner Legs of TF -> np.array([ x , y , +/- direction ])
-        for n in range(Ncoils):
-            TF.append(np.array([Rmin * np.cos(2 * np.pi * n / Ncoils + Phi0),
-                                Rmin * np.sin(2 * np.pi * n / Ncoils + Phi0), 1.0]))
+        for rad in np.linspace(0,2*np.pi,Ncoils):
+            x = Rmin * np.cos(rad + Phi0)
+            y = Rmin * np.sin(rad + Phi0)
+            z = 1.0
+            TF.append(np.array([x, y, z]))
         self.TF = TF
 
         # create np.array of TF coordinates to faster computation
@@ -108,9 +113,9 @@ class BfieldTF:
             self.TFsign[i] = TF[i][2]
 
     def PlotTF(self):
-        plt.plt.figure(0)
-        for n in range(len(TF)):
-            plt.plot(TF[n][0], TF[n][1], 'ob')
+        plt.figure()
+        for n in range(len(self.TF)):
+            plt.plot(self.TF[n][0], self.TF[n][1], 'ob')
 
     # Function that calculates Toroidal field at position R
     def local(self, RIN):

@@ -94,9 +94,10 @@ class Boundary:
         Nvec = self.Nvec
 
         for i in range(self.Nv):
-            plt.plot([Cvec[i][0], Cvec[i - 1][0]], [Cvec[i][1], Cvec[i - 1][1]])
+            plt.plot([Cvec[i][0], Cvec[i - 1][0]],
+                     [Cvec[i][1], Cvec[i - 1][1]])
             plt.plot([Nvec[i][0] * NScale + Mvec[i][0], Mvec[i][0]],
-                    [Nvec[i][1] * NScale + Mvec[i][1], Mvec[i][1]])
+                     [Nvec[i][1] * NScale + Mvec[i][1], Mvec[i][1]])
             plt.plot(Mvec[i][0], Mvec[i][1], 'o')
 
         plt.xlim(0.3 - 1, 0.3 + 1)
@@ -143,7 +144,6 @@ class Boundary:
 
 # ------------------------------------------------------------------------------
 # Tests to see if point r is in the volume using "Ray Casting Algorithm"
-
 
     def InBoundary(self, r):
         x = np.sqrt(r[0]**2 + r[1]**2)
@@ -257,9 +257,9 @@ class Boundary:
     def PlotCorners2D(self, Xlim=[-1, 1], scale=1.0):
         for i in range(len(self.PoloidalLines)):
             plt.plot(scale * np.array(Xlim), scale *
-                    np.array([self.PoloidalLines[i], self.PoloidalLines[i]]), color='k', linewidth=0.7)
+                     np.array([self.PoloidalLines[i], self.PoloidalLines[i]]), color='k', linewidth=0.7)
             plt.plot(scale * np.array(Xlim), scale *
-                    np.array([0.0, 0.0]), color='r', linewidth=1.5, linestyle=':')
+                     np.array([0.0, 0.0]), color='r', linewidth=1.5, linestyle=':')
 
 # ===============================================================================
 # Extra Functions
@@ -300,4 +300,4 @@ def Circle(R, Nt=100):
 # TestInVolume(Wall,1000)
 
 # Wall.Plot3D(Nt=16,FIG=2)
-plt.show()
+# plt.show()

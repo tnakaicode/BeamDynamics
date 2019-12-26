@@ -56,16 +56,15 @@ if __name__ == "__main__":
     B = BfieldTF(B0=0.0)
     Bv = BfieldVF(B0=0.0)
     T = Trajectory(Vessel, B, Bv, v0=Vinjection[0], Method=None)
-    for j, alph in enumerate(alpha):
-        for i, B0 in enumerate(Bn):
+    for i, B0 in enumerate(Bn):
+        for j, alph in enumerate(alpha):
             B = BfieldTF(B0=B0)
             Bv = BfieldVF(B0=0.00000)
             V0 = Vinjection[j]
             T.init_condition(Vessel, B, Bv, v0=V0, Method='LeapFrog')
             T.LineColor = Color[j]
             T.PlotParticle()
-            # T.PlotB(FIG=2)
-            # T.PlotV(FIG=3)
+            T.PlotBV()
             TrajectoryList.append(T)
 
             np.savetxt(
@@ -73,6 +72,7 @@ if __name__ == "__main__":
             AngleComponents.append([T.target.VAngle, T.target.HAngle])
             Coordinates.append([T.target.R, T.target.Z, T.target.Phi])
             Parameters.append(T.target.GetDetectionParameters())
+        # T.FigureBV()
 
     # 3D plot of vessel Boundary
     T.Vessel.Plot3D(T.axs_3d)

@@ -23,7 +23,8 @@ Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha)
               * np.sin(beta), -np.sin(alpha)]
 
 Mass0 = 2.0 * (938.272e6)
-dLB = 2.0e-3  # scale length for B gradient
+dLB = 2.0e-3
+# scale length for B gradient
 #Vinjection = [-1,0,0]
 # ====== \Default injection geometry ==================
 
@@ -36,9 +37,17 @@ class Trajectory(object):
         self.fig_3d = plt.figure(1)
         self.axs_3d = Axes3D(self.fig_3d)
 
-        self.fig_2d, self.axs_2d = plt.subplots(1, 2)
+        self.fig_2d, self.axs_2d = plt.subplots(1, 2, figsize=(15, 8))
         self.axs_pol = self.axs_2d[0]
+        self.axs_pol.set_aspect('auto')
+        self.axs_pol.xaxis.grid()
+        self.axs_pol.yaxis.grid()
         self.axs_top = self.axs_2d[1]
+        self.axs_top.set_aspect('auto')
+        self.axs_top.xaxis.grid()
+        self.axs_top.yaxis.grid()
+
+        self.FigureBV()
 
         # Method == 'Relativistic'
         # Method == 'LeapFrog'
@@ -203,6 +212,7 @@ class Trajectory(object):
 # ===============================================================================
 # Euler Integration:
 # ===============================================================================
+
 
     def Method_Euler(self):
         c1 = True
@@ -478,14 +488,9 @@ class Trajectory(object):
 # Relativistic Euler Integration:
 # ===============================================================================
 
-# ===============================================================================
-# Class Methods
-# ===============================================================================
-
-# ------------------------------------------------------------------------------
-# Calculate 3x3 matrix vectors representing the local x,y,z basis
-# and the 6x6 matrix of column vectors representing the local x,x',y,y',l,dp/p
-# phase space basis
+    # Calculate 3x3 matrix vectors representing the local x,y,z basis
+    # and the 6x6 matrix of column vectors representing the local x,x',y,y',l,dp/p
+    # phase space basis
     def BeamBasis(self):
         Ni = len(self.v)
         e3 = [self.v[0] / norm(self.v[0])]
@@ -501,7 +506,6 @@ class Trajectory(object):
             e1.append(np.cross(e2[-1], e3[-1]))
             self.BasisM3.append(Basis3(e1[-1], e2[-1], e3[-1]))
             self.BasisM6.append(Basis6(e1[-1], e2[-1], e3[-1]))
-            # print i
 
     def PlotParticle(self, box=1.5, offsetX=0.5, offsetY=0.5, offsetZ=0):
         x = []
@@ -570,6 +574,76 @@ class Trajectory(object):
         ax.set_xlim3d(-box / 2 + offsetX, box / 2 + offsetX)
         ax.set_ylim3d(-box / 2 + offsetY, box / 2 + offsetY)
         ax.set_zlim3d(-box / 2 + offsetZ, box / 2 + offsetZ)
+
+    def FigureBV(self):
+        self.fig_BV, self.axs_BV = plt.subplots(4, 3, figsize=(20, 8))
+        self.axs_bx = self.axs_BV[0, 0]
+        self.axs_bx.set_ylabel(r'Bx [T]')
+        self.axs_bx.set_title('B-Field Components Along Trajectory')
+        self.axs_by = self.axs_BV[1, 0]
+        self.axs_by.set_ylabel(r'By [T]')
+        self.axs_bz = self.axs_BV[2, 0]
+        self.axs_bz.set_ylabel(r'Bz [T]')
+        self.axs_b = self.axs_BV[3, 0]
+        self.axs_b.set_ylabel(r'|B| [T]')
+        self.axs_b.set_xlabel('S-coordinate [m]')
+
+        self.axs_vx = self.axs_BV[0, 1]
+        self.axs_vx.set_ylabel(r'$\beta_x$')
+        self.axs_vx.set_title(
+            r'Velocity Components Along Trajectory $\beta=v_i/c$')
+        self.axs_vy = self.axs_BV[1, 1]
+        self.axs_vy.set_ylabel(r'$\beta_y$')
+        self.axs_vz = self.axs_BV[2, 1]
+        self.axs_vz.set_ylabel(r'$\beta_z$')
+        self.axs_v = self.axs_BV[3, 1]
+        self.axs_v.set_ylabel(r'$\beta$')
+        self.axs_v.set_xlabel('S-coordinate [m]')
+
+        self.axs_bvx = self.axs_BV[0, 2]
+        self.axs_bvx.set_ylabel(r'$\beta_x$')
+        self.axs_bvy = self.axs_BV[1, 2]
+        self.axs_bvy.set_ylabel(r'$\beta_y$')
+        self.axs_bvz = self.axs_BV[2, 2]
+        self.axs_bv = self.axs_BV[3, 2]
+        self.axs_bv.set_ylabel(r'$\beta$')
+        self.axs_bv.set_xlabel('S-coordinate [m]')
+        self.axs_bv.set_ylabel(r'$\beta$')
+
+    def PlotBV(self):
+        Bx = []
+        By = []
+        Bz = []
+        Bmag = []
+        for i in range(len(self.B)):
+            Bx.append(self.B[i][0])
+            By.append(self.B[i][1])
+            Bz.append(self.B[i][2])
+            Bmag.append(norm(self.B[i]))
+        self.axs_bx.plot(self.s, Bx)
+        self.axs_by.plot(self.s, By)
+        self.axs_bz.plot(self.s, Bz)
+        self.axs_b.plot(self.s, Bmag)
+
+        Vx = []
+        Vy = []
+        Vz = []
+        Vmag = []
+        for i in range(len(self.v)):
+            vx, vy, vz = self.v[i] / cnt.c
+            Vx.append(vx)
+            Vy.append(vy)
+            Vz.append(vz)
+            Vmag.append(np.sqrt(vx**2 + vy**2 + vz**2))
+        self.axs_vx.plot(self.s, Vx)
+        self.axs_vy.plot(self.s, Vy)
+        self.axs_vz.plot(self.s, Vz)
+        self.axs_v.plot(self.s, Vmag)
+
+        self.axs_bvx.plot(Vx, Bx)
+        self.axs_bvy.plot(Vy, By)
+        self.axs_bvz.plot(Vz, By)
+        self.axs_bv.plot(Vmag, Bmag)
 
 # ------------------------------------------------------------------------------
 # Plot Magnetic Field components along beam trajectory
@@ -664,145 +738,146 @@ def Basis6(e1, e2, e3):
 # ==============================================================================
 
 # Radius of Curvature method with perpendicular projection of B and constant dTheta = dS/R(B)
-BMag = 0.0
-vMag = 0.0
-hPara = np.zeros(3, float)
-hPerp = np.zeros(3, float)
-if False:
-    while (c1 or c2) and i < Nmax:
-
-        self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
-
-        BMag = norm(self.B[-1])
-
-        vMag = norm(self.v[-1])
-
-        # parallel to velocity unit vector
-        hPara = self.v[-1] / vMag
-
-        # Vector along bending Radius
-        hRadius = np.cross(self.v[-1], self.B[-1])
-        hRadius = hRadius / norm(hRadius)
-
-        # perpendicular to B unit vector
-        hPerp = np.cross(hRadius, hPara)
-
-        # Magnitude of perpendicular projection of B
-        BPerp = np.dot(self.B[-1], hPerp)
-
-        # Cyclotron Frequency
-        Omega = self.q0 * BPerp / self.m0
-        dTheta = 0.001  # Omega*self.dt
-
-        # Larmor radius
-        rL = (self.m0 * vMag) / (self.q0 * BPerp)
-        print(rL, Omega, (rL * dTheta))
-        # Change in r
-
-        drPara = rL * np.sin(dTheta) * hPara
-
-        drRad = rL * (np.cos(dTheta) - 1.0) * hRadius
-
-        vPara = vMag * np.cos(dTheta) * hPara
-
-        vRad = vMag * np.sin(dTheta) * hRadius
-
-        self.r.append(self.r[-1] + drPara + drRad)
-
-        self.s.append(self.s[-1] + (rL * dTheta))
-
-        self.dS.append(self.s[-1] - self.s[-2])
-
-        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
-
-        self.v.append(vPara + vRad)
-
-        # Normalized Relativistic Parameters
-        self.Beta.append(self.v[-1] / c0)
-        self.beta.append(norm(self.Beta[-1]))
-        self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
-
-        # Check to see if beam np.crosses boundary
-        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
-            self.r[-2], self.r[-1])
-
-        c1 = IN
-        c2 = self.s[-1] < Smin
-        i = i + 1
-        print(i)
-#			self.Target = Target(NormalV,TangentV,IncidentV)
-
-    print('trajectory complete')
-    self.Target = Target(NormalV, TangentV, IncidentV,
-                         BFieldTF, BFieldVF, RT, Xpol)
-    self.BeamBasis()
-    print('Beam Coordinates Complete')
-    print(self.BasisM3)
+#BMag = 0.0
+#vMag = 0.0
+#hPara = np.zeros(3, float)
+#hPerp = np.zeros(3, float)
+# if False:
+#    while (c1 or c2) and i < Nmax:
+#
+#        self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
+#
+#        BMag = norm(self.B[-1])
+#
+#        vMag = norm(self.v[-1])
+#
+#        # parallel to velocity unit vector
+#        hPara = self.v[-1] / vMag
+#
+#        # Vector along bending Radius
+#        hRadius = np.cross(self.v[-1], self.B[-1])
+#        hRadius = hRadius / norm(hRadius)
+#
+#        # perpendicular to B unit vector
+#        hPerp = np.cross(hRadius, hPara)
+#
+#        # Magnitude of perpendicular projection of B
+#        BPerp = np.dot(self.B[-1], hPerp)
+#
+#        # Cyclotron Frequency
+#        Omega = self.q0 * BPerp / self.m0
+#        dTheta = 0.001  # Omega*self.dt
+#
+#        # Larmor radius
+#        rL = (self.m0 * vMag) / (self.q0 * BPerp)
+#        print(rL, Omega, (rL * dTheta))
+#        # Change in r
+#
+#        drPara = rL * np.sin(dTheta) * hPara
+#
+#        drRad = rL * (np.cos(dTheta) - 1.0) * hRadius
+#
+#        vPara = vMag * np.cos(dTheta) * hPara
+#
+#        vRad = vMag * np.sin(dTheta) * hRadius
+#
+#        self.r.append(self.r[-1] + drPara + drRad)
+#
+#        self.s.append(self.s[-1] + (rL * dTheta))
+#
+#        self.dS.append(self.s[-1] - self.s[-2])
+#
+#        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
+#
+#        self.v.append(vPara + vRad)
+#
+#        # Normalized Relativistic Parameters
+#        self.Beta.append(self.v[-1] / c0)
+#        self.beta.append(norm(self.Beta[-1]))
+#        self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
+#
+#        # Check to see if beam np.crosses boundary
+#        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
+#            self.r[-2], self.r[-1])
+#
+#        c1 = IN
+#        c2 = self.s[-1] < Smin
+#        i = i + 1
+#        print(i)
+##			self.Target = Target(NormalV,TangentV,IncidentV)
+#
+#    print('trajectory complete')
+#    self.Target = Target(NormalV, TangentV, IncidentV,
+#                         BFieldTF, BFieldVF, RT, Xpol)
+#    self.BeamBasis()
+#    print('Beam Coordinates Complete')
+#    print(self.BasisM3)
 # Boris Method with constant dTheta = dS/R(B)
-if False:
-    while (c1 or c2) and i < Nmax:
-
-        self.B.append(
-            np.array(B.local(self.r[-1])) + np.array(Bv.local(self.r[-1])))
-        BMag = norm(self.B[-1])
-
-        # parallel to B unit vector
-        hPara = self.B[-1] / BMag
-
-        # perpendicular to B unit vector
-        hPerp = (V - (V * hPara) * hPara)
-        hPerp = hPerp / norm(hPerp)
-
-        # Vector along bending Radius
-        hRadius = np.cross(hPara, hPerp)
-
-        # Cyclotron Frequency
-        Omega = self.q0 * BMag / self.m0
-        dTheta = Omega * self.dt
-
-        # Larmor radius
-        rL = (self.m0 * np.dot(self.v[-1], hPerp)) / (self.q0 * BMag)
-
-        # Change in r
-
-        drPara = self.dt * np.dot(self.v[-1], hPara) * hPara
-
-        drPerp = (rL * np.sin(dTheta)) * hPerp
-
-        drRad = rL * (np.cos(dTheta) - 1.0) * hRad
-
-        self.r.append(self.r[-1] + drPara + drPerp + drRad)
-
-        self.s.append(self.s[-1] + norm(self.r[-1] - self.r[-2]))
-
-        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
-
-        dv = np.dot(self.v[-1], hPara) * hPara + np.dot(self.v[-1],
-                                                        hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
-
-        self.v.append(self.v[-1] + dv)
-
-        # Normalized Relativistic Parameters
-        self.Beta.append(self.v[-1] / c0)
-        self.beta.append(norm(self.Beta[-1]))
-        self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
-
-        # Check to see if beam np.crosses boundary
-        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
-            self.r[-2], self.r[-1])
-
-        c1 = IN
-        c2 = i * dS < Smin
-        i = i + 1
-        print(i)
-#			self.Target = Target(NormalV,TangentV,IncidentV)
-
-    print('trajectory complete')
-    self.BeamBasis()
-    print('Beam Coordinates Complete')
-    self.Target = Target(NormalV, TangentV, IncidentV,
-                         BFieldTF, BFieldVF, RT, Xpol)
-    print('Target Complete')
-
-    self.NormalV = NormalV
-    self.IncidentV = IncidentV
+# if False:
+#    while (c1 or c2) and i < Nmax:
+#
+#        self.B.append(
+#            np.array(B.local(self.r[-1])) + np.array(Bv.local(self.r[-1])))
+#        BMag = norm(self.B[-1])
+#
+#        # parallel to B unit vector
+#        hPara = self.B[-1] / BMag
+#
+#        # perpendicular to B unit vector
+#        hPerp = (V - (V * hPara) * hPara)
+#        hPerp = hPerp / norm(hPerp)
+#
+#        # Vector along bending Radius
+#        hRadius = np.cross(hPara, hPerp)
+#
+#        # Cyclotron Frequency
+#        Omega = self.q0 * BMag / self.m0
+#        dTheta = Omega * self.dt
+#
+#        # Larmor radius
+#        rL = (self.m0 * np.dot(self.v[-1], hPerp)) / (self.q0 * BMag)
+#
+#        # Change in r
+#
+#        drPara = self.dt * np.dot(self.v[-1], hPara) * hPara
+#
+#        drPerp = (rL * np.sin(dTheta)) * hPerp
+#
+#        drRad = rL * (np.cos(dTheta) - 1.0) * hRad
+#
+#        self.r.append(self.r[-1] + drPara + drPerp + drRad)
+#
+#        self.s.append(self.s[-1] + norm(self.r[-1] - self.r[-2]))
+#
+#        self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
+#
+#        dv = np.dot(self.v[-1], hPara) * hPara + np.dot(self.v[-1],
+#                                                        hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
+#
+#        self.v.append(self.v[-1] + dv)
+#
+#        # Normalized Relativistic Parameters
+#        self.Beta.append(self.v[-1] / c0)
+#        self.beta.append(norm(self.Beta[-1]))
+#        self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
+#
+#        # Check to see if beam np.crosses boundary
+#        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
+#            self.r[-2], self.r[-1])
+#
+#        c1 = IN
+#        c2 = i * dS < Smin
+#        i = i + 1
+#        print(i)
+##			self.Target = Target(NormalV,TangentV,IncidentV)
+#
+#    print('trajectory complete')
+#    self.BeamBasis()
+#    print('Beam Coordinates Complete')
+#    self.Target = Target(NormalV, TangentV, IncidentV,
+#                         BFieldTF, BFieldVF, RT, Xpol)
+#    print('Target Complete')
+#
+#    self.NormalV = NormalV
+#    self.IncidentV = IncidentV
+#
