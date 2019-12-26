@@ -16,7 +16,6 @@ if __name__ == "__main__":
     #  alpha = 12.6 degrees (X-Z plane)
     #  beta = 8.0 degrees (X-Y plane)
     #  VInjection
-    #  -cos(alpha) * cos(beta), cos(alpha) * sin(alpha), -sin(alpha)
     alpha = np.linspace(8, 12, 4) / 180.0 * np.pi
     beta = 8.0 / 180.0 * np.pi
     Rinjection = [1.798, 0.052, 0.243]
@@ -54,32 +53,41 @@ if __name__ == "__main__":
     Coordinates = []
     Parameters = []
     TrajectoryList = []
-    OutputPath = '../output/'
+    OutputPath = './tmp/'
     Color = ['b', 'g', 'r', 'c']
     for j, alph in enumerate(alpha):
-        for i, B0 in enumerate(Bn):  # range(len(Bn)):
+        for i, B0 in enumerate(Bn):
             B = BfieldTF(B0=B0)
             Bv = BfieldVF(B0=0.00000)
-            T = Trajectory(Vessel, B, Bv, v0=Vinjection[j], Method='LeapFrog')
+            T = Trajectory(Vessel, B, Bv, v0=Vinjection[j], Method='Relativistic')
             T.LineColor = Color[j]
             T.Plot3D(ax)
             T.PlotB(FIG=2)
             T.PlotV(FIG=3)
+            TrajectoryList.append(T)
 
+            np.savetxt(
+                "./tmp/Traject_{:d}_{:d}.dat".format(j, i), np.array(T.r))
             AngleComponents.append([T.target.VAngle, T.target.HAngle])
             Coordinates.append([T.target.R, T.target.Z, T.target.Phi])
             Parameters.append(T.target.GetDetectionParameters())
 
     T.Limits3D(ax)
 
+    plt.figure(figsize=(20, 8))
+    for T in TrajectoryList:
+        plt.subplot(1, 2, 1)
+        T.Plot2D('poloidal')
+    for T in TrajectoryList:
+        plt.subplot(1, 2, 2)
+        T.Plot2D('top')
+
     # ------------------------------------------------------------------------------
     # Save Angular and Detection Quantities
-    if False:
-        np.savetxt(
-            OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat', AngleComponents)
-        np.savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
-        Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
-        np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-                   (np.array(Parameters)), header=Header0)
+    np.savetxt(OutputPath + 'TargetAngle_Vert_Horiz.dat', AngleComponents)
+    np.savetxt(OutputPath + 'TargetCoordinates.dat', Coordinates)
+    Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
+    np.savetxt(OutputPath + 'DetectionParameters.dat',
+               (np.array(Parameters)), header=Header0)
 
     plt.show()

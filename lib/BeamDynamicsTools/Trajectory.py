@@ -1,9 +1,9 @@
 # Trajectory.py
-
 import numpy as np
 import matplotlib.pyplot as plt
-#import scipy as sp
+import scipy as sp
 import pylab as pl
+import scipy.constants as cnt
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm
 from .Ellipse import *
@@ -19,7 +19,8 @@ alpha = 12.6 / 180.0 * np.pi
 beta = 8.0 / 180.0 * np.pi
 
 Rinjection = [1.798, -0.052, 0.243]
-Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha) * np.sin(beta), -np.sin(alpha)]
+Vinjection = [-np.cos(alpha) * np.cos(beta), np.cos(alpha)
+              * np.sin(beta), -np.sin(alpha)]
 
 Mass0 = 2.0 * (938.272e6)
 dLB = 2.0e-3  # scale length for B gradient
@@ -29,7 +30,14 @@ dLB = 2.0e-3  # scale length for B gradient
 
 class Trajectory:
     def __init__(self, Vessel, B, Bv, dS=1e-3, r0=Rinjection, v0=Vinjection, a0=[0.0, 0.0, 0.0], M0=Mass0, T0=0.9e6, I0=1e-3, Freq=425e6, Nmax=5000, Smin=1.1, Smax=5.0, Method='Relativistic'):
-        start = timeit.default_timer()
+        self.start = timeit.default_timer()
+
+        #self.fig_3d = plt.figure(1)
+        #self.axs_3d = Axes3D(self.fig_3d)
+
+        #self.fig_2d, self.axs_2d = plt.subplots(1,2)
+        #self.axs_pol = self.axs_2d[0]
+        #self.axs_top = self.axs_2d[1]
 
         # Method == 'Relativistic'
         # Method == 'LeapFrog'
@@ -42,34 +50,35 @@ class Trajectory:
         # r  = position vector [x, y, z]
         # v  = velocity vector [Vx, Vy, Vz]
         # a  = acceleration vector [ax, ay, az]
+        # 938.272e6 Proton Mass
+        # Electron Charge
 
         # Particle and beam constants
-        c0 = 299792458
-        self.c0 = c0
-        q0 = 1.60217646e-19
-        qm = q0 / (M0 * q0 / c0**2)
+        self.c0 = cnt.c
         self.A0 = M0 / 938.272e6
         self.q0 = 1.60217646e-19
+        self.qm = self.q0 / (M0 * self.q0 / self.c0**2)
         self.m0 = M0
         self.I0 = I0
         self.Frequency = Freq
         self.T0 = T0
 
+        # Vessel Boundary
+        self.Vessel = Vessel
+
         # Magnetic coil sets
         self.BFieldTF = B
         self.BFieldVF = Bv
-        BFieldTF = B
-        BFieldVF = Bv
 
         # Beam
-#		v0 = plt.np.sqrt(2*T0*1.602e-16/(A0*1.67e-27))
         self.r = [np.array(r0)]
-#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
         self.gamma = 1.0 + T0 / M0
         self.beta = np.sqrt(1.0 - 1.0 / self.gamma**2)
         self.Beta = [self.beta * np.array(v0) / norm(v0)]
+#		self.v0 = np.sqrt(2.0*T0*1.602e-16/(A0*1.67e-27))
 #		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
-        self.v0 = self.beta * c0
+#		self.v0 = np.sqrt(2.0*T0*self.q0/(self.m0))
+        self.v0 = self.beta * self.c0
         self.v = [self.v0 * np.array(v0) / norm(v0)]
         self.beta = [norm(self.Beta[-1])]
         self.gamma = [1.0 / (1.0 - self.beta[-1]**2)]
@@ -77,9 +86,8 @@ class Trajectory:
         self.F = [0.0]
         self.B = [np.array(B.local(r0))]
         self.s = [0.0]
-        dt = dS / self.v0
-        self.dt = dt
-        self.dS = [1.0e-3]
+        self.dt = dS / self.v0
+        self.dS = [dS]
 
         # Gradient and curvature attributes
         self.k = [0.0]
@@ -95,6 +103,11 @@ class Trajectory:
         self.LineWidth = 2
         self.LineStyle = '-'
 
+        # num Limit
+        self.Nmax = Nmax
+        self.Smax = Smax
+        self.Smin = Smin
+
         c1 = True
         c2 = True
         i = 0
@@ -105,95 +118,13 @@ class Trajectory:
         RT = np.zeros(3)
 
 # ===============================================================================
-# # Relativistic Euler Integration:
+# Run Relativistic Euler Integration:
 # ===============================================================================
         if Method == 'Relativistic':
-            while (c1 or c2) and (i < Nmax and self.s[-1] < Smax):
-
-                self.r.append(self.r[-1] + self.v[-1] * dt)
-
-                self.s.append(self.s[-1] + dS)
-
-                self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
-
-                self.F.append(self.q0 * np.cross(self.v[-1], self.B[-1]))
-
-                self.a.append(self.c0**2 / (self.gamma[-1] * self.m0 * self.q0) * (
-                    self.F[-1] - (np.dot(self.v[-1], self.F[-1]) * self.v[-1] / self.c0**2)))
-
-                self.v.append(self.v[-1] + self.a[-1] * dt)
-
-                self.dS.append(self.s[-1] - self.s[-2])
-# ------------------------------------------------------------------------------
-            # Normalized Relativistic Parameters
-                self.Beta.append(self.v[-1] / c0)
-                self.beta.append(norm(self.Beta[-1]))
-                self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
-
-                # Check to see if beam crosses boundary
-                IN = True
-                c3 = self.s[-1] > Smin
-                c4 = Vessel.InBoundary(self.r[-1])
-                c5 = self.s[-1] < Smax
-                if c3:
-                    if (not c4):
-                        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
-                            self.r[-2], self.r[-1])
-# ------------------------------------------------------------------------------
-            # record curvature and bending radius
-                self.k.append(norm(self.a[-1] / self.v0**2))
-                self.Rc.append(1.0 / self.k[-1])
-
-# ------------------------------------------------------------------------------
-            # B Record Gradients
-                vecR = -1.0 * (self.a[-1]) / norm(self.a[-1])
-                vecB = self.B[-1] / norm(self.B[-1])
-                Br2 = norm(B.local(self.r[-1] + vecR * dLB))
-                Br1 = norm(B.local(self.r[-1] - vecR * dLB))
-                Bb2 = norm(B.local(self.r[-1] + vecB * dLB))
-                Bb1 = norm(B.local(self.r[-1] - vecB * dLB))
-                # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
-                self.gradB.append((Br2 - Br1) / (2.0 * dLB))
-                # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
-                self.gradBk.append(self.gradB[-1] * qm / (c0 * self.v0))
-                self.gradBn.append(-1.0 * self.Rc[-1] /
-                                   norm(self.B[-1]) * (Br2 - Br1) / (2.0 * dLB))
-                self.gradBx.append((Br2 - Br1) / (2.0 * dLB))
-                self.gradBy.append((Bb2 - Bb1) / (2.0 * dLB))
-
-# ------------------------------------------------------------------------------
-            # Conditional statements for continuing iteration
-                c1 = IN
-                c2 = self.s[-1] < Smin
-                i = i + 1
-
-# ------------------------------------------------------------------------------
-        # Calculate Basis Matrices
-            self.BeamBasis()
-            stop = timeit.default_timer()
-            self.RunTime = stop - start
-            print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
-                self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
-# ------------------------------------------------------------------------------
-        # Define Target
-            if i < Nmax - 1 and self.s[-1] <= Smax:
-                self.target = Target(
-                    NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
-                self.target.SigmaBasis = self.BasisM6[-1]
-#				self.target.TargetBasis = self.BasisM6[-1]
-# ------------------------------------------------------------------------------
-        # If no boundary was reached assume normal incidence
-            else:
-                NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
-                TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
-                IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
-                RT = self.r[-1]
-                self.target = Target(
-                    NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
-            print('Beam Coordinates Complete')
+            self.Method_Relativistic()
 
 # ===============================================================================
-# # Leapfrog Integration:
+# Leapfrog Integration:
 # ===============================================================================
         if Method == 'LeapFrog':
             # and self.s[-1] < Smax:
@@ -262,7 +193,7 @@ class Trajectory:
         # Calculate Basis Matrices
             self.BeamBasis()
             stop = timeit.default_timer()
-            self.RunTime = stop - start
+            self.RunTime = stop - self.start
             print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
                 self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
 
@@ -351,7 +282,7 @@ class Trajectory:
         # Calculate Basis Matrices
             self.BeamBasis()
             stop = timeit.default_timer()
-            self.RunTime = stop - start
+            self.RunTime = stop - self.start
             print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
                 self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
 
@@ -371,6 +302,101 @@ class Trajectory:
                 self.target = Target(
                     NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
             print('Beam Coordinates Complete')
+
+# ===============================================================================
+# Relativistic Euler Integration:
+# ===============================================================================
+    def Method_Relativistic(self):
+        c1 = True
+        c2 = True
+        i = 0
+        IN = False
+        NormalV = np.zeros(3)
+        TangentV = np.zeros(3)
+        IncidentV = np.zeros(3)
+        RT = np.zeros(3)
+
+        while (c1 or c2) and (i < self.Nmax and self.s[-1] < self.Smax):
+            self.r.append(self.r[-1] + self.v[-1] * self.dt)
+            self.s.append(self.s[-1] + self.dS[-1])
+            self.B.append(self.BFieldTF.local(
+                self.r[-1]) + self.BFieldVF.local(self.r[-1]))
+            self.F.append(self.q0 * np.cross(self.v[-1], self.B[-1]))
+            self.a.append(self.c0**2 / (self.gamma[-1] * self.m0 * self.q0) * (
+                self.F[-1] - (np.dot(self.v[-1], self.F[-1]) * self.v[-1] / self.c0**2)))
+            self.v.append(self.v[-1] + self.a[-1] * self.dt)
+            self.dS.append(self.s[-1] - self.s[-2])
+# ------------------------------------------------------------------------------
+            # Normalized Relativistic Parameters
+            self.Beta.append(self.v[-1] / self.c0)
+            self.beta.append(norm(self.Beta[-1]))
+            self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
+
+            # Check to see if beam crosses boundary
+            IN = True
+            c3 = self.s[-1] > self.Smin
+            c4 = self.Vessel.InBoundary(self.r[-1])
+            c5 = self.s[-1] < self.Smax
+            if c3:
+                if (not c4):
+                    IN, NormalV, TangentV, IncidentV, RT, Xpol = self.Vessel.Xboundary(
+                        self.r[-2], self.r[-1])
+# ------------------------------------------------------------------------------
+            # record curvature and bending radius
+            self.k.append(norm(self.a[-1] / self.v0**2))
+            self.Rc.append(1.0 / self.k[-1])
+
+# ------------------------------------------------------------------------------
+            # B Record Gradients
+            vecR = -1.0 * (self.a[-1]) / norm(self.a[-1])
+            vecB = self.B[-1] / norm(self.B[-1])
+            Br2 = norm(self.BFieldTF.local(self.r[-1] + vecR * dLB))
+            Br1 = norm(self.BFieldTF.local(self.r[-1] - vecR * dLB))
+            Bb2 = norm(self.BFieldTF.local(self.r[-1] + vecB * dLB))
+            Bb1 = norm(self.BFieldTF.local(self.r[-1] - vecB * dLB))
+            # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
+            self.gradB.append((Br2 - Br1) / (2.0 * dLB))
+            # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
+            self.gradBk.append(self.gradB[-1] * self.qm / (self.c0 * self.v0))
+            self.gradBn.append(-1.0 * self.Rc[-1] /
+                               norm(self.B[-1]) * (Br2 - Br1) / (2.0 * dLB))
+            self.gradBx.append((Br2 - Br1) / (2.0 * dLB))
+            self.gradBy.append((Bb2 - Bb1) / (2.0 * dLB))
+
+# ------------------------------------------------------------------------------
+            # Conditional statements for continuing iteration
+            c1 = IN
+            c2 = self.s[-1] < self.Smin
+            i = i + 1
+
+# ------------------------------------------------------------------------------
+        # Calculate Basis Matrices
+        self.BeamBasis()
+        self.stop = timeit.default_timer()
+        self.RunTime = self.stop - self.start
+        print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
+            self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
+# ------------------------------------------------------------------------------
+        # Define Target
+        if i < self.Nmax - 1 and self.s[-1] <= self.Smax:
+            self.target = Target(NormalV, TangentV, IncidentV,
+                                 self.BFieldTF, self.BFieldVF, RT, Xpol)
+            self.target.SigmaBasis = self.BasisM6[-1]
+            #self.target.TargetBasis = self.BasisM6[-1]
+# ------------------------------------------------------------------------------
+        # If no boundary was reached assume normal incidence
+        else:
+            NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
+            TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
+            IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
+            RT = self.r[-1]
+            self.target = Target(NormalV, TangentV, IncidentV,
+                                 BFieldTF, BFieldVF, RT, Xpol)
+        print('Beam Coordinates Complete')
+# ===============================================================================
+# End
+# Relativistic Euler Integration:
+# ===============================================================================
 
 # ===============================================================================
 # Class Methods
@@ -397,6 +423,17 @@ class Trajectory:
             self.BasisM6.append(Basis6(e1[-1], e2[-1], e3[-1]))
             # print i
 
+    def PlotAll(self):
+        x = []
+        y = []
+        z = []
+        for i in range(len(self.r)):
+            x.append(self.r[i][0])
+            y.append(self.r[i][1])
+            z.append(self.r[i][2])
+        #ax.plot(x, y, z, color=self.LineColor, linewidth=self.LineWidth)
+        #ax.scatter(x[-1], y[-1], z[-1], s=15, c=self.LineColor)
+
 # ------------------------------------------------------------------------------
 # Plot 2D projection of trajectory
     def Plot2D(self, Type='poloidal'):
@@ -412,10 +449,10 @@ class Trajectory:
             R.append(np.sqrt(x[-1]**2 + y[-1]**2))
         if Type == 'poloidal':
             PLOT = plt.plot(R, z, color=self.LineColor,
-                           linestyle=self.LineStyle, linewidth=self.LineWidth)
+                            linestyle=self.LineStyle, linewidth=self.LineWidth)
         if Type == 'top':
             PLOT = plt.plot(x, y, color=self.LineColor,
-                           linestyle=self.LineStyle, linewidth=self.LineWidth)
+                            linestyle=self.LineStyle, linewidth=self.LineWidth)
         return PLOT
 
 # ------------------------------------------------------------------------------
@@ -500,11 +537,15 @@ class Trajectory:
 # Save magnetic field and curvature parameters
     def SaveFieldParameters(self, TFCurrent, Path='Output/'):
         # Save field and geometric parameters along trajectory
-        np.savetxt(Path + 'Curvature_I_' + str(int(TFCurrent)) + '.txt', self.k)
+        np.savetxt(Path + 'Curvature_I_' +
+                   str(int(TFCurrent)) + '.txt', self.k)
         np.savetxt(Path + 'SCoord_I_' + str(int(TFCurrent)) + '.txt', self.s)
-        np.savetxt(Path + 'GradB_I_' + str(int(TFCurrent)) + '.txt', self.gradB)
-        np.savetxt(Path + 'GradBk_I_' + str(int(TFCurrent)) + '.txt', self.gradBn)
-        np.savetxt(Path + 'GradBn_I_' + str(int(TFCurrent)) + '.txt', self.gradBk)
+        np.savetxt(Path + 'GradB_I_' +
+                   str(int(TFCurrent)) + '.txt', self.gradB)
+        np.savetxt(Path + 'GradBk_I_' +
+                   str(int(TFCurrent)) + '.txt', self.gradBn)
+        np.savetxt(Path + 'GradBn_I_' +
+                   str(int(TFCurrent)) + '.txt', self.gradBk)
 
 
 def Basis3(e1, e2, e3):
@@ -611,7 +652,8 @@ if False:
 if False:
     while (c1 or c2) and i < Nmax:
 
-        self.B.append(np.array(B.local(self.r[-1])) + np.array(Bv.local(self.r[-1])))
+        self.B.append(
+            np.array(B.local(self.r[-1])) + np.array(Bv.local(self.r[-1])))
         BMag = norm(self.B[-1])
 
         # parallel to B unit vector
@@ -646,7 +688,7 @@ if False:
         self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
 
         dv = np.dot(self.v[-1], hPara) * hPara + np.dot(self.v[-1],
-                                                  hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
+                                                        hPerp) * (np.cos(dTheta) * hPerp - np.sin(dTheta) * hRad)
 
         self.v.append(self.v[-1] + dv)
 

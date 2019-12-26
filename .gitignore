@@ -1,3 +1,13 @@
+# VSCode
+.vscode/*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Tmp
+*/tmp/*
+
 *.py~
 *.txt~
 *.pyc
@@ -17,4 +27,3 @@ data/Sigma_Trace3d/
 *.pyc
 *~
 .metadata
-.vscode/launch.json
