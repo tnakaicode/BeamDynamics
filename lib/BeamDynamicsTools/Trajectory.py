@@ -31,6 +31,10 @@ class Trajectory:
     def __init__(self, Vessel, B, Bv, dS=1e-3, r0=Rinjection, v0=Vinjection, a0=[0.0, 0.0, 0.0], M0=Mass0, T0=0.9e6, I0=1e-3, Freq=425e6, Nmax=5000, Smin=1.1, Smax=5.0, Method='Relativistic'):
         start = timeit.default_timer()
 
+        # Method == 'Relativistic'
+        # Method == 'LeapFrog'
+        # Method == 'Euler'
+
         # B = Magnetic Field [T] (BfieldTF class)
         # Vessel = Defines wall (Boundary class)
         # M0 = Rest Mass [MeV/c^2]
