@@ -59,7 +59,7 @@ if __name__ == "__main__":
         for i, B0 in enumerate(Bn):
             B = BfieldTF(B0=B0)
             Bv = BfieldVF(B0=0.00000)
-            T = Trajectory(Vessel, B, Bv, v0=Vinjection[j], Method='LeapFrog')
+            T = Trajectory(Vessel, B, Bv, v0=Vinjection[j], Method='Euler')
             T.LineColor = Color[j]
             T.Plot3D(ax)
             T.PlotB(FIG=2)

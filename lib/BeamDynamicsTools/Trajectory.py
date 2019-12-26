@@ -124,7 +124,7 @@ class Trajectory:
             self.Method_Relativistic()
 
 # ===============================================================================
-# Leapfrog Integration:
+# Run Leapfrog Integration:
 # ===============================================================================
         if Method == 'LeapFrog':
             self.Method_LeapFrog()
@@ -133,90 +133,96 @@ class Trajectory:
 # Euler Integration:
 # ===============================================================================
         if Method == 'Euler':
-            while (c1 or c2) and (i < Nmax and self.s[-1] < Smax):
+            self.Method_Euler()
 
-                self.r.append(self.r[-1] + self.v[-1] * dt)
+# ===============================================================================
+# Euler Integration:
+# ===============================================================================
+    def Method_Euler(self):
+        c1 = True
+        c2 = True
+        i = 0
+        IN = False
+        NormalV = np.zeros(3)
+        TangentV = np.zeros(3)
+        IncidentV = np.zeros(3)
+        RT = np.zeros(3)
 
-                self.s.append(self.s[-1] + dS)
-
-                self.B.append(B.local(self.r[-1]) + Bv.local(self.r[-1]))
-
-                self.a.append(qm * np.cross(self.v[-1], self.B[-1]))
-
-                self.v.append(self.v[-1] + (self.a[-1]) * dt)
-
-                self.dS.append(self.s[-1] - self.s[-2])
-
+        while (c1 or c2) and (i < self.Nmax and self.s[-1] < self.Smax):
+            self.r.append(self.r[-1] + self.v[-1] * self.dt)
+            self.s.append(self.s[-1] + self.dS[-1])
+            self.B.append(self.BFieldTF.local(self.r[-1]) + self.BFieldVF.local(self.r[-1]))
+            self.a.append(self.qm * np.cross(self.v[-1], self.B[-1]))
+            self.v.append(self.v[-1] + (self.a[-1]) * self.dt)
+            self.dS.append(self.s[-1] - self.s[-2])
 # ------------------------------------------------------------------------------
             # Normalized Relativistic Parameters
-                self.Beta.append(self.v[-1] / c0)
-                self.beta.append(norm(self.Beta[-1]))
-                self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
-
+            self.Beta.append(self.v[-1] / self.c0)
+            self.beta.append(norm(self.Beta[-1]))
+            self.gamma.append(1.0 / (1.0 - self.beta[-1]**2))
 # ------------------------------------------------------------------------------
             # Check to see if beam np.crosses boundary
-                IN = True
-                c3 = self.s[-1] > Smin
-                c4 = Vessel.InBoundary(self.r[-1])
-                c5 = self.s[-1] < Smax
-                if c3:
-                    if c4:
-                        IN, NormalV, TangentV, IncidentV, RT, Xpol = Vessel.Xboundary(
-                            self.r[-2], self.r[-1])
-
+            IN = True
+            c3 = self.s[-1] > self.Smin
+            c4 = self.Vessel.InBoundary(self.r[-1])
+            c5 = self.s[-1] < self.Smax
+            if c3:
+                if c4:
+                    IN, NormalV, TangentV, IncidentV, RT, Xpol = self.Vessel.Xboundary(
+                        self.r[-2], self.r[-1])
 # ------------------------------------------------------------------------------
             # record curvature and bending radius
-#				self.k.append(qm * cross(self.v[-1],self.B[-1])/self.v0**2)
-                self.k.append(norm(self.a[-1] / self.v0**2))
-                self.Rc.append(1.0 / self.k[-1])
-
+            #self.k.append(qm * cross(self.v[-1],self.B[-1])/self.v0**2)
+            self.k.append(norm(self.a[-1] / self.v0**2))
+            self.Rc.append(1.0 / self.k[-1])
 # ------------------------------------------------------------------------------
             # B Record Gradients
-                vecR = -1.0 * (self.a[-1]) / norm(self.a[-1])
-                vecB = self.B[-1] / norm(self.B[-1])
-                Br2 = norm(B.local(self.r[-1] + vecR * dLB))
-                Br1 = norm(B.local(self.r[-1] - vecR * dLB))
-                Bb2 = norm(B.local(self.r[-1] + vecB * dLB))
-                Bb1 = norm(B.local(self.r[-1] - vecB * dLB))
-                # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
-                self.gradB.append((Br2 - Br1) / (2.0 * dLB))
-                # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
-                self.gradBk.append(self.gradB[-1] * qm / (c0 * self.v0))
-                self.gradBn.append(-1.0 * self.Rc[-1] /
-                                   norm(self.B[-1]) * (Br2 - Br1) / (2.0 * dLB))
-                self.gradBx.append((Br2 - Br1) / (2.0 * dLB))
-                self.gradBy.append((Bb2 - Bb1) / (2.0 * dLB))
-
+            vecR = -1.0 * (self.a[-1]) / norm(self.a[-1])
+            vecB = self.B[-1] / norm(self.B[-1])
+            Br2 = norm(self.BFieldTF.local(self.r[-1] + vecR * dLB))
+            Br1 = norm(self.BFieldTF.local(self.r[-1] - vecR * dLB))
+            Bb2 = norm(self.BFieldTF.local(self.r[-1] + vecB * dLB))
+            Bb1 = norm(self.BFieldTF.local(self.r[-1] - vecB * dLB))
+            # ( np.array( [(Br2-Br1)/(2.0*dLB) , (Bb2-Bb1)/(2.0*dLB)] ) )
+            self.gradB.append((Br2 - Br1) / (2.0 * dLB))
+            # (qm/(self.gamma[-1]*self.beta[-1]*c0**2))
+            self.gradBk.append(self.gradB[-1] * self.qm / (self.c0 * self.v0))
+            self.gradBn.append(-1.0 * self.Rc[-1] /
+                               norm(self.B[-1]) * (Br2 - Br1) / (2.0 * dLB))
+            self.gradBx.append((Br2 - Br1) / (2.0 * dLB))
+            self.gradBy.append((Bb2 - Bb1) / (2.0 * dLB))
 # ------------------------------------------------------------------------------
             # Conditional statements for continuing iteration
-                c1 = IN
-                c2 = self.s[-1] < Smin
-                i = i + 1
-
+            c1 = IN
+            c2 = self.s[-1] < self.Smin
+            i = i + 1
 # ------------------------------------------------------------------------------
         # Calculate Basis Matrices
-            self.BeamBasis()
-            stop = timeit.default_timer()
-            self.RunTime = stop - self.start
-            print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
-                self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
-
+        self.BeamBasis()
+        self.stop = timeit.default_timer()
+        self.RunTime = self.stop - self.start
+        print('trajectory complete, S = %0.3f m, B0 = %0.4f T, B0 = %0.4f T, RunTime = %0.1f s' % (
+            self.s[-1], self.BFieldTF.B0, self.BFieldVF.B0, self.RunTime))
 # ------------------------------------------------------------------------------
         # Define Target
-            if i < Nmax - 1 and self.s[-1] <= Smax:
-                self.target = Target(
-                    NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
-                self.target.SigmaBasis = self.BasisM6[-1]
-# ------------------------------------------------------------------------------
+        if i < self.Nmax - 1 and self.s[-1] <= self.Smax:
+            self.target = Target(
+                NormalV, TangentV, IncidentV, self.BFieldTFBFieldTF, self.BFieldTFBFieldVF, RT, Xpol)
+            self.target.SigmaBasis = self.BasisM6[-1]
+# ----------------------------------------------------------------------------
         # If no boundary was reached assume normal incidence
-            else:
-                NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
-                TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
-                IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
-                RT = self.r[-1]
-                self.target = Target(
-                    NormalV, TangentV, IncidentV, BFieldTF, BFieldVF, RT, Xpol)
-            print('Beam Coordinates Complete')
+        else:
+            NormalV = np.array(self.BasisM3[-1][:, 2]).flatten()
+            TangentV = np.array(self.BasisM3[-1][:, 1]).flatten()
+            IncidentV = np.array(self.BasisM3[-1][:, 2]).flatten()
+            RT = self.r[-1]
+            self.target = Target(
+                NormalV, TangentV, IncidentV, self.BFieldTF, self.BFieldVF, RT, Xpol)
+        print('Beam Coordinates Complete')
+# ===============================================================================
+# End
+# Euler Integration:
+# ===============================================================================
 
 # ===============================================================================
 # Leapfrog Integration:
