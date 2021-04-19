@@ -19,8 +19,8 @@ output/sigma/*.txt
 output/sigma/*.dat
 output/*.txt
 output/*.dat
-data/sigma_trace3d/
-data/Sigma_Trace3d/
+#data/sigma_trace3d/
+#data/Sigma_Trace3d/
 .gitignore~
 *.sh~
 *.md~

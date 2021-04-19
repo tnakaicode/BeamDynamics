@@ -1,18 +1,16 @@
-import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
 import os
+from numpy.linalg import inv
+
 sys.path.append(os.path.join('../'))
 from lib.BeamDynamicsTools.Boundary import Boundary
 from lib.BeamDynamicsTools.Bfield import Bfield, BfieldTF, BfieldVF
 from lib.BeamDynamicsTools.Trajectory import Trajectory
 from lib.BeamDynamicsTools.Beam import Beam
 from lib.BeamDynamicsTools.Ellipse import Ellipse
-import numpy as np
-from matplotlib.pyplot import *
-from numpy.linalg import inv
-import numpy as np
+
 
 # ==============================================================================
 # ====== Convert 6x6 Basis Matrix to 3x3 Basis Matrix ==========================
@@ -238,34 +236,31 @@ np.savetxt(Path0 + 'Trace3DSigma_I_4450NG.dat', Sigma4450NG)
 np.savetxt(Path0 + 'Trace3DSigmaBend90.dat', SigmaBend90)
 
 
-if True:
-    plt.figure(1, figsize=(8, 8))
-    E0 = Ellipse(Sigma0000)
-    E1 = Ellipse(Sigma0000LC)
-    M = E0.MismatchFactor(E1, Type=1)
+plt.figure(1, figsize=(8, 8))
+E0 = Ellipse(Sigma0000)
+E1 = Ellipse(Sigma0000LC)
+M = E0.MismatchFactor(E1, Type=1)
 
-    subplot(2, 2, 1)
-    E0.PlotXX1()
-    E1.PlotXX1()
-    text(0, 0, 'M=%0.4f' % M[1], va='center', ha='center', color='r', size=16)
-    legend((r'1.000 mA', '0.001 mA'), loc=2)
+plt.subplot(2, 2, 1)
+E0.PlotXX1()
+E1.PlotXX1()
+plt.text(0, 0, 'M=%0.4f' % M[1], va='center', ha='center', color='r', size=16)
+plt.legend((r'1.000 mA', '0.001 mA'), loc=2)
 
-    subplot(2, 2, 2)
-    E0.PlotYY1()
-    E1.PlotYY1()
-    text(0, 0, 'M=%0.4f' % M[1], va='center', ha='center', color='r', size=16)
+plt.subplot(2, 2, 2)
+E0.PlotYY1()
+E1.PlotYY1()
+plt.text(0, 0, 'M=%0.4f' % M[1], va='center', ha='center', color='r', size=16)
 
-    subplot(2, 2, 3)
-    E0.PlotZZ1()
-    E1.PlotZZ1()
-    text(0, 0, 'M=%0.4f' % M[2], va='center', ha='center', color='r', size=16)
+plt.subplot(2, 2, 3)
+E0.PlotZZ1()
+E1.PlotZZ1()
+plt.text(0, 0, 'M=%0.4f' % M[2], va='center', ha='center', color='r', size=16)
 
-    subplot(2, 2, 4)
-    E0.PlotXY()
-    E1.PlotXY()
-    text(0, 0, 'M=%0.4f' % M[3], va='center', ha='center', color='r', size=16)
+plt.subplot(2, 2, 4)
+E0.PlotXY()
+E1.PlotXY()
+plt.text(0, 0, 'M=%0.4f' % M[3], va='center', ha='center', color='r', size=16)
+plt.suptitle(r'Space Charge Effects: 1mA versus 1$\mu$A', size=16)
 
-    suptitle(r'Space Charge Effects: 1mA versus 1$\mu$A', size=16)
-
-
-show()
+plt.savefig("./DataTRACE3D.png")

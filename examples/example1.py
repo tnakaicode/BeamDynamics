@@ -95,12 +95,9 @@ for i in [0, 1, 2, 3]:  # range(len(Bn)):
 
 # ------------------------------------------------------------------------------
 # Save Angular and Detection Quantities
-if False:
-    np.savetxt(OutputPath + 'geometry/TargetAngle_Vert_Horiz.dat',
-               AngleComponents)
-    np.savetxt(OutputPath + 'geometry/TargetCoordinates.dat', Coordinates)
-    Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
-    np.savetxt(OutputPath + 'geometry/DetectionParameters.dat',
-               (np.np.array(Parameters)), header=Header0)
-
-plt.show()
+np.savetxt('./example1_TargetAngle_Vert_Horiz.dat', AngleComponents)
+np.savetxt('./example1_TargetCoordinates.dat', Coordinates)
+Header0 = '(0) I0 [A], (1) B0 [T], (2) X [m] , (3) Y [m], (4) Z [m], (5) incident angle [rad], (6) Detection Angle [rad], (7) optical path length [m] , (8) Detection Angle [rad], (9) Detection Angle [deg], (10) Detector Eff'
+np.savetxt('./example1_DetectionParameters.dat',
+           np.array(Parameters), header=Header0)
+plt.savefig("./example1.png")

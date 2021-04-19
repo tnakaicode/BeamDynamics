@@ -36,14 +36,13 @@ print(Cinv)
 Y = np.polyval(C, X)
 Yinv = np.polyval(Cinv, X)
 
-if True:
-    plt.figure()
-    plt.plot(X, Y)
-    plt.plot(FormF[:, 0], FormF[:, 1], '.')
-    plt.figure()
-    plt.plot(X, Yinv)
-    plt.plot(FormF[:, 2], FormF[:, 3], '.')
-    plt.show()
+plt.figure()
+plt.plot(X, Y)
+plt.plot(FormF[:, 0], FormF[:, 1], '.')
+plt.figure()
+plt.plot(X, Yinv)
+plt.plot(FormF[:, 2], FormF[:, 3], '.')
+plt.savefig("./SpaceChargeFormFactor.png")
 
 # Fit results:
 # polynomial coefficients
