@@ -1,7 +1,11 @@
 import numpy as np
+import os
+import sys
 import math
-from solvers.particleUtils import velocityToMomentum, momentumToVelocity
-#import scipy.constants
+import scipy.constants
+
+sys.path.append(os.path.join('../../'))
+from lib.ESPIC3D.particleUtils import velocityToMomentum, momentumToVelocity
 
 
 class particle(object):

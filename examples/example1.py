@@ -42,38 +42,38 @@ OutputPath = '../output/'
 for i in [0, 1, 2, 3]:  # range(len(Bn)):
     B = BfieldTF(B0=Bn[i])
     Bv = BfieldVF(B0=0.00000)
-# ---------------------------- Calculate Trajectory (initialize Trajectory Class)
+    # ---------------------------- Calculate Trajectory (initialize Trajectory Class)
     T = Trajectory(Vessel, B, Bv)
-# --------------------- Initialize Beam Class from trajectory and sigma matrix S1
+    # --------------------- Initialize Beam Class from trajectory and sigma matrix S1
     beam = Beam(T, S1)
-# ----------------------------------- Calculate (Trace) evolution of sigma matrix
+    # ----------------------------------- Calculate (Trace) evolution of sigma matrix
     beam.Trace()  # Trace
     AIMSBeam.append(beam)
 
-# ------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # Save Sigma Matrix
     np.savetxt(OutputPath + 'sigma/' + 'SigmaFinal_I_' +
                str(int(In[i])) + '.dat', AIMSBeam[-1].target.Sigma)
 
-# ------------------------------------------------------------------------------
-# Save field and geometric parameters along trajectory
-#	T.SaveFieldParameters(TFCurrent=In[i],Path=OutputPath+'geometry/')
-#	T.target.SaveTargetParameters(Path=OutputPath+'geometry/')
+    # ------------------------------------------------------------------------------
+    # Save field and geometric parameters along trajectory
+    #	T.SaveFieldParameters(TFCurrent=In[i],Path=OutputPath+'geometry/')
+    #	T.target.SaveTargetParameters(Path=OutputPath+'geometry/')
 
-# ------------------------------------------------------------------------------
-# append lists of Target Quantities
+    # ------------------------------------------------------------------------------
+    # append lists of Target Quantities
     AngleComponents.append([T.target.VAngle, T.target.HAngle])
     Coordinates.append([T.target.R, T.target.Z, T.target.Phi])
     Parameters.append(T.target.GetDetectionParameters())
 
-# ------------------------------------------------------------------------------
-# Plot 3D results
+    # ------------------------------------------------------------------------------
+    # Plot 3D results
     T.Plot3D(ax)
     T.target.Plot3D(ax)
     T.Limits3D(ax)
 
-# ------------------------------------------------------------------------------
-# Plot 2D projections of Trajectories
+    # ------------------------------------------------------------------------------
+    # Plot 2D projections of Trajectories
     plt.figure(10)
     T.Plot2D()
     plt.figure(11)

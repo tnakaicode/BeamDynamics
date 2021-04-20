@@ -9,8 +9,8 @@ sys.path.append(os.path.join('../'))
 from lib.ESPIC3D.esSolve import laplace2D
 from lib.ESPIC3D.dirichlet import dirichlet as dirBC
 
-NX = 25
-NY = 30
+NX = 50
+NY = 75
 LX = 1.25
 LY = 2.3
 DX = LX / NX
@@ -36,7 +36,7 @@ start = time.time()
 
 solType = "direct"
 solType = "jacobi"
-#solType ="gaussSeidel"
+solType ="gaussSeidel"
 
 potential_1 = laplace2D(NX, DX, V0x, VNx, NY, DY, V0y, VNy,
                         solType, useCython=False, relTol=0.0, absTol=1.0)
@@ -76,7 +76,6 @@ def plot2Darrays(arrays):
 plot2Darrays([[potential_1, '1.0', 'green'],
               [potential_2, '0.5', 'red'],
               [potential_3, '1.0e-3', 'blue']])
-
 plt.savefig("./ex_2d.png")
 
 plot2Darrays([potential_1])
