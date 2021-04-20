@@ -2,7 +2,7 @@ import os
 import sys
 import math
 import numpy as np
-sys.path.append(os.path.join('./'))
+sys.path.append(os.path.join('../'))
 #sys.path.append(os.path.join('.'))
 
 
@@ -84,7 +84,7 @@ def put1DArrayOnGrid(N, array):
 
 def solveLinearSystem(M, B, solType, relTol, absTol, useCython=False):
     #import linAlgSolveCy
-    from solvers.linAlgSolve import direct, jacobi, gaussSeidel
+    from lib.ESPIC3D.linAlgSolve import direct, jacobi, gaussSeidel
     #import linAlgSolve
     if solType == "direct":
         if useCython:

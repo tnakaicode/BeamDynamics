@@ -7,10 +7,10 @@ import scipy.constants
 sys.path.append(os.path.join('../'))
 #sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '../solvers/')
 
-from solvers.dirichlet import dirichlet as dirBC
-from solvers.particle import particle
-from solvers.particleUtils import velocityToMomentum, momentumToVelocity
-from solvers.esSolve import laplace1D, potentialToElectricField, electricFieldAtPoint
+from lib.ESPIC3D.dirichlet import dirichlet as dirBC
+from lib.ESPIC3D.particle import particle
+from lib.ESPIC3D.particleUtils import velocityToMomentum, momentumToVelocity
+from lib.ESPIC3D.esSolve import laplace1D, potentialToElectricField, electricFieldAtPoint
 
 # Grid
 NX = 20

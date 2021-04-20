@@ -6,9 +6,8 @@ import time
 from mpl_toolkits.mplot3d import axes3d
 
 sys.path.append(os.path.join('../'))
-#sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../solvers')
-from solvers.esSolve import laplace2D
-from solvers.dirichlet import dirichlet as dirBC
+from lib.ESPIC3D.esSolve import laplace2D
+from lib.ESPIC3D.dirichlet import dirichlet as dirBC
 
 NX = 25
 NY = 30
@@ -35,12 +34,16 @@ VNy = dirBC(np.zeros((NX + 1)))
 
 start = time.time()
 
-potential_1 = laplace2D(
-    NX, DX, V0x, VNx, NY, DY, V0y, VNy, "gaussSeidel", relTol=0.0, absTol=1.0)
-potential_2 = laplace2D(
-    NX, DX, V0x, VNx, NY, DY, V0y, VNy, "gaussSeidel", relTol=0.0, absTol=0.5)
-potential_3 = laplace2D(
-    NX, DX, V0x, VNx, NY, DY, V0y, VNy, "gaussSeidel", relTol=0.0, absTol=1.0e-3)
+solType = "direct"
+solType = "jacobi"
+#solType ="gaussSeidel"
+
+potential_1 = laplace2D(NX, DX, V0x, VNx, NY, DY, V0y, VNy,
+                        solType, useCython=False, relTol=0.0, absTol=1.0)
+potential_2 = laplace2D(NX, DX, V0x, VNx, NY, DY, V0y, VNy,
+                        solType, useCython=False, relTol=0.0, absTol=0.5)
+potential_3 = laplace2D(NX, DX, V0x, VNx, NY, DY, V0y, VNy,
+                        solType, useCython=False, relTol=0.0, absTol=1.0e-3)
 
 end = time.time()
 
@@ -67,12 +70,20 @@ def plot2Darrays(arrays):
             ax.plot_wireframe(
                 X, Y, array[0][:], label='absolute tolerance = ' + array[1], color=array[2])
 
-    plt.legend(loc='best')
+    ax.legend()
 
 
 plot2Darrays([[potential_1, '1.0', 'green'],
               [potential_2, '0.5', 'red'],
               [potential_3, '1.0e-3', 'blue']])
 
-plot2Darrays([potential_3])
 plt.savefig("./ex_2d.png")
+
+plot2Darrays([potential_1])
+plt.savefig("./ex_2d_001.png")
+
+plot2Darrays([potential_2])
+plt.savefig("./ex_2d_002.png")
+
+plot2Darrays([potential_3])
+plt.savefig("./ex_2d_003.png")
