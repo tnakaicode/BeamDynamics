@@ -1,0 +1,28 @@
+0. add unit tests for individual methods in esSolve
+
+1. Poisson
+
+2. Parallelize: CUDA, OpenMP / MPI
+     http://wiki.scipy.org/PerformancePython
+
+3. testLinAlg needs more test cases
+
+4. Change system exits to raise exceptions instead
+
+5. esSolve.py --> poisson.py ?
+
+6. Switch BCs from E to dV/dx to make more generic?
+
+7. Get final 2D and 3D test cases working
+
+8. Figure out how to deal with all neumann bcs (user specifies V at point?), or throw error if a user attempts it
+
+9. Make class for field? should be generic (not potential-specific), plot() method
+
+10. Make more test functions for esSolve.electricFieldAtPoint()
+
+11. Add unit test for particle::push()
+
+12. there's an issue where if you increase NX, the 1D test fails
+
+13. Once get poisson implemented, then need mechanism for particle to feedbackon field (deposit charge)
