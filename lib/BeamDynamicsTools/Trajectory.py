@@ -1,15 +1,19 @@
 # Trajectory.py
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy as sp
-import pylab as pl
 import scipy.constants as cnt
+import os
+import sys
+import math
+import timeit
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm
+
+sys.path.append(os.path.join('../'))
 from .Ellipse import *
 from .AngleCorrection import *
 from .Target import *
-import timeit
+
 
 # ======= Default injection geometry ==================
 # (x,y,z) = (1.798m, -0.052m, 0.243m)

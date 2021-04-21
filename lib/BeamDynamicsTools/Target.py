@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-#import scipy as sp
-import pylab as pl
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.linalg import norm
 from .Ellipse import *
